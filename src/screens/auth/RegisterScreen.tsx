@@ -40,17 +40,15 @@ export default function RegisterScreen() {
 
   const [name, setName] = useState("uygar");
   const [surname, setSurname] = useState("erenn");
-  const [username, setUsername] = useState("yugo");
-  const [email, setEmail] = useState("uygarerenx@gmail.com");
-  const [phone, setPhone] = useState("");
-  const [password, setPassword] = useState("uygareren12345");
-  const [password2, setPassword2] = useState("uygareren12345");
+  const [username, setUsername] = useState("uygarerenn2");
+  const [email, setEmail] = useState("uygareren1031@gmail.com");
+  const [phone, setPhone] = useState("123456789");
+  const [password, setPassword] = useState("uygareren123");
+  const [password2, setPassword2] = useState("uygareren123");
   const [checkBox, setCheckBox] = useState(false);
 
   const phoneInput = useRef<PhoneInput>(null);
   const [formattedValue, setFormattedValue] = useState("");
-
-  const [loading, setLoading] = useState(false);
 
   const registerMutation = useMutation({
     mutationFn: register,
@@ -59,9 +57,11 @@ export default function RegisterScreen() {
       showToast("info", "Verify Code", "");
       navigation.navigate("CodeConfirm", { email, mode: "VERIFY" });
     },
-    onError(error) {
-      console.log(error);
+    onError(error:any) {
+      const errorMessage = error.response?.data?.message;
+      showToast("error", "Error", errorMessage)
     },
+
   });
 
   const handleRegister = async () => {
@@ -198,7 +198,7 @@ export default function RegisterScreen() {
 
       <View style={{ marginTop: 12 }}>
         <ButtonComp
-          loading={loading}
+          loading={registerMutation.isLoading}
           title={t("register_btn")}
           onPress={() => handleRegister()}
         />

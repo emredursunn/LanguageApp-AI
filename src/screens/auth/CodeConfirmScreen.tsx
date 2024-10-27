@@ -82,8 +82,6 @@ export default function CodeConfirmationScreen() {
     setValue,
   });
 
-  const [isLoading, setIsLoading] = useState(false);
-
   const registerVerifyMutation = useMutation({
     mutationFn: registerVerify,
     onSuccess(data, variables, context) {
@@ -91,6 +89,7 @@ export default function CodeConfirmationScreen() {
       navigation.navigate("Login");
     },
     onError(error, variables, context) {
+      showToast("error", "Wrong code!", "");
       console.log(error);
     },
   });
@@ -102,6 +101,7 @@ export default function CodeConfirmationScreen() {
       navigation.navigate("NewPassword", {email});
     },
     onError(error, variables, context) {
+      showToast("error", "Wrong code!", "");
       console.log(error);
     },
   });
@@ -228,7 +228,7 @@ export default function CodeConfirmationScreen() {
         <View>
           <ButtonComp
             onPress={() => handleSendCode()}
-            loading={isLoading}
+            loading={registerVerifyMutation.isLoading || forgetPasswordVerifyMutation.isLoading}
             title={"Send Code"}
           />
         </View>
