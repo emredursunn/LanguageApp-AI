@@ -6,6 +6,7 @@ type RootStackParamList = {
         email:string,
         mode: "VERIFY" | "RESET"
     },
+    StoryInfo:undefined
     NewPassword:{
         email:string,
     }

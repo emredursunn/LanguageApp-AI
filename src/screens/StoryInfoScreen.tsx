@@ -1,25 +1,30 @@
 import { AntDesign } from "@expo/vector-icons";
-import { CommonActions, useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useState } from "react";
 import { Dimensions, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
-import { Screen1 } from "../components/firstInfoViews/Screen1";
-import { Screen2 } from "../components/firstInfoViews/Screen2";
+import { StoryInfoScreen1 } from "../components/storyInfoViews/StoryInfoScreen1";
+import { StoryInfoScreen2 } from "../components/storyInfoViews/StoryInfoScreen2";
+import { StoryInfoScreen3 } from "../components/storyInfoViews/StoryInfoScreen3";
+import { StoryInfoScreen4 } from "../components/storyInfoViews/StoryInfoScreen4";
 import { RootStackParamList } from "../types/stackNavigations";
 import { MAIN_COLOR, WHITE } from "../utils/colors";
 
-type FirstInfoScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "FirstInfo">;
+type StoryInfoScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "StoryInfo">;
+
 
 const { width } = Dimensions.get("screen");
 
-export default function FirstInfoScreen() {
-    const navigation = useNavigation<FirstInfoScreenNavigationProp>();
+export default function StoryInfoScreen(){
+
+    const navigation = useNavigation<StoryInfoScreenNavigationProp>();
 
     const [stepper, setStepper] = useState(1);
-    // Define shared value for progress animation
-    const progress = useSharedValue(50); // Initial value for the first step
 
+    const progress = useSharedValue(25); // Initial value for the first step
+
+    
     function handleCloseScreen() {
         setStepper(1);
         progress.value = withTiming(50, { duration: 500 }); // Reset progress to first step
@@ -30,19 +35,14 @@ export default function FirstInfoScreen() {
         if (stepper > 1) {
             const newStep = stepper - 1;
             setStepper(newStep);
-            progress.value = withTiming(newStep * 50, { duration: 500 });
+            progress.value = withTiming(newStep * 25, { duration: 500 });
         }
     }
-   
-    function handleDoneInfo() {
-        navigation.dispatch(
-            CommonActions.reset({
-                index: 1,
-                routes: [{ name: 'Tab' }],
-            })
-        );
-    }
 
+    function handleDoneInfo() {
+        
+    }
+    
     const animatedProgressStyle = useAnimatedStyle(() => {
         return {
             width: (width - 96) * (progress.value / 100), // Calculate width in pixels
@@ -51,12 +51,17 @@ export default function FirstInfoScreen() {
 
     const RenderCreateScreen = () => {
         if (stepper === 1) {
-            return <Screen1 stepper={stepper} setStepper={setStepper} progress={progress}/>;
+            return <StoryInfoScreen1 stepper={stepper} setStepper={setStepper} progress={progress}/>;
         } else if (stepper === 2) {
-            return <Screen2 handleDoneInfo={handleDoneInfo} />;
+            return <StoryInfoScreen2 stepper={stepper} setStepper={setStepper} progress={progress}/>;
+        } else if (stepper === 3) {
+            return <StoryInfoScreen3 stepper={stepper} setStepper={setStepper} progress={progress}/>;
+        } else if (stepper === 4) {
+            return <StoryInfoScreen4 handleDoneInfo={handleDoneInfo} />;
         }
         return null; // Ensure to return null if no screen matches
     };
+   
 
     return (
         <SafeAreaView style={styles.container}>
@@ -76,7 +81,7 @@ export default function FirstInfoScreen() {
                 </View>
 
                 <View>
-                    <Text style={styles.stepperText}>{stepper}/2</Text>
+                    <Text style={styles.stepperText}>{stepper}/4</Text>
                 </View>
             </View>
 

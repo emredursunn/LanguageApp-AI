@@ -1,16 +1,17 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { TabNavigation } from "./src/navigation/Tab";
 import CodeConfirmationScreen from "./src/screens/auth/CodeConfirmScreen";
 import EmailConfirmScreen from "./src/screens/auth/EmailConfirmScreen";
+import NewPasswordScreen from "./src/screens/auth/NewPasswordScreen";
 import FirstInfoScreen from "./src/screens/FirstInfoScreen";
 import SplashScren from "./src/screens/SplashScreen";
+import StoryInfoScreen from "./src/screens/StoryInfoScreen";
 import { RootStackParamList } from "./src/types/stackNavigations";
-import Toast from "react-native-toast-message";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import NewPasswordScreen from "./src/screens/auth/NewPasswordScreen";
 
 const App = () => {
   const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -37,6 +38,7 @@ const App = () => {
                 name="NewPassword"
               />
               <Stack.Screen component={FirstInfoScreen} name="FirstInfo" />
+              <Stack.Screen component={StoryInfoScreen} name="StoryInfo" />
             </Stack.Navigator>
           </NavigationContainer>
         </SafeAreaView>

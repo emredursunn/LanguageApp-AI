@@ -19,6 +19,11 @@ export default function HomeScreen(){
             style={{borderWidth:1, padding:15, backgroundColor:"red"}}>
                 <Text style={{color:"white"}}>İlk Girişten sonraki sayfaya git</Text>
             </TouchableOpacity>
+            <TouchableOpacity 
+            onPress={() => navigation.navigate("StoryInfo")}
+            style={{borderWidth:1, padding:15, backgroundColor:"green"}}>
+                <Text style={{color:"white"}}>Hikaye bilgi sayfasına git</Text>
+            </TouchableOpacity>
         </View>
     )
 }

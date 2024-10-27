@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { FlatList, Modal, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { ButtonComp } from "../components/ButtonComp";
-import { TEXT_BLACK } from "../utils/colors";
 import { withTiming } from "react-native-reanimated";
+import { TEXT_BLACK } from "../../utils/colors";
+import { ButtonComp } from "../ButtonComp";
 
 export type ScreenType = {
     stepper: number;

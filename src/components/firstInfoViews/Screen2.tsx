@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { FlatList, Modal, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { ButtonComp } from "../components/ButtonComp";
-import { TEXT_BLACK } from "../utils/colors";
+import { TEXT_BLACK } from "../../utils/colors";
+import { ButtonComp } from "../ButtonComp";
 
 export type ScreenType = {
     handleDoneInfo: () => void; // Updated to type handleDoneInfo as a function
