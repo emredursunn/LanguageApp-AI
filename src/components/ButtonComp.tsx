@@ -13,7 +13,7 @@ type ButtonCompParams = {
 export const ButtonComp = ({loading, title, onPress, styleContainer, styleText, isActive=true }: ButtonCompParams) => {
     return (
         <TouchableOpacity 
-            disabled={!isActive} 
+            disabled={!isActive || loading} 
             onPress={onPress} 
             style={[styles.authButtonContainer, styleContainer, { opacity: isActive ? 1 : 0.7 }]}
         >

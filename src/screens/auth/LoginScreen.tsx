@@ -24,9 +24,6 @@ export default function LoginScreen() {
     const [email, setEmail] = useState("uygareren@gmail.com");
     const [password, setPassword] = useState("uygareren12345");
 
-    const [loading, setLoading] = useState(false)
-    const [isLoading, setIsLoading] = useState(false)
-
     const loginMutation = useMutation({
         mutationFn: login,
         onSuccess: (data) => {
@@ -82,7 +79,7 @@ export default function LoginScreen() {
             </TouchableOpacity>
 
             <View>
-                <ButtonComp loading={isLoading} title={t("btn_title")} onPress={handleLogin} 
+                <ButtonComp loading={loginMutation.isLoading} title={t("btn_title")} onPress={handleLogin} 
                 />
             </View>
 

@@ -33,7 +33,6 @@ export default function EmailConfirmScreen() {
   const { t } = useI18n("LoginScreen");
 
   const [email, setEmail] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
 
   const navigation = useNavigation<EmailConfirmScreenNavigationProp>();
 
@@ -99,7 +98,7 @@ export default function EmailConfirmScreen() {
 
         <View>
           <ButtonComp
-            loading={isLoading}
+            loading={emailVerificationMutation.isLoading}
             title={"Send"}
             onPress={handleSendResetPasswordCode}
           />

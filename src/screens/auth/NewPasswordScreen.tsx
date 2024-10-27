@@ -27,7 +27,6 @@ const NewPasswordScreen = () => {
   const { t } = useI18n("LoginScreen");
 
   const [newPassword, setNewPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const { email } = useRoute<any>().params;
   const navigation = useNavigation<any>();
 
@@ -93,7 +92,7 @@ const NewPasswordScreen = () => {
 
       <View>
         <ButtonComp
-          loading={isLoading}
+          loading={passwordResetMutation.isLoading}
           title={"Confirm"}
           onPress={handleSendResetPasswordCode}
         />
