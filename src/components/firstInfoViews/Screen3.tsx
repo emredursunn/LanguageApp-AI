@@ -1,17 +1,15 @@
 import React, { useState } from "react";
 import { Dimensions, FlatList, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { MAIN_COLOR, TEXT_BLACK } from "../../utils/colors"; // Ensure this path is correct
-import { ButtonComp } from "../ButtonComp"; // Ensure ButtonComp is imported
+import { MAIN_COLOR, TEXT_BLACK } from "../../utils/colors";
+import { ButtonComp } from "../ButtonComp";
 
 export type ScreenType = {
-    stepper: number;
-    setStepper: (value: number) => void;
-    progress: any;
+    handleDoneInfo: () => void; // Updated to type handleDoneInfo as a function
 };
 
 const { height } = Dimensions.get("screen");
 
-export const Screen2: React.FC<ScreenType> = ({ stepper, setStepper, progress }) => {
+export const Screen3: React.FC<ScreenType> = ({ handleDoneInfo }) => {
     const [selectedLanguage, setSelectedLanguage] = useState<string>("");
     const [searchQuery, setSearchQuery] = useState<string>("");
 
@@ -33,12 +31,7 @@ export const Screen2: React.FC<ScreenType> = ({ stepper, setStepper, progress })
             setSelectedLanguage(language);
 
         }
-        setSearchQuery(""); 
-    };
-
-    const handleNext = () => {
-        // Logic for the next step
-        setStepper(stepper + 1); // Proceed to the next step
+        setSearchQuery(""); // Clear search query when a language is selected
     };
 
     return (
@@ -46,11 +39,10 @@ export const Screen2: React.FC<ScreenType> = ({ stepper, setStepper, progress })
             {/* TITLE */}
             <View>
                 <Text style={{ fontSize: 24, fontWeight: "700", color: TEXT_BLACK }}>
-                    What language do you speak?
+                    What language do you want to speak?
                 </Text>
             </View>
 
-           
 
             {/* SEARCH INPUT */}
             <TextInput
@@ -72,7 +64,7 @@ export const Screen2: React.FC<ScreenType> = ({ stepper, setStepper, progress })
                 data={filteredLanguages}
                 keyExtractor={(item) => item}
                 showsVerticalScrollIndicator={false}
-                style={{ maxHeight: height * 0.55, marginTop: 16 }} // Set max height for FlatList
+                style={{ maxHeight: height * 0.5, marginTop: 16 }}
 
                 renderItem={({ item }) => (
                     <TouchableOpacity
@@ -98,7 +90,7 @@ export const Screen2: React.FC<ScreenType> = ({ stepper, setStepper, progress })
                     loading={false}
                     isActive={selectedLanguage.length > 0}
                     title={"Next"}
-                    onPress={handleNext}
+                    onPress={handleDoneInfo}
                 />
             </View>
         </View>

@@ -1,19 +1,20 @@
 import React, { useState } from "react";
-import { FlatList, Modal, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Dimensions, FlatList, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { withTiming } from "react-native-reanimated";
-import { TEXT_BLACK } from "../../utils/colors";
+import { MAIN_COLOR, TEXT_BLACK, WHITE } from "../../utils/colors"; // Ensure these colors are defined in your colors file
 import { ButtonComp } from "../ButtonComp";
 
 export type ScreenType = {
     stepper: number;
     setStepper: (value: number) => void;
-    progress:any
+    progress: any;
 };
+
+const { height } = Dimensions.get("screen");
 
 export const Screen1: React.FC<ScreenType> = ({ stepper, setStepper, progress }) => {
     const [selectedCountry, setSelectedCountry] = useState<string>("");
     const [searchQuery, setSearchQuery] = useState<string>("");
-    const [isPickerVisible, setPickerVisible] = useState<boolean>(false);
 
     const countries = [
         "United States", "Canada", "Mexico", "Brazil", "Argentina", "United Kingdom", "France",
@@ -27,94 +28,74 @@ export const Screen1: React.FC<ScreenType> = ({ stepper, setStepper, progress })
     );
 
     const handleSelectCountry = (country: string) => {
-        setSelectedCountry(country);
-        setPickerVisible(false); 
-        setSearchQuery(""); 
+        if (country === selectedCountry) {
+            setSelectedCountry(""); // Deselect if already selected
+        } else {
+            setSelectedCountry(country);
+        }
     };
 
-    function handleNext(){
-        const newStep = stepper + 1
+    const handleNext = () => {
+        const newStep = stepper + 1;
         setStepper(newStep);
         progress.value = withTiming(newStep * 50, { duration: 500 });
-    }
+    };
 
     return (
-        <View style={{paddingVertical: 16 }}>
-            {/* TITLE */}
-            <View>
-                <Text style={{ fontSize: 24, fontWeight: "700", color: TEXT_BLACK }}>
-                    Which country are you from?
-                </Text>
-            </View>
+        <View style={{ padding: 16 }}>
+            <Text style={{ fontSize: 24, fontWeight: "700", color: TEXT_BLACK, marginBottom: 16 }}>
+                Which country are you from?
+            </Text>
 
-            {/* DISPLAY SELECTED COUNTRY */}
-            <TouchableOpacity
-                onPress={() => setPickerVisible(true)}
+            {/* Search Input */}
+            <TextInput
+                placeholder="Search for your country..."
+                value={searchQuery}
+                onChangeText={setSearchQuery}
                 style={{
-                    marginTop: 24,
                     padding: 8,
-                    paddingVertical:16,
                     borderWidth: 1,
                     borderColor: "gray",
                     borderRadius: 4,
+                    marginBottom: 16,
+                    color: TEXT_BLACK,
                 }}
-            >
-                <Text style={{ color: TEXT_BLACK, fontSize:16 }}>
-                    {selectedCountry ? selectedCountry : "Select your country..."}
-                </Text>
-            </TouchableOpacity>
+            />
 
-            <View style={{marginTop:32}}>
-                <ButtonComp loading={false} isActive={selectedCountry.length > 0 ? true : false} title={"Next"} onPress={() => handleNext()} 
+            {/* List of countries */}
+            <FlatList
+                data={filteredCountries}
+                keyExtractor={(item) => item}
+                style={{ maxHeight: height * 0.55 }} // Set max height for FlatList
+                renderItem={({ item }) => (
+                    <TouchableOpacity
+                        onPress={() => handleSelectCountry(item)}
+                        style={{
+                            padding: 12,
+                            marginVertical: 6,
+                            borderWidth: 1,
+                            borderColor: "gray",
+                            borderRadius: 8,
+                            backgroundColor: selectedCountry === item ? MAIN_COLOR : "white",
+                        }}
+                    >
+                        <Text style={{ fontSize: 18, color: selectedCountry === item ? WHITE : TEXT_BLACK }}>
+                            {item}
+                        </Text>
+                    </TouchableOpacity>
+                )}
+                showsVerticalScrollIndicator={false}
+            />
+
+            {/* Next Button */}
+            <View style={{ marginTop: 32 }}>
+                <ButtonComp 
+                    loading={false} 
+                    isActive={selectedCountry.length > 0} 
+                    title={"Next"} 
+                    onPress={handleNext} 
                 />
             </View>
-
-            {/* CUSTOM SEARCHABLE COUNTRY PICKER MODAL */}
-            <Modal
-                visible={isPickerVisible}
-                animationType="slide"
-                transparent={true}
-                onRequestClose={() => setPickerVisible(false)}
-            >
-                <View style={{ flex: 1, justifyContent: "center", backgroundColor: "rgba(0,0,0,0.5)", paddingVertical:36}}>
-                    <View style={{ margin: 20, padding: 20, backgroundColor: "white", borderRadius: 8 }}>
-                        <TextInput
-                            placeholder="Search for your country..."
-                            value={searchQuery}
-                            onChangeText={setSearchQuery}
-                            style={{
-                                padding: 8,
-                                borderWidth: 1,
-                                borderColor: "gray",
-                                borderRadius: 4,
-                                marginBottom: 16,
-                                color: TEXT_BLACK,
-                            }}
-                        />
-
-                        <FlatList
-                            data={filteredCountries}
-                            keyExtractor={(item) => item}
-                            showsVerticalScrollIndicator={false}
-                            renderItem={({ item }) => (
-                                <TouchableOpacity
-                                    onPress={() => handleSelectCountry(item)}
-                                    style={{ padding: 8 }}
-                                >
-                                    <Text style={{ color: TEXT_BLACK, fontWeight:"500", fontSize:20 }}>{item}</Text>
-                                </TouchableOpacity>
-                            )}
-                        />
-
-                        <TouchableOpacity
-                            onPress={() => setPickerVisible(false)}
-                            style={{ marginTop: 16, alignItems: "center" }}
-                        >
-                            <Text style={{ color: "blue" }}>Close</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </Modal>
         </View>
     );
 };

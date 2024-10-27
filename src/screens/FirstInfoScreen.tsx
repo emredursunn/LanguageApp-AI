@@ -6,6 +6,7 @@ import { Dimensions, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } fr
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import { Screen1 } from "../components/firstInfoViews/Screen1";
 import { Screen2 } from "../components/firstInfoViews/Screen2";
+import { Screen3 } from "../components/firstInfoViews/Screen3";
 import { RootStackParamList } from "../types/stackNavigations";
 import { MAIN_COLOR, WHITE } from "../utils/colors";
 
@@ -18,7 +19,7 @@ export default function FirstInfoScreen() {
 
     const [stepper, setStepper] = useState(1);
     // Define shared value for progress animation
-    const progress = useSharedValue(50); // Initial value for the first step
+    const progress = useSharedValue(33); // Initial value for the first step
 
     function handleCloseScreen() {
         setStepper(1);
@@ -30,7 +31,7 @@ export default function FirstInfoScreen() {
         if (stepper > 1) {
             const newStep = stepper - 1;
             setStepper(newStep);
-            progress.value = withTiming(newStep * 50, { duration: 500 });
+            progress.value = withTiming(newStep * 33, { duration: 500 });
         }
     }
    
@@ -52,8 +53,10 @@ export default function FirstInfoScreen() {
     const RenderCreateScreen = () => {
         if (stepper === 1) {
             return <Screen1 stepper={stepper} setStepper={setStepper} progress={progress}/>;
-        } else if (stepper === 2) {
-            return <Screen2 handleDoneInfo={handleDoneInfo} />;
+        }else if (stepper === 2) {
+            return <Screen2 stepper={stepper} setStepper={setStepper} progress={progress}/>;
+        } else if (stepper === 3) {
+            return <Screen3 handleDoneInfo={handleDoneInfo} />;
         }
         return null; // Ensure to return null if no screen matches
     };
@@ -76,7 +79,7 @@ export default function FirstInfoScreen() {
                 </View>
 
                 <View>
-                    <Text style={styles.stepperText}>{stepper}/2</Text>
+                    <Text style={styles.stepperText}>{stepper}/3</Text>
                 </View>
             </View>
 
