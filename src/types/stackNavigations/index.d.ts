@@ -2,7 +2,8 @@ type RootStackParamList = {
     Splash: undefined;
     Tab: undefined,
     EmailConfirm: undefined,
-    CodeConfirm:undefined
+    CodeConfirm:undefined,
+    FirstInfo:undefined
 };
 
 export type TabStackParamList = {
