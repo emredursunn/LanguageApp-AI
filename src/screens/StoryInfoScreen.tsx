@@ -8,6 +8,7 @@ import { StoryInfoScreen1 } from "../components/storyInfoViews/StoryInfoScreen1"
 import { StoryInfoScreen2 } from "../components/storyInfoViews/StoryInfoScreen2";
 import { StoryInfoScreen3 } from "../components/storyInfoViews/StoryInfoScreen3";
 import { StoryInfoScreen4 } from "../components/storyInfoViews/StoryInfoScreen4";
+import { StoryInfoScreen5 } from "../components/storyInfoViews/StoryInfoScreen5";
 import { RootStackParamList } from "../types/stackNavigations";
 import { MAIN_COLOR, WHITE } from "../utils/colors";
 
@@ -57,7 +58,9 @@ export default function StoryInfoScreen(){
         } else if (stepper === 3) {
             return <StoryInfoScreen3 stepper={stepper} setStepper={setStepper} progress={progress}/>;
         } else if (stepper === 4) {
-            return <StoryInfoScreen4 handleDoneInfo={handleDoneInfo} />;
+            return <StoryInfoScreen4 stepper={stepper} setStepper={setStepper} progress={progress}/>;
+        } else if (stepper === 5) {
+            return <StoryInfoScreen5 handleDoneInfo={handleDoneInfo} />;
         }
         return null; // Ensure to return null if no screen matches
     };
@@ -81,7 +84,7 @@ export default function StoryInfoScreen(){
                 </View>
 
                 <View>
-                    <Text style={styles.stepperText}>{stepper}/4</Text>
+                    <Text style={styles.stepperText}>{stepper}/5</Text>
                 </View>
             </View>
 

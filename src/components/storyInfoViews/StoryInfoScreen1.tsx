@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Dimensions, FlatList, Text, TouchableOpacity, View } from "react-native";
-import { MAIN_COLOR, TEXT_BLACK, WHITE } from "../../utils/colors"; // Assuming MAIN_COLOR and WHITE are defined in colors
+import { Dimensions, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { MAIN_COLOR, TEXT_BLACK, WHITE } from "../../utils/colors"; // Assuming these are defined in your colors
 import { ButtonComp } from "../ButtonComp";
 
 export type StoryInfoScreenType = {
@@ -9,25 +9,44 @@ export type StoryInfoScreenType = {
     progress: any;
 };
 
-const { width, height } = Dimensions.get("screen");
+const { height } = Dimensions.get("screen");
+
+const languagesData = [
+    { label: "English", value: "english" },
+    { label: "Spanish", value: "spanish" },
+    { label: "French", value: "french" },
+    { label: "German", value: "german" },
+    { label: "Chinese", value: "chinese" },
+    { label: "Japanese", value: "japanese" },
+    { label: "Korean", value: "korean" },
+    { label: "Russian", value: "russian" },
+    { label: "Italian", value: "italian" },
+    { label: "Portuguese", value: "portuguese" },
+    { label: "Arabic", value: "arabic" },
+    { label: "Turkish", value: "turkish" },
+    { label: "Dutch", value: "dutch" },
+    { label: "Greek", value: "greek" },
+    { label: "Hebrew", value: "hebrew" },
+    { label: "Thai", value: "thai" },
+    { label: "Vietnamese", value: "vietnamese" },
+    { label: "Swedish", value: "swedish" },
+    { label: "Norwegian", value: "norwegian" },
+];
 
 export const StoryInfoScreen1: React.FC<StoryInfoScreenType> = ({ stepper, setStepper, progress }) => {
-    const [selectedTitle, setSelectedTitle] = useState<string>("");
+    const [selectedLanguage, setSelectedLanguage] = useState<string | null>(null);
+    const [searchTerm, setSearchTerm] = useState("");
 
-    const titles = [
-        "Adventure Awaits", "My Day", "Memorable Moments", "Family Time",
-        "Travel Diary", "Food Journey", "Learning Experience", "Nature Walk",
-        "Celebration", "Work Life", "Fitness Journey", "Pet Moments",
-        "Art & Creativity", "Life Goals", "Hobbies & Interests", "Mindfulness",
-        "Friends Forever", "Love Story", "Self-Care", "Grateful For", "New Beginnings",
-        // Add more titles as needed
-    ];
+    // Filter languages based on the search term
+    const filteredLanguages = languagesData.filter(language =>
+        language.label.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
-    const handleTitleSelection = (title: string) => {
-        if(title == selectedTitle){
-            setSelectedTitle("");
+    const handleLanguageSelection = (language: string) => {
+        if(language == selectedLanguage){
+            setSelectedLanguage("")
         }else{
-            setSelectedTitle(title);
+            setSelectedLanguage(language);
         }
     };
 
@@ -35,51 +54,68 @@ export const StoryInfoScreen1: React.FC<StoryInfoScreenType> = ({ stepper, setSt
         setStepper(stepper+1);
     }
 
+
     return (
         <View style={{ padding: 16 }}>
             <Text style={{ fontSize: 24, fontWeight: "700", color: TEXT_BLACK, marginBottom: 16 }}>
-                Select a title for your story
+                Select the language of your story
             </Text>
 
-            {/* Display selected title */}
-            {selectedTitle ? (
-                <Text style={{ fontSize: 18, color: TEXT_BLACK, marginBottom: 16, }}>
-                    Title: {selectedTitle}
-                </Text>
-            ) : 
-            <Text style={{ fontSize: 18, color: TEXT_BLACK, marginBottom: 16, display:"flex"}}>
-                
-            </Text>
-            }
+            {/* Search Input */}
+            <TextInput
+                style={{
+                    height: 40,
+                    borderColor: "gray",
+                    borderWidth: 1,
+                    borderRadius: 8,
+                    paddingHorizontal: 10,
+                    marginBottom: 16,
+                }}
+                placeholder="Search for a language"
+                value={searchTerm}
+                onChangeText={setSearchTerm}
+            />
 
-            {/* List of title options */}
+           
+
+            {/* List of language options */}
             <FlatList
-                data={titles}
-                keyExtractor={(item) => item}
-                style={{ maxHeight: height * 0.55 }} // Set max height for FlatList itself
+                data={filteredLanguages}
+                keyExtractor={(item) => item.value}
+                style={{ maxHeight: height * 0.55 }}
                 renderItem={({ item }) => (
                     <TouchableOpacity
-                        onPress={() => handleTitleSelection(item)}
+                        onPress={() => handleLanguageSelection(item.label)}
                         style={{
                             padding: 12,
                             marginVertical: 6,
                             borderWidth: 1,
                             borderColor: "gray",
                             borderRadius: 8,
-                            backgroundColor: selectedTitle === item ? MAIN_COLOR : "white",
+                            backgroundColor: selectedLanguage === item.label ? MAIN_COLOR : WHITE,
                         }}
                     >
-                        <Text style={{ fontSize: 18, color: selectedTitle === item ? WHITE : TEXT_BLACK }}>
-                            {item}
+                        <Text style={{ fontSize: 18, color: selectedLanguage === item.label ? WHITE : TEXT_BLACK }}>
+                            {item.label}
                         </Text>
                     </TouchableOpacity>
                 )}
                 showsVerticalScrollIndicator={false}
             />
-             <View style={{marginTop:32}}>
-                <ButtonComp loading={false} isActive={selectedTitle.length > 0 ? true : false} title={"Next"} onPress={() => handleNext()} 
-                />
+             <View style={styles.buttonContainer}>
+             <ButtonComp
+                loading={false}
+                isActive={selectedLanguage !== null && selectedLanguage.length > 0} // Updated condition
+                title={"Next"}
+                onPress={handleNext}
+            />
             </View>
         </View>
     );
 };
+
+const styles = StyleSheet.create({
+    buttonContainer: {
+        marginTop: 32,
+    },
+})

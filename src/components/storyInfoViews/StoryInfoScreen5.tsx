@@ -3,47 +3,40 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { MAIN_COLOR, TEXT_BLACK, WHITE } from "../../utils/colors";
 import { ButtonComp } from "../ButtonComp"; // Assuming you have a Button component
 
-export type StoryInfoScreenType = {
-    stepper: number;
-    setStepper: (value: number) => void;
-    progress: any;
+export type ScreenType = {
+    handleDoneInfo: () => void;
 };
 
-export const StoryInfoScreen4: React.FC<StoryInfoScreenType> = ({ stepper, setStepper, progress }) => {
-    const [selectedDuration, setSelectedDuration] = useState<string>("");
+export const StoryInfoScreen5: React.FC<ScreenType> = ({ handleDoneInfo }) => {
+    const [selectedDifficulty, setSelectedDifficulty] = useState<string>("");
 
-    const durations = [
-        { label: "Short", value: "short" },
+    const difficulties = [
+        { label: "Easy", value: "easy" },
         { label: "Medium", value: "medium" },
-        { label: "Long", value: "long" },
+        { label: "Hard", value: "hard" },
     ];
 
-    const handleDurationSelection = (duration: string) => {
-        setSelectedDuration(duration);
-    };
-
-    const handleNext = () => {
-        setStepper(stepper + 1);
-        // You can use selectedDuration if needed in the next step
+    const handleDifficultySelection = (difficulty: string) => {
+        setSelectedDifficulty(difficulty);
     };
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Select the Story Duration</Text>
+            <Text style={styles.title}>Select the Language Difficulty</Text>
 
-            {durations.map((item) => (
+            {difficulties.map((item) => (
                 <TouchableOpacity
                     key={item.value}
-                    onPress={() => handleDurationSelection(item.value)}
+                    onPress={() => handleDifficultySelection(item.value)}
                     style={[
                         styles.option,
-                        selectedDuration === item.value && { backgroundColor: MAIN_COLOR },
+                        selectedDifficulty === item.value && { backgroundColor: MAIN_COLOR },
                     ]}
                 >
                     <Text
                         style={[
                             styles.optionText,
-                            selectedDuration === item.value && { color: WHITE },
+                            selectedDifficulty === item.value && { color: WHITE },
                         ]}
                     >
                         {item.label}
@@ -54,9 +47,9 @@ export const StoryInfoScreen4: React.FC<StoryInfoScreenType> = ({ stepper, setSt
             <View style={styles.buttonContainer}>
                 <ButtonComp
                     loading={false}
-                    isActive={!!selectedDuration}
-                    title={"Next"}
-                    onPress={handleNext}
+                    isActive={!!selectedDifficulty}
+                    title={"Done"}
+                    onPress={handleDoneInfo}
                 />
             </View>
         </View>

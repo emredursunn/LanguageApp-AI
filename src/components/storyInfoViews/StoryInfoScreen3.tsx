@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { MAIN_COLOR, TEXT_BLACK, WHITE } from "../../utils/colors";
-import { ButtonComp } from "../ButtonComp"; // Assuming you have a Button component
+import { StyleSheet, Text, TextInput, View } from "react-native";
+import { TEXT_BLACK } from "../../utils/colors";
+import { ButtonComp } from "../ButtonComp"; // Assuming you have a button component
 
 export type StoryInfoScreenType = {
     stepper: number;
@@ -10,51 +10,29 @@ export type StoryInfoScreenType = {
 };
 
 export const StoryInfoScreen3: React.FC<StoryInfoScreenType> = ({ stepper, setStepper, progress }) => {
-    const [selectedDuration, setSelectedDuration] = useState<string>("");
-
-    const durations = [
-        { label: "Short", value: "short" },
-        { label: "Medium", value: "medium" },
-        { label: "Long", value: "long" },
-    ];
-
-    const handleDurationSelection = (duration: string) => {
-        setSelectedDuration(duration);
-    };
+    const [storyDescription, setStoryDescription] = useState<string>("");
 
     const handleNext = () => {
         setStepper(stepper + 1);
-        // You can use selectedDuration if needed in the next step
+        // Additional actions with storyDescription if needed
     };
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Select the Story Duration</Text>
+            <Text style={styles.title}>Write a Description for Your Story</Text>
 
-            {durations.map((item) => (
-                <TouchableOpacity
-                    key={item.value}
-                    onPress={() => handleDurationSelection(item.value)}
-                    style={[
-                        styles.option,
-                        selectedDuration === item.value && { backgroundColor: MAIN_COLOR },
-                    ]}
-                >
-                    <Text
-                        style={[
-                            styles.optionText,
-                            selectedDuration === item.value && { color: WHITE },
-                        ]}
-                    >
-                        {item.label}
-                    </Text>
-                </TouchableOpacity>
-            ))}
+            <TextInput
+                placeholder="Describe your story topic..."
+                value={storyDescription}
+                onChangeText={(text) => setStoryDescription(text)}
+                style={styles.input}
+                multiline={true}
+            />
 
             <View style={styles.buttonContainer}>
                 <ButtonComp
                     loading={false}
-                    isActive={!!selectedDuration}
+                    isActive={storyDescription.length > 0}
                     title={"Next"}
                     onPress={handleNext}
                 />
@@ -74,17 +52,14 @@ const styles = StyleSheet.create({
         color: TEXT_BLACK,
         marginBottom: 16,
     },
-    option: {
-        padding: 12,
-        marginVertical: 6,
+    input: {
+        height: 150,
         borderWidth: 1,
         borderColor: "gray",
         borderRadius: 8,
-        backgroundColor: "white",
-        alignItems: "center",
-    },
-    optionText: {
-        fontSize: 18,
+        padding: 12,
+        textAlignVertical: "top",
+        fontSize: 16,
         color: TEXT_BLACK,
     },
     buttonContainer: {
