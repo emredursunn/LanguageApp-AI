@@ -1,92 +1,119 @@
 import { AntDesign } from "@expo/vector-icons";
 import { CommonActions, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { Progress } from "native-base";
 import { useState } from "react";
 import { Dimensions, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Screen1 } from "../firstInfoViews/Screen1";
 import { Screen2 } from "../firstInfoViews/Screen2";
 import { RootStackParamList } from "../types/stackNavigations";
 import { MAIN_COLOR, WHITE } from "../utils/colors";
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 
+type FirstInfoScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "FirstInfo">;
 
-type FirstInfoScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "FirstInfo">
+const { width } = Dimensions.get("screen");
 
-const {width} = Dimensions.get("screen");
-
-export default function FirstInfoScreen(){
-
+export default function FirstInfoScreen() {
     const navigation = useNavigation<FirstInfoScreenNavigationProp>();
 
     const [stepper, setStepper] = useState(1);
+    // Define shared value for progress animation
+    const progress = useSharedValue(50); // Initial value for the first step
 
-    function handleCloseScreen(){
+    function handleCloseScreen() {
         setStepper(1);
+        progress.value = withTiming(50, { duration: 500 }); // Reset progress to first step
         navigation.goBack();
     }
 
-    function handleGoBack(){
-        setStepper(stepper-1);
+    function handleGoBack() {
+        if (stepper > 1) {
+            const newStep = stepper - 1;
+            setStepper(newStep);
+            progress.value = withTiming(newStep * 50, { duration: 500 });
+        }
     }
-
+   
     function handleDoneInfo() {
         navigation.dispatch(
             CommonActions.reset({
-              index: 1,
-              routes: [{ name: 'Tab' }],
-            }),
+                index: 1,
+                routes: [{ name: 'Tab' }],
+            })
         );
     }
 
-    const RenderCreateScreen = () => {
-        if(stepper == 1){
-            return(
-                <Screen1 stepper={stepper} setStepper={setStepper} />
-            )
-        }else if(stepper == 2){
-            return(
-                <Screen2 handleDoneInfo={handleDoneInfo} />
-            )
-        }
-        
-    }
+    const animatedProgressStyle = useAnimatedStyle(() => {
+        return {
+            width: (width - 96) * (progress.value / 100), // Calculate width in pixels
+        };
+    });
 
-    return(
+    const RenderCreateScreen = () => {
+        if (stepper === 1) {
+            return <Screen1 stepper={stepper} setStepper={setStepper} progress={progress}/>;
+        } else if (stepper === 2) {
+            return <Screen2 handleDoneInfo={handleDoneInfo} />;
+        }
+        return null; // Ensure to return null if no screen matches
+    };
+
+    return (
         <SafeAreaView style={styles.container}>
-           <View style={{flexDirection:"row", alignItems:'center', justifyContent:'space-between'}}>
-                {stepper == 1 ? (
+            <View style={styles.headerContainer}>
+                {stepper === 1 ? (
                     <TouchableOpacity onPress={handleCloseScreen}>
                         <AntDesign name="close" size={12.75} color="black" />
                     </TouchableOpacity>
-                ): (
+                ) : (
                     <TouchableOpacity onPress={handleGoBack}>
                         <AntDesign name="left" size={12.75} color="black" />
                     </TouchableOpacity>
                 )}
-                
-                <Progress bg={WHITE} _filledTrack={{bgColor:MAIN_COLOR}} w={(width - 96) + "px"} value={stepper * 50} my="16px" mx="16px"  />
+
+                <View style={styles.progressBarBackground}>
+                    <Animated.View style={[styles.progressBarFill, animatedProgressStyle]} />
+                </View>
+
                 <View>
                     <Text style={styles.stepperText}>{stepper}/2</Text>
                 </View>
             </View>
 
-            <RenderCreateScreen/>
-
-
+            <RenderCreateScreen />
+            
         </SafeAreaView>
-    )
+    );
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex:1,
+        flex: 1,
         backgroundColor: WHITE,
-        paddingTop:38,
-        paddingHorizontal:16
+        paddingTop: 38,
+        paddingHorizontal: 16,
+    },
+    headerContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+    },
+    progressBarBackground: {
+        height: 8,
+        width: width - 96,
+        backgroundColor: WHITE,
+        borderRadius: 4,
+        overflow: "hidden",
+        marginHorizontal: 16,
+    },
+    progressBarFill: {
+        height: "100%",
+        backgroundColor: MAIN_COLOR,
+        borderRadius: 4,
     },
     stepperText: {
-        fontWeight:"700", 
-        fontSize:12, 
-        lineHeight:24
-    }
-})
+        fontWeight: "700",
+        fontSize: 12,
+        lineHeight: 24,
+    },
+});

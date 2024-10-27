@@ -7,6 +7,10 @@ import { BLACK_COLOR, LIGHT_GRAY, MAIN_COLOR, MAIN_COLOR_2, PINK, WHITE } from "
 import { CONTAINER_HORIZONTAL } from "../../utils/measurement";
 import { TextInputComp, TextInputPassword } from "../../components/TextInputComp";
 import { ButtonComp } from "../../components/ButtonComp";
+import { useMutation } from "react-query";
+import { login } from "../../services/authService";
+import { showToast } from "../../utils/helpers";
+import { useAuthStore } from "../../store/useAuthStore";
 
 type LoginScreenNavigationProp = NativeStackNavigationProp<any, "Profile">;
 
@@ -15,16 +19,32 @@ export default function LoginScreen() {
     const navigation = useNavigation<LoginScreenNavigationProp>();
 
     const {t} = useI18n("LoginScreen");
+    const { setToken } = useAuthStore()
 
-    const [email, setEmail] = useState("mehmeteren@gmail.com");
-    const [password, setPassword] = useState("mehmet123456.");
+    const [email, setEmail] = useState("uygareren@gmail.com");
+    const [password, setPassword] = useState("uygareren12345");
 
     const [loading, setLoading] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
 
+    const loginMutation = useMutation({
+        mutationFn: login,
+        onSuccess: (data) => {
+          const { jwt, success } = data;
+          if (success) {
+            showToast("success","Login successful","Welcome!")
+            setToken(jwt); // Update auth state in the store
+          } else {
+            showToast("error","Wrong password or email","Be careful")
+          }
+        },
+        onError: (error) => {
+            showToast("error","Wrong password or email","Be careful")
+        },
+      });
 
     const handleLogin = async () => {
-
+        loginMutation.mutate({email,password})
     };
 
     const handleNavigate = async (id:string) => {
@@ -58,11 +78,11 @@ export default function LoginScreen() {
             <TouchableOpacity 
             onPress={() => navigation.navigate("EmailConfirm")}
             style={{marginTop:15, marginLeft:10}}>
-                <Text style={{fontSize:12, fontWeight:"700", color:MAIN_COLOR_2}}>Şifremi Unuttum?</Text>
+                <Text style={{fontSize:12, fontWeight:"700", color:MAIN_COLOR_2}}>Forgot Password?</Text>
             </TouchableOpacity>
 
             <View>
-                <ButtonComp loading={isLoading} title={t("btn_title")} onPress={() => handleLogin()} 
+                <ButtonComp loading={isLoading} title={t("btn_title")} onPress={handleLogin} 
                 />
             </View>
 

@@ -1,53 +1,48 @@
-import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useState } from "react";
 import {
-  Dimensions,
-  SafeAreaView,
-  StyleSheet,
+  View,
   Text,
   TouchableOpacity,
-  View,
+  Dimensions,
+  StyleSheet,
 } from "react-native";
-import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-import useI18n from "../../hooks/useI18n";
+import React, { useState } from "react";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { BORDER_RADIUS_2, CONTAINER_HORIZONTAL } from "../../utils/measurement";
 import {
   BLACK_COLOR,
   LIGHT_GRAY,
   MAIN_COLOR_GREEN,
   WHITE,
 } from "../../utils/colors";
-import { BORDER_RADIUS_2, CONTAINER_HORIZONTAL } from "../../utils/measurement";
-import { TextInputComp } from "../../components/TextInputComp";
+import { FontAwesome5 } from "@expo/vector-icons";
+import { TextInputPassword } from "../../components/TextInputComp";
 import { ButtonComp } from "../../components/ButtonComp";
-import { forgetPasswordEmailVerification } from "../../services/authService";
-import { showToast } from "../../utils/helpers";
+import useI18n from "../../hooks/useI18n";
 import { useMutation } from "react-query";
+import { forgetPasswordResetPassword } from "../../services/authService";
+import { showToast } from "../../utils/helpers";
 
-type EmailConfirmScreenNavigationProp = NativeStackNavigationProp<
-  any,
-  "EmailConfirm"
->;
-
-export default function EmailConfirmScreen() {
+const NewPasswordScreen = () => {
   const { t } = useI18n("LoginScreen");
 
-  const [email, setEmail] = useState("");
+  const [newPassword, setNewPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const { email } = useRoute<any>().params;
+  const navigation = useNavigation<any>();
 
-  const navigation = useNavigation<EmailConfirmScreenNavigationProp>();
-
-  const emailVerificationMutation = useMutation({
-    mutationFn: forgetPasswordEmailVerification,
+  const passwordResetMutation = useMutation({
+    mutationFn: forgetPasswordResetPassword,
     onSuccess: () => {
-      navigation.navigate("CodeConfirm", { email, mode: "RESET" });
+      showToast("success", "Password has changed", "");
+      navigation.navigate("Login");
     },
     onError: (error) =>
       showToast("error", "Error", "Ensure your email and try again later"),
   });
 
   const handleSendResetPasswordCode = () => {
-    emailVerificationMutation.mutate({ email });
+    passwordResetMutation.mutate({ email, newPassword });
   };
 
   return (
@@ -75,39 +70,37 @@ export default function EmailConfirmScreen() {
             marginTop: 35,
           }}
         >
-          Enter email to get a reset code!
+          Enter your new password!
         </Text>
       </View>
-      <View style={{ alignSelf: "center" }}>
-        <View style={{ marginTop: 30 }}>
-          <TextInputComp
-            value={email}
-            onchangeValue={setEmail}
-            label={t("email")}
-            placeholder={t("email_placeholder")}
-            styleContainer={styles.TextInput}
-            styleLabel={{ marginLeft: 5 }}
-            styleInputContainer={{
-              ...styles.InputContainer,
-              borderWidth: 2,
-              borderRadius: 10,
-              borderColor: LIGHT_GRAY,
-            }}
-            styleInput={styles.TextInput}
-          />
-        </View>
+      <View style={{ marginTop: 30 }}>
+        <TextInputPassword
+          value={newPassword}
+          onchangeValue={setNewPassword}
+          label={t("new_password")}
+          placeholder={t("password_placeholder")}
+          styleContainer={styles.TextInputPassword}
+          styleLabel={{ marginLeft: 5 }}
+          styleInputContainer={{
+            ...styles.InputContainer,
+            borderWidth: 2,
+            borderRadius: 10,
+            borderColor: LIGHT_GRAY,
+          }}
+          styleInput={styles.TextInput}
+        />
+      </View>
 
-        <View>
-          <ButtonComp
-            loading={isLoading}
-            title={"Send"}
-            onPress={handleSendResetPasswordCode}
-          />
-        </View>
+      <View>
+        <ButtonComp
+          loading={isLoading}
+          title={"Confirm"}
+          onPress={handleSendResetPasswordCode}
+        />
       </View>
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -129,6 +122,8 @@ const styles = StyleSheet.create({
     width: Dimensions.get("screen").width * 0.89,
     alignSelf: "center",
     borderRadius: 19,
+    paddingHorizontal:10,
+    justifyContent:'space-between'
   },
   textInput: {
     paddingVertical: 10,
@@ -138,3 +133,5 @@ const styles = StyleSheet.create({
     borderRadius: 18,
   },
 });
+
+export default NewPasswordScreen;

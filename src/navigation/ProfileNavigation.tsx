@@ -1,10 +1,9 @@
 import { NativeStackScreenProps, createNativeStackNavigator } from "@react-navigation/native-stack";
-import { useSelector } from "react-redux";
 import LoginScreen from "../screens/auth/LoginScreen";
 import ProfileScreen from "../screens/profile/ProfileScreen";
 import RegisterScreen from "../screens/auth/RegisterScreen";
-import { RootStateType } from "../store/store";
 import { TabStackParamList } from "../types/stackNavigations";
+import { useAuthStore } from "../store/useAuthStore";
 
 export type TabProfileScreenProps<T extends keyof TabStackParamList> =
   NativeStackScreenProps<TabStackParamList, T, T>;
@@ -12,10 +11,11 @@ export type TabProfileScreenProps<T extends keyof TabStackParamList> =
 const Stack = createNativeStackNavigator<TabStackParamList>();
 
 export default function ProfileNavigation() {
-    const userInfo = useSelector<RootStateType, any>((state) => state.user.userInfo);
 
+    const { auth } = useAuthStore()
+ 
     const RenderScreens = () => {
-        if (userInfo?.userId) {
+        if (auth) {
             return (
                 <Stack.Screen
                     component={ProfileScreen}

@@ -2,7 +2,13 @@ type RootStackParamList = {
     Splash: undefined;
     Tab: undefined,
     EmailConfirm: undefined,
-    CodeConfirm:undefined,
+    CodeConfirm: {
+        email:string,
+        mode: "VERIFY" | "RESET"
+    },
+    NewPassword:{
+        email:string,
+    }
     FirstInfo:undefined
 };
 

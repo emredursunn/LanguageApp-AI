@@ -2,13 +2,15 @@ import React, { useState } from "react";
 import { FlatList, Modal, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { ButtonComp } from "../components/ButtonComp";
 import { TEXT_BLACK } from "../utils/colors";
+import { withTiming } from "react-native-reanimated";
 
 export type ScreenType = {
     stepper: number;
     setStepper: (value: number) => void;
+    progress:any
 };
 
-export const Screen1: React.FC<ScreenType> = ({ stepper, setStepper }) => {
+export const Screen1: React.FC<ScreenType> = ({ stepper, setStepper, progress }) => {
     const [selectedCountry, setSelectedCountry] = useState<string>("");
     const [searchQuery, setSearchQuery] = useState<string>("");
     const [isPickerVisible, setPickerVisible] = useState<boolean>(false);
@@ -31,7 +33,9 @@ export const Screen1: React.FC<ScreenType> = ({ stepper, setStepper }) => {
     };
 
     function handleNext(){
-        setStepper(2);
+        const newStep = stepper + 1
+        setStepper(newStep);
+        progress.value = withTiming(newStep * 50, { duration: 500 });
     }
 
     return (
