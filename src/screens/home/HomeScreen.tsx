@@ -24,6 +24,11 @@ export default function HomeScreen(){
             style={{borderWidth:1, padding:15, backgroundColor:"green"}}>
                 <Text style={{color:"white"}}>Hikaye bilgi sayfasına git</Text>
             </TouchableOpacity>
+            <TouchableOpacity 
+            onPress={() => navigation.push("Story")}
+            style={{borderWidth:1, padding:15, backgroundColor:"green"}}>
+                <Text style={{color:"white"}}>story</Text>
+            </TouchableOpacity>
         </View>
     )
 }

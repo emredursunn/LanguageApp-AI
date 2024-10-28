@@ -10,7 +10,8 @@ type RootStackParamList = {
     NewPassword:{
         email:string,
     }
-    FirstInfo:undefined
+    FirstInfo:undefined,
+    Story:undefined
 };
 
 export type TabStackParamList = {
