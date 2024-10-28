@@ -1,12 +1,12 @@
 import { CommonActions, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useState } from "react";
-import {useSharedValue, withTiming } from "react-native-reanimated";
+import { useSharedValue, withTiming } from "react-native-reanimated";
+import AnimatedFormContainer from "../components/common/AnimatedFormContainer";
 import { Screen1 } from "../components/firstInfoViews/Screen1";
 import { Screen2 } from "../components/firstInfoViews/Screen2";
 import { Screen3 } from "../components/firstInfoViews/Screen3";
 import { RootStackParamList } from "../types/stackNavigations";
-import AnimatedFormContainer from "../components/common/AnimatedFormContainer";
 
 type FirstInfoScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "FirstInfo">;
 
@@ -14,7 +14,7 @@ export default function FirstInfoScreen() {
     const navigation = useNavigation<FirstInfoScreenNavigationProp>();
 
     const [stepper, setStepper] = useState(1);
-    const MAX_STEP = 2
+    const MAX_STEP = 3
     // Define shared value for progress animation
     const progress = useSharedValue(33); // Initial value for the first step
 

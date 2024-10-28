@@ -1,16 +1,16 @@
-import { useNavigation } from "@react-navigation/native";
+import { CommonActions, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useState } from "react";
 import { Dimensions, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import useI18n from "../../hooks/useI18n";
-import { BLACK_COLOR, LIGHT_GRAY, MAIN_COLOR, MAIN_COLOR_2, PINK, WHITE } from "../../utils/colors";
-import { CONTAINER_HORIZONTAL } from "../../utils/measurement";
-import { TextInputComp, TextInputPassword } from "../../components/common/TextInputComp";
-import { ButtonComp } from "../../components/common/ButtonComp";
 import { useMutation } from "react-query";
+import { ButtonComp } from "../../components/common/ButtonComp";
+import { TextInputComp, TextInputPassword } from "../../components/common/TextInputComp";
+import useI18n from "../../hooks/useI18n";
 import { login } from "../../services/authService";
-import { showToast } from "../../utils/helpers";
 import { useAuthStore } from "../../store/useAuthStore";
+import { BLACK_COLOR, LIGHT_GRAY, MAIN_COLOR, MAIN_COLOR_2, PINK, WHITE } from "../../utils/colors";
+import { showToast } from "../../utils/helpers";
+import { CONTAINER_HORIZONTAL } from "../../utils/measurement";
 
 type LoginScreenNavigationProp = NativeStackNavigationProp<any, "Profile">;
 
@@ -21,16 +21,32 @@ export default function LoginScreen() {
     const {t} = useI18n("LoginScreen");
     const { setToken } = useAuthStore()
 
-    const [email, setEmail] = useState("uygareren@gmail.com");
+    const [email, setEmail] = useState("uygareren1030@gmail.com");
     const [password, setPassword] = useState("uygareren12345");
 
     const loginMutation = useMutation({
         mutationFn: login,
         onSuccess: (data) => {
-          const { jwt, success } = data;
+          const { jwt, success, } = data;
           if (success) {
             showToast("success","Login successful","Welcome!")
-            setToken(jwt); // Update auth state in the store
+            if(data.user.infoStatus == 0){
+                navigation.dispatch(
+                    CommonActions.reset({
+                      index: 1,
+                      routes: [{ name: 'FirstInfo' }],
+                    }),
+                );
+            }else if(data.user.infoStatus == 1){
+                navigation.dispatch(
+                    CommonActions.reset({
+                      index: 1,
+                      routes: [{ name: 'Tab' }],
+                    }),
+                );
+                setToken(jwt); // Update auth state in the store
+
+            }
           } else {
             showToast("error","Wrong password or email","Be careful")
           }

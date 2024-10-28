@@ -4,8 +4,6 @@ import { MAIN_COLOR, TEXT_BLACK } from "../../utils/colors"; // Ensure this path
 import { ButtonComp } from "../common/ButtonComp"; // Ensure ButtonComp is imported
 
 export type ScreenType = {
-    stepper: number;
-    setStepper: (value: number) => void;
     handleNext: () => void;
 };
 
