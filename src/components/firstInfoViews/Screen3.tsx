@@ -1,37 +1,61 @@
 import React, { useState } from "react";
 import { Dimensions, FlatList, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { MAIN_COLOR, TEXT_BLACK } from "../../utils/colors";
-import { ButtonComp } from "../common/ButtonComp";
+import { MAIN_COLOR, TEXT_BLACK } from "../../utils/colors"; // Ensure this path is correct
+import { ButtonComp } from "../common/ButtonComp"; // Ensure ButtonComp is imported
+
+export type RequestData = {
+    countryId: number | null; 
+    languageId: number | null; 
+    spokenLanguageId: number | null;
+};
+
+export type LanguageData = {
+    id: number;        
+    language: string;
+    iconUrl: string;
+    countryCode: string;
+};
 
 export type ScreenType = {
-    handleDoneInfo: () => void; // Updated to type handleDoneInfo as a function
+    handleDoneInfo: () => void;
+    languageData: LanguageData[];
+    requestData: RequestData;      
+    setRequestData: React.Dispatch<React.SetStateAction<RequestData>>;
+    spokenLanguage:string
 };
 
 const { height } = Dimensions.get("screen");
 
-export const Screen3: React.FC<ScreenType> = ({ handleDoneInfo }) => {
-    const [selectedLanguage, setSelectedLanguage] = useState<string>("");
+export const Screen3: React.FC<ScreenType> = ({ handleDoneInfo, languageData, requestData, setRequestData, spokenLanguage}) => {
+    const [selectedLanguage, setSelectedLanguage] = useState<LanguageData | null>(() => {
+        if (requestData.spokenLanguageId) {
+            return languageData.find(language => language.id === requestData.languageId) || null;
+        }
+        return null; 
+    });
+    
     const [searchQuery, setSearchQuery] = useState<string>("");
 
-    const languages = [
-        "English", "Spanish", "Mandarin", "French", "German", "Russian", "Arabic",
-        "Portuguese", "Hindi", "Bengali", "Japanese", "Korean", "Italian",
-        "Dutch", "Turkish", "Swedish", "Polish", "Greek", "Norwegian", "Finnish",
-        "Danish", "Czech", "Romanian", "Hungarian", "Thai", "Vietnamese",
-    ];
-
-    const filteredLanguages = languages.filter((language) =>
-        language.toLowerCase().includes(searchQuery.toLowerCase())
+    const filteredLanguages = languageData.filter((language) =>
+        language.language.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    const handleSelectLanguage = (language: string) => {
-        if(language == selectedLanguage){
-            setSelectedLanguage("")
-        }else{
+    const handleSelectLanguage = (language: LanguageData) => {
+        if (language === selectedLanguage) {
+            setSelectedLanguage(null);
+        } else {
             setSelectedLanguage(language);
-
         }
-        setSearchQuery(""); // Clear search query when a language is selected
+        setSearchQuery(""); 
+    };
+
+    const handleFinish = () => {
+        if (selectedLanguage) {
+            setRequestData((prev) => ({
+                ...prev,
+                languageId: selectedLanguage.id,
+            }));
+        }
     };
 
     return (
@@ -42,7 +66,6 @@ export const Screen3: React.FC<ScreenType> = ({ handleDoneInfo }) => {
                     What language do you want to speak?
                 </Text>
             </View>
-
 
             {/* SEARCH INPUT */}
             <TextInput
@@ -62,10 +85,9 @@ export const Screen3: React.FC<ScreenType> = ({ handleDoneInfo }) => {
             {/* FlatList for languages */}
             <FlatList
                 data={filteredLanguages}
-                keyExtractor={(item) => item}
+                keyExtractor={(item) => item.id.toString()} // Use id for key
                 showsVerticalScrollIndicator={false}
-                style={{ maxHeight: height * 0.5, marginTop: 16 }}
-
+                style={{ maxHeight: height * 0.55, marginTop: 16 }} // Set max height for FlatList
                 renderItem={({ item }) => (
                     <TouchableOpacity
                         onPress={() => handleSelectLanguage(item)}
@@ -75,11 +97,11 @@ export const Screen3: React.FC<ScreenType> = ({ handleDoneInfo }) => {
                             borderWidth: 1,
                             borderColor: "gray",
                             borderRadius: 8,
-                            backgroundColor: selectedLanguage === item ? MAIN_COLOR : "white", // Highlight selected item
+                            backgroundColor: selectedLanguage?.id === item.id ? MAIN_COLOR : "white", // Highlight selected item
                         }}
                     >
-                        <Text style={{ color: selectedLanguage === item ? "white" : TEXT_BLACK, fontSize: 18 }}>
-                            {item}
+                        <Text style={{ color: selectedLanguage?.id === item.id ? "white" : TEXT_BLACK, fontSize: 18 }}>
+                            {item.language}
                         </Text>
                     </TouchableOpacity>
                 )}
@@ -88,9 +110,9 @@ export const Screen3: React.FC<ScreenType> = ({ handleDoneInfo }) => {
             <View style={{ marginTop: 32 }}>
                 <ButtonComp
                     loading={false}
-                    isActive={selectedLanguage.length > 0}
+                    isActive={!!selectedLanguage} // Active if a language is selected
                     title={"Next"}
-                    onPress={handleDoneInfo}
+                    onPress={handleFinish} // Use the updated next click handler
                 />
             </View>
         </>

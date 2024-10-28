@@ -1,37 +1,60 @@
 import React, { useState } from "react";
-import { Dimensions, FlatList, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { withTiming } from "react-native-reanimated";
+import { Dimensions, FlatList, Image, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { MAIN_COLOR, TEXT_BLACK, WHITE } from "../../utils/colors"; // Ensure these colors are defined in your colors file
 import { ButtonComp } from "../common/ButtonComp";
 
+export type CountryData = {
+    code_1: string;       
+    code_2: string;     
+    countryName: string; 
+    iconUrl: string;     
+    id: number;          
+};
+
+export type RequestData = {
+    countryId: number | null; 
+    languageId: number | null; 
+    spokenLanguageId: number | null;
+};
+  
 export type ScreenType = {
     handleNext: () => void;
+    countryData: CountryData[];
+    requestData: RequestData;      
+    setRequestData: React.Dispatch<React.SetStateAction<RequestData>>;
 };
 
 const { height } = Dimensions.get("screen");
 
-export const Screen1: React.FC<ScreenType> = ({handleNext }) => {
-    const [selectedCountry, setSelectedCountry] = useState<string>("");
-    const [searchQuery, setSearchQuery] = useState<string>("");
+export const Screen1: React.FC<ScreenType> = ({ handleNext, countryData, requestData, setRequestData }) => {
+    const [selectedCountry, setSelectedCountry] = useState<CountryData | null>(() => {
+        if (requestData.countryId) {
+            return countryData.find(country => country.id == requestData.countryId) || null;
+        }
+        return null; 
+    });
+        const [searchQuery, setSearchQuery] = useState<string>("");
 
-    const countries = [
-        "United States", "Canada", "Mexico", "Brazil", "Argentina", "United Kingdom", "France",
-        "Germany", "Italy", "Spain", "China", "India", "Japan", "South Korea", "Australia",
-        "New Zealand", "Russia", "South Africa", "Egypt", "Turkey", "Saudi Arabia", "United Arab Emirates",
-    ];
-
-    // Filter countries based on the search query
-    const filteredCountries = countries.filter((country) =>
-        country.toLowerCase().includes(searchQuery.toLowerCase())
+    const filteredCountries = countryData.filter((country) =>
+        country.countryName.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    const handleSelectCountry = (country: string) => {
+    const handleSelectCountry = (country: CountryData) => {
         if (country === selectedCountry) {
-            setSelectedCountry(""); // Deselect if already selected
+            setSelectedCountry(null);
         } else {
             setSelectedCountry(country);
         }
     };
+
+    function handlePickAndNext() {
+        setRequestData((prev) => ({
+            ...prev, 
+            countryId: selectedCountry?.id || null,
+        }));
+        handleNext(); 
+    }
+    
 
     return (
         <>
@@ -57,7 +80,7 @@ export const Screen1: React.FC<ScreenType> = ({handleNext }) => {
             {/* List of countries */}
             <FlatList
                 data={filteredCountries}
-                keyExtractor={(item) => item}
+                keyExtractor={(item) => item.id.toString()} // ID'yi string olarak kullan
                 style={{ maxHeight: height * 0.55 }} // Set max height for FlatList
                 renderItem={({ item }) => (
                     <TouchableOpacity
@@ -68,11 +91,18 @@ export const Screen1: React.FC<ScreenType> = ({handleNext }) => {
                             borderWidth: 1,
                             borderColor: "gray",
                             borderRadius: 8,
-                            backgroundColor: selectedCountry === item ? MAIN_COLOR : "white",
+                            backgroundColor: selectedCountry?.id === item.id ? MAIN_COLOR : "white",
+                            flexDirection: 'row', // Ülke adını ve resmi yan yana yerleştirmek için
+                            alignItems: 'center',  // Ortalamak için
                         }}
                     >
-                        <Text style={{ fontSize: 18, color: selectedCountry === item ? WHITE : TEXT_BLACK }}>
-                            {item}
+                        {/* Country Flag */}
+                        <Image 
+                            source={{ uri: item.iconUrl }} // Bayrağın URL'si
+                            style={{ width: 24, height: 16, marginRight: 8 }} // Boyutları ve sağ kenar boşluğu
+                        />
+                        <Text style={{ fontSize: 18, color: selectedCountry?.id === item.id ? WHITE : TEXT_BLACK }}>
+                            {item.countryName}
                         </Text>
                     </TouchableOpacity>
                 )}
@@ -83,9 +113,9 @@ export const Screen1: React.FC<ScreenType> = ({handleNext }) => {
             <View style={{ marginTop: 32 }}>
                 <ButtonComp 
                     loading={false} 
-                    isActive={selectedCountry.length > 0} 
+                    isActive={!!selectedCountry}  // Seçili bir ülke varsa aktif
                     title={"Next"} 
-                    onPress={handleNext} 
+                    onPress={handlePickAndNext} 
                 />
             </View>
         </>
