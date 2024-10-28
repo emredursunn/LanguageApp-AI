@@ -40,7 +40,6 @@ export default function RegisterScreen() {
 
   const [name, setName] = useState("uygar");
   const [surname, setSurname] = useState("erenn");
-  const [username, setUsername] = useState("uygarerenn2");
   const [email, setEmail] = useState("uygareren1031@gmail.com");
   const [phone, setPhone] = useState("123456789");
   const [password, setPassword] = useState("uygareren123");
@@ -69,7 +68,7 @@ export default function RegisterScreen() {
       email,
       name,
       surname,
-      username,
+      username:"default",
       phone,
       password,
       password2,
@@ -99,60 +98,18 @@ export default function RegisterScreen() {
           onchangeValue={setName}
           label={t("name")}
           placeholder={t("name_placeholder")}
-          styleContainer={styles.TextInputComp}
-          styleLabel={{ marginLeft: 5 }}
-          styleInputContainer={{
-            ...styles.InputContainer,
-            borderWidth: 2,
-            borderRadius: 10,
-            borderColor: LIGHT_GRAY,
-          }}
-          styleInput={styles.TextInput}
         />
         <TextInputComp
           value={surname}
           onchangeValue={setSurname}
           label={t("surname")}
           placeholder={t("surname_placeholder")}
-          styleContainer={styles.TextInputComp}
-          styleLabel={{ marginLeft: 5 }}
-          styleInputContainer={{
-            ...styles.InputContainer,
-            borderWidth: 2,
-            borderRadius: 10,
-            borderColor: LIGHT_GRAY,
-          }}
-          styleInput={styles.TextInput}
-        />
-        <TextInputComp
-          value={username}
-          onchangeValue={setUsername}
-          label={t("username")}
-          placeholder={t("username_placeholder")}
-          styleContainer={styles.TextInputComp}
-          styleLabel={{ marginLeft: 5 }}
-          styleInputContainer={{
-            ...styles.InputContainer,
-            borderWidth: 2,
-            borderRadius: 10,
-            borderColor: LIGHT_GRAY,
-          }}
-          styleInput={styles.TextInput}
         />
         <TextInputComp
           value={email}
           onchangeValue={setEmail}
           label={t("email")}
           placeholder={t("email_placeholder")}
-          styleContainer={styles.TextInputComp}
-          styleLabel={{ marginLeft: 5 }}
-          styleInputContainer={{
-            ...styles.InputContainer,
-            borderWidth: 2,
-            borderRadius: 10,
-            borderColor: LIGHT_GRAY,
-          }}
-          styleInput={styles.TextInput}
         />
         <PhoneInputComp
           styleContainer={styles.TextInputComp}
@@ -169,30 +126,12 @@ export default function RegisterScreen() {
           onchangeValue={setPassword}
           label={t("password")}
           placeholder={t("password_placeholder")}
-          styleContainer={styles.TextInputPassword}
-          styleLabel={{ marginLeft: 5 }}
-          styleInputContainer={{
-            ...styles.InputContainer,
-            borderWidth: 2,
-            borderRadius: 10,
-            borderColor: LIGHT_GRAY,
-          }}
-          styleInput={styles.TextInput}
         />
         <TextInputPassword
           value={password2}
           onchangeValue={setPassword2}
           label={t("confirm_password")}
           placeholder={t("confirm_password_placeholder")}
-          styleContainer={styles.TextInputPassword}
-          styleLabel={{ marginLeft: 5 }}
-          styleInputContainer={{
-            ...styles.InputContainer,
-            borderWidth: 2,
-            borderRadius: 10,
-            borderColor: LIGHT_GRAY,
-          }}
-          styleInput={styles.TextInput}
         />
       </View>
 
@@ -239,28 +178,9 @@ const styles = StyleSheet.create({
     backgroundColor: WHITE,
     paddingHorizontal: CONTAINER_HORIZONTAL,
   },
-
   TextInputComp: {
     marginVertical: 10,
     marginTop: 20,
-  },
-  InputContainer: {
-    flexDirection: "row",
-    backgroundColor: WHITE,
-    width: "100%",
-    alignSelf: "center",
-    borderRadius: 19,
-  },
-  TextInputPassword: {
-    marginVertical: 10,
-    marginTop: 20,
-  },
-  TextInput: {
-    paddingVertical: 10,
-    paddingHorizontal: 10,
-    width: "83%",
-    backgroundColor: "white",
-    borderRadius: 18,
   },
   buttonContainer: {
     alignSelf: "center",

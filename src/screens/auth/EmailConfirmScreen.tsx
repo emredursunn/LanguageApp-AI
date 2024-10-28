@@ -91,15 +91,6 @@ export default function EmailConfirmScreen() {
             onchangeValue={setEmail}
             label={t("email")}
             placeholder={t("email_placeholder")}
-            styleContainer={styles.TextInput}
-            styleLabel={{ marginLeft: 5 }}
-            styleInputContainer={{
-              ...styles.InputContainer,
-              borderWidth: 2,
-              borderRadius: 10,
-              borderColor: LIGHT_GRAY,
-            }}
-            styleInput={styles.TextInput}
           />
         </View>
 
@@ -120,27 +111,5 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: WHITE,
     paddingHorizontal: CONTAINER_HORIZONTAL,
-  },
-  TextInput: {
-    marginVertical: 10,
-    marginTop: 20,
-  },
-  TextInputPassword: {
-    marginVertical: 10,
-    marginTop: 20,
-  },
-  InputContainer: {
-    flexDirection: "row",
-    backgroundColor: WHITE,
-    width: Dimensions.get("screen").width * 0.89,
-    alignSelf: "center",
-    borderRadius: 19,
-  },
-  textInput: {
-    paddingVertical: 10,
-    paddingHorizontal: 10,
-    width: "83%",
-    backgroundColor: "white",
-    borderRadius: 18,
   },
 });
