@@ -17,6 +17,9 @@ type RootStackParamList = {
 export type TabStackParamList = {
     Home: undefined,
     Profile: undefined,
+    Settings:undefined,
+    PersonalInformation:undefined,
+    SavedWords:undefined,
     Login:undefined,
     Register:undefined
 }
