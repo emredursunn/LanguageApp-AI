@@ -22,7 +22,7 @@ export default function StoryInfoScreen() {
   const [stepper, setStepper] = useState(1);
   const MAX_STEP = 5;
 
-  const progress = useSharedValue(25); // Initial value for the first step
+  const progress = useSharedValue(100/MAX_STEP); // Initial value for the first step
 
   function handleCloseScreen() {
     setStepper(1);

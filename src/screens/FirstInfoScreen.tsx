@@ -30,7 +30,7 @@ export default function FirstInfoScreen() {
     const [stepper, setStepper] = useState(1);
     const MAX_STEP = 3
     // Define shared value for progress animation
-    const progress = useSharedValue(33); // Initial value for the first step
+    const progress = useSharedValue(100/MAX_STEP); // Initial value for the first step
 
     const { data, error, isLoading } = useQuery('country', getCountry);
 

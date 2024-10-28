@@ -9,12 +9,14 @@ import ProfileNavigation from "./ProfileNavigation";
 import { useQuery } from "react-query";
 import { useAuthStore } from "../store/useAuthStore";
 import { loginWithToken } from "../services/authService";
+import { useUserStore } from "../store/useUserStore";
 
 const Tab = createBottomTabNavigator();
 
 export const TabNavigation = () => {
   const { token, setAuth } = useAuthStore();
-
+  const { setLanguageId, setCountryId } = useUserStore();
+  
   const { isLoading, isError } = useQuery(
     ["fetchUser", token], // Query key includes token
     loginWithToken, // Query function
@@ -23,8 +25,10 @@ export const TabNavigation = () => {
       onSuccess: (data) => {
         if (data) {
           const { userInfo } = data;
-          console.log(userInfo);
           setAuth(userInfo);
+          console.log(userInfo)
+          setLanguageId(userInfo.languageId)
+          setCountryId(userInfo.countryId)
         }
       },
       onError: (error) => {

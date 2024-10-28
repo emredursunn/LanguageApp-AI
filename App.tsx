@@ -2,7 +2,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NativeBaseProvider } from "native-base"; // Import NativeBaseProvider
 import React from "react";
-import { GestureHandlerRootView } from 'react-native-gesture-handler'; // Import the GestureHandlerRootView
+import { GestureHandlerRootView } from "react-native-gesture-handler"; // Import the GestureHandlerRootView
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import { QueryClient, QueryClientProvider } from "react-query";
@@ -24,7 +24,7 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <SafeAreaProvider>
         <GestureHandlerRootView style={{ flex: 1 }}>
-          <NativeBaseProvider> 
+          <NativeBaseProvider>
             <SafeAreaView style={{ flex: 1 }}>
               <NavigationContainer>
                 <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -49,7 +49,7 @@ const App = () => {
               </NavigationContainer>
             </SafeAreaView>
             <Toast />
-          </NativeBaseProvider> 
+          </NativeBaseProvider>
         </GestureHandlerRootView>
       </SafeAreaProvider>
     </QueryClientProvider>
