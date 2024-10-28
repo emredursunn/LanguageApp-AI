@@ -19,6 +19,7 @@ type Props = {
   handleCloseScreen: () => void;
   handleGoBack: () => void;
   stepper: number;
+  maxStep:number
   progress: any;
   children: ReactNode;
 };
@@ -30,6 +31,7 @@ const AnimatedFormContainer = ({
   handleGoBack,
   progress,
   stepper,
+  maxStep,
   children,
 }: Props) => {
   const animatedProgressStyle = useAnimatedStyle(() => {
@@ -58,7 +60,7 @@ const AnimatedFormContainer = ({
         </View>
 
         <View>
-          <Text style={styles.stepperText}>{stepper}/5</Text>
+          <Text style={styles.stepperText}>{stepper}/{maxStep}</Text>
         </View>
       </View>
 

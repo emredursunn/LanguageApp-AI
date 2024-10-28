@@ -4,7 +4,7 @@ import { TEXT_BLACK } from "../../utils/colors";
 import { ButtonComp } from "../common/ButtonComp"; // Assuming you have a button component
 import { StoryInfoScreenType } from "../../types/Story";
 
-export const StoryInfoScreen3: React.FC<StoryInfoScreenType> = ({ stepper, setStepper, progress, handleNext }) => {
+export const StoryInfoScreen3: React.FC<StoryInfoScreenType> = ({ handleNext }) => {
     const [storyDescription, setStoryDescription] = useState<string>("");
 
     return (

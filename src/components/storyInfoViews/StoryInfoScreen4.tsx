@@ -5,9 +5,6 @@ import { ButtonComp } from "../common/ButtonComp"; // Assuming you have a Button
 import { StoryInfoScreenType } from "../../types/Story";
 
 export const StoryInfoScreen4: React.FC<StoryInfoScreenType> = ({
-  stepper,
-  setStepper,
-  progress,
   handleNext,
 }) => {
   const [selectedDuration, setSelectedDuration] = useState<string>("");

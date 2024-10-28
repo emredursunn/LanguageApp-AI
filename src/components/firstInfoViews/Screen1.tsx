@@ -5,14 +5,12 @@ import { MAIN_COLOR, TEXT_BLACK, WHITE } from "../../utils/colors"; // Ensure th
 import { ButtonComp } from "../common/ButtonComp";
 
 export type ScreenType = {
-    stepper: number;
-    setStepper: (value: number) => void;
-    progress: any;
+    handleNext: () => void;
 };
 
 const { height } = Dimensions.get("screen");
 
-export const Screen1: React.FC<ScreenType> = ({ stepper, setStepper, progress }) => {
+export const Screen1: React.FC<ScreenType> = ({handleNext }) => {
     const [selectedCountry, setSelectedCountry] = useState<string>("");
     const [searchQuery, setSearchQuery] = useState<string>("");
 
@@ -33,12 +31,6 @@ export const Screen1: React.FC<ScreenType> = ({ stepper, setStepper, progress })
         } else {
             setSelectedCountry(country);
         }
-    };
-
-    const handleNext = () => {
-        const newStep = stepper + 1;
-        setStepper(newStep);
-        progress.value = withTiming(newStep * 50, { duration: 500 });
     };
 
     return (

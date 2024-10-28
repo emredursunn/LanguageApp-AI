@@ -6,12 +6,12 @@ import { ButtonComp } from "../common/ButtonComp"; // Ensure ButtonComp is impor
 export type ScreenType = {
     stepper: number;
     setStepper: (value: number) => void;
-    progress: any;
+    handleNext: () => void;
 };
 
 const { height } = Dimensions.get("screen");
 
-export const Screen2: React.FC<ScreenType> = ({ stepper, setStepper, progress }) => {
+export const Screen2: React.FC<ScreenType> = ({ handleNext }) => {
     const [selectedLanguage, setSelectedLanguage] = useState<string>("");
     const [searchQuery, setSearchQuery] = useState<string>("");
 
@@ -34,11 +34,6 @@ export const Screen2: React.FC<ScreenType> = ({ stepper, setStepper, progress })
 
         }
         setSearchQuery(""); 
-    };
-
-    const handleNext = () => {
-        // Logic for the next step
-        setStepper(stepper + 1); // Proceed to the next step
     };
 
     return (

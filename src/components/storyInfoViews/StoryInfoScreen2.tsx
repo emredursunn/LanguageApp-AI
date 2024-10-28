@@ -6,7 +6,7 @@ import { StoryInfoScreenType } from "../../types/Story";
 
 const { width, height } = Dimensions.get("screen");
 
-export const StoryInfoScreen2: React.FC<StoryInfoScreenType> = ({ stepper, setStepper, progress, handleNext }) => {
+export const StoryInfoScreen2: React.FC<StoryInfoScreenType> = ({ handleNext }) => {
     const [selectedTitle, setSelectedTitle] = useState<string>("");
 
     const titles = [

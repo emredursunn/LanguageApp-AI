@@ -28,7 +28,7 @@ const languagesData = [
     { label: "Norwegian", value: "norwegian" },
 ];
 
-export const StoryInfoScreen1: React.FC<StoryInfoScreenType> = ({ stepper, setStepper, progress,handleNext }) => {
+export const StoryInfoScreen1: React.FC<StoryInfoScreenType> = ({handleNext }) => {
     const [selectedLanguage, setSelectedLanguage] = useState<string | null>(null);
     const [searchTerm, setSearchTerm] = useState("");
 

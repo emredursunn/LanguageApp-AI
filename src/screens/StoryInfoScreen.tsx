@@ -60,36 +60,24 @@ export default function StoryInfoScreen() {
       case 1:
         return (
           <StoryInfoScreen1
-            stepper={stepper}
-            setStepper={setStepper}
-            progress={progress}
             handleNext={handleNext}
           />
         );
       case 2:
         return (
           <StoryInfoScreen2
-            stepper={stepper}
-            setStepper={setStepper}
-            progress={progress}
             handleNext={handleNext}
           />
         );
       case 3:
         return (
           <StoryInfoScreen3
-            stepper={stepper}
-            setStepper={setStepper}
-            progress={progress}
             handleNext={handleNext}
           />
         );
       case 4:
         return (
           <StoryInfoScreen4
-            stepper={stepper}
-            setStepper={setStepper}
-            progress={progress}
             handleNext={handleNext}
           />
         );
@@ -106,6 +94,7 @@ export default function StoryInfoScreen() {
       handleGoBack={handleGoBack}
       progress={progress}
       stepper={stepper}
+      maxStep={MAX_STEP}
     >
       <RenderCreateScreen />
     </AnimatedFormContainer>

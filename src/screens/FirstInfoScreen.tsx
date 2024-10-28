@@ -14,8 +14,10 @@ export default function FirstInfoScreen() {
     const navigation = useNavigation<FirstInfoScreenNavigationProp>();
 
     const [stepper, setStepper] = useState(1);
+    const MAX_STEP = 2
     // Define shared value for progress animation
     const progress = useSharedValue(33); // Initial value for the first step
+
 
     function handleCloseScreen() {
         setStepper(1);
@@ -27,9 +29,19 @@ export default function FirstInfoScreen() {
         if (stepper > 1) {
             const newStep = stepper - 1;
             setStepper(newStep);
-            progress.value = withTiming(newStep * 33, { duration: 500 });
+            progress.value = withTiming(newStep * (100/MAX_STEP), { duration: 500 });
         }
     }
+
+    function handleNext() {
+        if (stepper < MAX_STEP) {
+          const newStep = stepper + 1;
+          setStepper(newStep);
+          progress.value = withTiming(newStep * (100 / MAX_STEP), {
+            duration: 500,
+          });
+        }
+      }
    
     function handleDoneInfo() {
         navigation.dispatch(
@@ -43,9 +55,9 @@ export default function FirstInfoScreen() {
     const RenderCreateScreen = () => {
         switch (stepper) {
             case 1:
-                return <Screen1 stepper={stepper} setStepper={setStepper} progress={progress}/>;
+                return <Screen1 handleNext={handleNext}/>;
             case 2:
-                return <Screen2 stepper={stepper} setStepper={setStepper} progress={progress}/>;
+                return <Screen2 handleNext={handleNext}/>;
             case 3:
                 return <Screen3 handleDoneInfo={handleDoneInfo} />;
             default:
@@ -59,6 +71,7 @@ export default function FirstInfoScreen() {
       handleGoBack={handleGoBack}
       progress={progress}
       stepper={stepper}
+      maxStep={MAX_STEP}
     >
       <RenderCreateScreen />
     </AnimatedFormContainer>
