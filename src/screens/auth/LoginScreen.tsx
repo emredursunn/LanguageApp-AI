@@ -45,6 +45,7 @@ export default function LoginScreen() {
     onSuccess: (data) => {
       const { jwt, success } = data;
       if (success) {
+        setToken(jwt); // Update auth state in the store
         showToast("success", "Login successful", "Welcome!");
         if (data.user.infoStatus == 0) {
           navigation.dispatch(
@@ -60,7 +61,6 @@ export default function LoginScreen() {
               routes: [{ name: "Tab" }],
             })
           );
-          setToken(jwt); // Update auth state in the store
         }
       } else {
         showToast("error", "Wrong password or email", "Be careful");
