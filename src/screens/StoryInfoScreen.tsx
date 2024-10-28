@@ -58,29 +58,13 @@ export default function StoryInfoScreen() {
   const RenderCreateScreen = () => {
     switch (stepper) {
       case 1:
-        return (
-          <StoryInfoScreen1
-            handleNext={handleNext}
-          />
-        );
+        return <StoryInfoScreen1 handleNext={handleNext} />;
       case 2:
-        return (
-          <StoryInfoScreen2
-            handleNext={handleNext}
-          />
-        );
+        return <StoryInfoScreen2 handleNext={handleNext} />;
       case 3:
-        return (
-          <StoryInfoScreen3
-            handleNext={handleNext}
-          />
-        );
+        return <StoryInfoScreen3 handleNext={handleNext} />;
       case 4:
-        return (
-          <StoryInfoScreen4
-            handleNext={handleNext}
-          />
-        );
+        return <StoryInfoScreen4 handleNext={handleNext} />;
       case 5:
         return <StoryInfoScreen5 handleDoneInfo={handleDoneInfo} />;
       default:
