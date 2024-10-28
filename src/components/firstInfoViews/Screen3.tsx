@@ -35,7 +35,7 @@ export const Screen3: React.FC<ScreenType> = ({ handleDoneInfo }) => {
     };
 
     return (
-        <View style={{ padding: 16 }}>
+        <>
             {/* TITLE */}
             <View>
                 <Text style={{ fontSize: 24, fontWeight: "700", color: TEXT_BLACK }}>
@@ -93,6 +93,6 @@ export const Screen3: React.FC<ScreenType> = ({ handleDoneInfo }) => {
                     onPress={handleDoneInfo}
                 />
             </View>
-        </View>
+        </>
     );
 };

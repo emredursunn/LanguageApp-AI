@@ -1,19 +1,16 @@
 import React, { ReactNode } from 'react';
-import Animated, { SlideInLeft, SlideInRight, SlideOutLeft, SlideOutRight } from 'react-native-reanimated';
+import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 
 type Props = {
-    direction: 'BACK' | 'NEXT';
     children: ReactNode;
 };
 
-const AnimatedFormContainer = ({ direction, children }: Props) => {
-    const enteringAnimation = direction === 'BACK' ? SlideInLeft : SlideInRight;
-    const exitingAnimation = direction === 'BACK' ? SlideOutRight : SlideOutLeft;
+const AnimatedFormContainer = ({ children }: Props) => {
 
     return (
         <Animated.View
-            entering={enteringAnimation}
-            exiting={exitingAnimation}
+            entering={FadeIn.duration(400)}
+            exiting={FadeOut.duration(400)}
             style={{ flex: 1, padding: 16 }}
         >
             {children}

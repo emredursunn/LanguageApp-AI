@@ -42,7 +42,7 @@ export const Screen1: React.FC<ScreenType> = ({ stepper, setStepper, progress })
     };
 
     return (
-        <View style={{ padding: 16 }}>
+        <>
             <Text style={{ fontSize: 24, fontWeight: "700", color: TEXT_BLACK, marginBottom: 16 }}>
                 Which country are you from?
             </Text>
@@ -96,6 +96,6 @@ export const Screen1: React.FC<ScreenType> = ({ stepper, setStepper, progress })
                     onPress={handleNext} 
                 />
             </View>
-        </View>
+        </>
     );
 };

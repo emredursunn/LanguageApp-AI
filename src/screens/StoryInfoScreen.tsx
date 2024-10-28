@@ -3,7 +3,7 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import {useState } from "react";
 import { Dimensions, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
+import Animated, { SlideInRight, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import { StoryInfoScreen1 } from "../components/storyInfoViews/StoryInfoScreen1";
 import { StoryInfoScreen2 } from "../components/storyInfoViews/StoryInfoScreen2";
 import { StoryInfoScreen3 } from "../components/storyInfoViews/StoryInfoScreen3";
@@ -25,7 +25,6 @@ export default function StoryInfoScreen(){
 
     const [stepper, setStepper] = useState(1);
     const MAX_STEP = 5
-    const [direction,setDirection] = useState<'BACK'|'NEXT'>('NEXT')
 
     const progress = useSharedValue(25); // Initial value for the first step
 
@@ -38,7 +37,6 @@ export default function StoryInfoScreen(){
 
     function handleGoBack() {
         if (stepper > 1) {
-            setDirection('BACK')
             const newStep = stepper - 1;
             setStepper(newStep);
             progress.value = withTiming(newStep * (100/MAX_STEP), { duration: 500 });
@@ -47,7 +45,6 @@ export default function StoryInfoScreen(){
     
     function handleNext() {
         if (stepper < MAX_STEP) {
-            setDirection('NEXT')
             const newStep = stepper + 1;
             setStepper(newStep);
             progress.value = withTiming(newStep * (100/MAX_STEP), { duration: 500 });
@@ -84,7 +81,7 @@ export default function StoryInfoScreen(){
    
 
     return (
-        <SafeAreaView style={styles.container}>
+        <Animated.View entering={SlideInRight} style={styles.container}>
             <View style={styles.headerContainer}>
                 {stepper === 1 ? (
                     <TouchableOpacity onPress={handleCloseScreen}>
@@ -105,11 +102,11 @@ export default function StoryInfoScreen(){
                 </View>
             </View>
 
-            <AnimatedFormContainer key={`${stepper}-${direction}`} direction={direction}>
+            <AnimatedFormContainer key={stepper}>
                 <RenderCreateScreen />
             </AnimatedFormContainer>
             
-        </SafeAreaView>
+        </Animated.View>
     );
 }
 

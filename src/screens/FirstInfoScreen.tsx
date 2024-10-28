@@ -3,12 +3,13 @@ import { CommonActions, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useState } from "react";
 import { Dimensions, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
+import Animated, { SlideInRight, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import { Screen1 } from "../components/firstInfoViews/Screen1";
 import { Screen2 } from "../components/firstInfoViews/Screen2";
 import { Screen3 } from "../components/firstInfoViews/Screen3";
 import { RootStackParamList } from "../types/stackNavigations";
 import { MAIN_COLOR, WHITE } from "../utils/colors";
+import AnimatedFormContainer from "../components/common/AnimatedFormContainer";
 
 type FirstInfoScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "FirstInfo">;
 
@@ -62,7 +63,7 @@ export default function FirstInfoScreen() {
     };
 
     return (
-        <SafeAreaView style={styles.container}>
+        <Animated.View entering={SlideInRight} style={styles.container}>
             <View style={styles.headerContainer}>
                 {stepper === 1 ? (
                     <TouchableOpacity onPress={handleCloseScreen}>
@@ -82,10 +83,12 @@ export default function FirstInfoScreen() {
                     <Text style={styles.stepperText}>{stepper}/3</Text>
                 </View>
             </View>
-
-            <RenderCreateScreen />
             
-        </SafeAreaView>
+            <AnimatedFormContainer key={stepper}>
+                <RenderCreateScreen />
+            </AnimatedFormContainer>
+            
+        </Animated.View>
     );
 }
 

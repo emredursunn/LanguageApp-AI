@@ -42,7 +42,7 @@ export const Screen2: React.FC<ScreenType> = ({ stepper, setStepper, progress })
     };
 
     return (
-        <View style={{ padding: 16 }}>
+        <>
             {/* TITLE */}
             <View>
                 <Text style={{ fontSize: 24, fontWeight: "700", color: TEXT_BLACK }}>
@@ -101,6 +101,6 @@ export const Screen2: React.FC<ScreenType> = ({ stepper, setStepper, progress })
                     onPress={handleNext}
                 />
             </View>
-        </View>
+        </>
     );
 };
