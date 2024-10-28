@@ -1,17 +1,12 @@
 import React, { useState } from "react";
 import { Dimensions, FlatList, Text, TouchableOpacity, View } from "react-native";
 import { MAIN_COLOR, TEXT_BLACK, WHITE } from "../../utils/colors"; // Assuming MAIN_COLOR and WHITE are defined in colors
-import { ButtonComp } from "../ButtonComp";
-
-export type StoryInfoScreenType = {
-    stepper: number;
-    setStepper: (value: number) => void;
-    progress: any;
-};
+import { ButtonComp } from "../common/ButtonComp";
+import { StoryInfoScreenType } from "../../types/Story";
 
 const { width, height } = Dimensions.get("screen");
 
-export const StoryInfoScreen2: React.FC<StoryInfoScreenType> = ({ stepper, setStepper, progress }) => {
+export const StoryInfoScreen2: React.FC<StoryInfoScreenType> = ({ stepper, setStepper, progress, handleNext }) => {
     const [selectedTitle, setSelectedTitle] = useState<string>("");
 
     const titles = [
@@ -31,12 +26,8 @@ export const StoryInfoScreen2: React.FC<StoryInfoScreenType> = ({ stepper, setSt
         }
     };
 
-    const handleNext = () => {
-        setStepper(stepper+1);
-    }
-
     return (
-        <View style={{ padding: 16 }}>
+        <>
             <Text style={{ fontSize: 24, fontWeight: "700", color: TEXT_BLACK, marginBottom: 16 }}>
                 Select a title for your story
             </Text>
@@ -80,6 +71,6 @@ export const StoryInfoScreen2: React.FC<StoryInfoScreenType> = ({ stepper, setSt
                 <ButtonComp loading={false} isActive={selectedTitle.length > 0 ? true : false} title={"Next"} onPress={() => handleNext()} 
                 />
             </View>
-        </View>
+        </>
     );
 };

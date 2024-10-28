@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { MAIN_COLOR, TEXT_BLACK, WHITE } from "../../utils/colors";
-import { ButtonComp } from "../ButtonComp"; // Assuming you have a Button component
+import { ButtonComp } from "../common/ButtonComp"; // Assuming you have a Button component
 
 export type ScreenType = {
     handleDoneInfo: () => void;
@@ -21,9 +21,8 @@ export const StoryInfoScreen5: React.FC<ScreenType> = ({ handleDoneInfo }) => {
     };
 
     return (
-        <View style={styles.container}>
+        <>
             <Text style={styles.title}>Select the Language Difficulty</Text>
-
             {difficulties.map((item) => (
                 <TouchableOpacity
                     key={item.value}
@@ -52,7 +51,7 @@ export const StoryInfoScreen5: React.FC<ScreenType> = ({ handleDoneInfo }) => {
                     onPress={handleDoneInfo}
                 />
             </View>
-        </View>
+        </>
     );
 };
 

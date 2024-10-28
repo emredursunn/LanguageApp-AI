@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Dimensions, FlatList, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { MAIN_COLOR, TEXT_BLACK } from "../../utils/colors"; // Ensure this path is correct
-import { ButtonComp } from "../ButtonComp"; // Ensure ButtonComp is imported
+import { ButtonComp } from "../common/ButtonComp"; // Ensure ButtonComp is imported
 
 export type ScreenType = {
     stepper: number;

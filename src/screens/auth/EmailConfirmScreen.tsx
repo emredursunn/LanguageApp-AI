@@ -18,10 +18,10 @@ import {
   WHITE,
 } from "../../utils/colors";
 import { BORDER_RADIUS_2, CONTAINER_HORIZONTAL } from "../../utils/measurement";
-import { TextInputComp } from "../../components/TextInputComp";
-import { ButtonComp } from "../../components/ButtonComp";
+import { TextInputComp } from "../../components/common/TextInputComp";
+import { ButtonComp } from "../../components/common/ButtonComp";
 import { forgetPasswordEmailVerification } from "../../services/authService";
-import { showToast } from "../../utils/helpers";
+import { showToast, validateEmail } from "../../utils/helpers";
 import { useMutation } from "react-query";
 
 type EmailConfirmScreenNavigationProp = NativeStackNavigationProp<
@@ -39,14 +39,20 @@ export default function EmailConfirmScreen() {
   const emailVerificationMutation = useMutation({
     mutationFn: forgetPasswordEmailVerification,
     onSuccess: () => {
+      showToast("info", "We have sent a code to your email", ""),
       navigation.navigate("CodeConfirm", { email, mode: "RESET" });
     },
     onError: (error) =>
       showToast("error", "Error", "Ensure your email and try again later"),
+    
   });
 
   const handleSendResetPasswordCode = () => {
-    emailVerificationMutation.mutate({ email });
+    if (validateEmail(email)) {
+      emailVerificationMutation.mutate({ email })
+    }else{
+      showToast("error", "Error", "Ensure your email and try again later")
+    }
   };
 
   return (
@@ -80,6 +86,7 @@ export default function EmailConfirmScreen() {
       <View style={{ alignSelf: "center" }}>
         <View style={{ marginTop: 30 }}>
           <TextInputComp
+            type="email"
             value={email}
             onchangeValue={setEmail}
             label={t("email")}

@@ -1,24 +1,14 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import { TEXT_BLACK } from "../../utils/colors";
-import { ButtonComp } from "../ButtonComp"; // Assuming you have a button component
+import { ButtonComp } from "../common/ButtonComp"; // Assuming you have a button component
+import { StoryInfoScreenType } from "../../types/Story";
 
-export type StoryInfoScreenType = {
-    stepper: number;
-    setStepper: (value: number) => void;
-    progress: any;
-};
-
-export const StoryInfoScreen3: React.FC<StoryInfoScreenType> = ({ stepper, setStepper, progress }) => {
+export const StoryInfoScreen3: React.FC<StoryInfoScreenType> = ({ stepper, setStepper, progress, handleNext }) => {
     const [storyDescription, setStoryDescription] = useState<string>("");
 
-    const handleNext = () => {
-        setStepper(stepper + 1);
-        // Additional actions with storyDescription if needed
-    };
-
     return (
-        <View style={styles.container}>
+        <>
             <Text style={styles.title}>Write a Description for Your Story</Text>
 
             <TextInput
@@ -37,7 +27,7 @@ export const StoryInfoScreen3: React.FC<StoryInfoScreenType> = ({ stepper, setSt
                     onPress={handleNext}
                 />
             </View>
-        </View>
+        </>
     );
 };
 

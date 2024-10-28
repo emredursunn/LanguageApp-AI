@@ -1,7 +1,7 @@
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useState } from "react";
+import {useState } from "react";
 import { Dimensions, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import { StoryInfoScreen1 } from "../components/storyInfoViews/StoryInfoScreen1";
@@ -11,6 +11,8 @@ import { StoryInfoScreen4 } from "../components/storyInfoViews/StoryInfoScreen4"
 import { StoryInfoScreen5 } from "../components/storyInfoViews/StoryInfoScreen5";
 import { RootStackParamList } from "../types/stackNavigations";
 import { MAIN_COLOR, WHITE } from "../utils/colors";
+import { showToast } from "../utils/helpers";
+import AnimatedFormContainer from "../components/common/AnimatedFormContainer";
 
 type StoryInfoScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "StoryInfo">;
 
@@ -22,6 +24,8 @@ export default function StoryInfoScreen(){
     const navigation = useNavigation<StoryInfoScreenNavigationProp>();
 
     const [stepper, setStepper] = useState(1);
+    const MAX_STEP = 5
+    const [direction,setDirection] = useState<'BACK'|'NEXT'>('NEXT')
 
     const progress = useSharedValue(25); // Initial value for the first step
 
@@ -34,14 +38,25 @@ export default function StoryInfoScreen(){
 
     function handleGoBack() {
         if (stepper > 1) {
+            setDirection('BACK')
             const newStep = stepper - 1;
             setStepper(newStep);
-            progress.value = withTiming(newStep * 25, { duration: 500 });
+            progress.value = withTiming(newStep * (100/MAX_STEP), { duration: 500 });
+        }
+    }
+    
+    function handleNext() {
+        if (stepper < MAX_STEP) {
+            setDirection('NEXT')
+            const newStep = stepper + 1;
+            setStepper(newStep);
+            progress.value = withTiming(newStep * (100/MAX_STEP), { duration: 500 });
         }
     }
 
     function handleDoneInfo() {
-        
+        showToast("success", "Created", "")
+        setStepper(1)
     }
     
     const animatedProgressStyle = useAnimatedStyle(() => {
@@ -51,19 +66,21 @@ export default function StoryInfoScreen(){
     });
 
     const RenderCreateScreen = () => {
-        if (stepper === 1) {
-            return <StoryInfoScreen1 stepper={stepper} setStepper={setStepper} progress={progress}/>;
-        } else if (stepper === 2) {
-            return <StoryInfoScreen2 stepper={stepper} setStepper={setStepper} progress={progress}/>;
-        } else if (stepper === 3) {
-            return <StoryInfoScreen3 stepper={stepper} setStepper={setStepper} progress={progress}/>;
-        } else if (stepper === 4) {
-            return <StoryInfoScreen4 stepper={stepper} setStepper={setStepper} progress={progress}/>;
-        } else if (stepper === 5) {
-            return <StoryInfoScreen5 handleDoneInfo={handleDoneInfo} />;
+        switch (stepper) {
+            case 1:
+                return <StoryInfoScreen1 stepper={stepper} setStepper={setStepper} progress={progress} handleNext={handleNext}/>;
+            case 2:
+                return <StoryInfoScreen2 stepper={stepper} setStepper={setStepper} progress={progress} handleNext={handleNext}/>;
+            case 3:
+                return <StoryInfoScreen3 stepper={stepper} setStepper={setStepper} progress={progress} handleNext={handleNext}/>;
+            case 4:
+                return <StoryInfoScreen4 stepper={stepper} setStepper={setStepper} progress={progress} handleNext={handleNext}/>;
+            case 5:
+                return <StoryInfoScreen5 handleDoneInfo={handleDoneInfo} />;
+            default:
+                break;
         }
-        return null; // Ensure to return null if no screen matches
-    };
+    }
    
 
     return (
@@ -88,7 +105,9 @@ export default function StoryInfoScreen(){
                 </View>
             </View>
 
-            <RenderCreateScreen />
+            <AnimatedFormContainer key={`${stepper}-${direction}`} direction={direction}>
+                <RenderCreateScreen />
+            </AnimatedFormContainer>
             
         </SafeAreaView>
     );

@@ -1,13 +1,8 @@
 import React, { useState } from "react";
 import { Dimensions, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { MAIN_COLOR, TEXT_BLACK, WHITE } from "../../utils/colors"; // Assuming these are defined in your colors
-import { ButtonComp } from "../ButtonComp";
-
-export type StoryInfoScreenType = {
-    stepper: number;
-    setStepper: (value: number) => void;
-    progress: any;
-};
+import { ButtonComp } from "../common/ButtonComp";
+import { StoryInfoScreenType } from "../../types/Story";
 
 const { height } = Dimensions.get("screen");
 
@@ -33,7 +28,7 @@ const languagesData = [
     { label: "Norwegian", value: "norwegian" },
 ];
 
-export const StoryInfoScreen1: React.FC<StoryInfoScreenType> = ({ stepper, setStepper, progress }) => {
+export const StoryInfoScreen1: React.FC<StoryInfoScreenType> = ({ stepper, setStepper, progress,handleNext }) => {
     const [selectedLanguage, setSelectedLanguage] = useState<string | null>(null);
     const [searchTerm, setSearchTerm] = useState("");
 
@@ -50,13 +45,8 @@ export const StoryInfoScreen1: React.FC<StoryInfoScreenType> = ({ stepper, setSt
         }
     };
 
-    const handleNext = () => {
-        setStepper(stepper+1);
-    }
-
-
     return (
-        <View style={{ padding: 16 }}>
+        <>
             <Text style={{ fontSize: 24, fontWeight: "700", color: TEXT_BLACK, marginBottom: 16 }}>
                 Select the language of your story
             </Text>
@@ -110,7 +100,7 @@ export const StoryInfoScreen1: React.FC<StoryInfoScreenType> = ({ stepper, setSt
                 onPress={handleNext}
             />
             </View>
-        </View>
+        </>
     );
 };
 

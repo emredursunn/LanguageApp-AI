@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Dimensions, KeyboardTypeOptions, Pressable, Text, TextInput, TextStyle, View, ViewStyle } from "react-native";
 // import PhoneInput from "react-native-phone-number-input";
 import Feather from '@expo/vector-icons/Feather';
-import { BLACK_COLOR, LIGHT_GRAY, TEXT_BLACK, WHITE } from '../utils/colors';
+import { BLACK_COLOR, LIGHT_GRAY, TEXT_BLACK, WHITE } from '../../utils/colors';
 import PhoneInput from "react-native-phone-number-input";
 
 
@@ -42,12 +42,12 @@ export const TextInputComp = ({ value, onchangeValue, requiredError = false, lab
         <View style={{...styleContainer}}>
             
             <View style={{...styleLabel,}}>
-            <Text style={{fontSize:15, fontWeight:'300'}}>
+            <Text style={{fontSize:15, fontWeight:'300',marginBottom:2}}>
                     {label}
                 </Text>
             </View>
             
-            <View style={{ ...styleInputContainer }}>
+            <View style={{ ...styleInputContainer, paddingHorizontal:2 }}>
                 {isTextArea ? (
                     <TextInput
                         keyboardType={type as KeyboardTypeOptions}
@@ -89,11 +89,11 @@ export const TextInputPassword = ({
         return(
             <View style={{...styleContainer}}>
                 <View style={{...styleLabel,}}>
-                <Text style={{fontSize:15, fontWeight:'300'}}>
+                <Text style={{fontSize:15, fontWeight:'300', marginBottom:2}}>
                     {label}
                 </Text>
             </View>
-                <View style={{...styleInputContainer}}>
+                <View style={{...styleInputContainer, paddingHorizontal:2}}>
                     <TextInput value={value} onChangeText={onchangeValue} placeholder={placeholder} secureTextEntry={isShow} style={{...styleInput}}/>
 
                     <Pressable onPress={() => setisShow(!isShow)} style={{marginLeft: 20, justifyContent: "center"}}>
@@ -109,7 +109,7 @@ export const PhoneInputComp = ({styleContainer, label,phoneInput, placeHolder, p
     return(
         
         <View style={{...styleContainer}}>
-            <Text>{label}</Text>
+            <Text style={{marginBottom:2, paddingHorizontal:4, fontWeight:300}}>{label}</Text>
             <PhoneInput
                 ref={phoneInput}
                 defaultValue={phone}

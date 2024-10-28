@@ -27,7 +27,7 @@ import {
   WHITE,
 } from "../../utils/colors";
 import { BORDER_RADIUS_2, CONTAINER_HORIZONTAL } from "../../utils/measurement";
-import { ButtonComp } from "../../components/ButtonComp";
+import { ButtonComp } from "../../components/common/ButtonComp";
 import { useMutation } from "react-query";
 import {
   forgetPasswordResendVerify,

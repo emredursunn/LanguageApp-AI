@@ -5,8 +5,8 @@ import { Dimensions, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } fr
 import useI18n from "../../hooks/useI18n";
 import { BLACK_COLOR, LIGHT_GRAY, MAIN_COLOR, MAIN_COLOR_2, PINK, WHITE } from "../../utils/colors";
 import { CONTAINER_HORIZONTAL } from "../../utils/measurement";
-import { TextInputComp, TextInputPassword } from "../../components/TextInputComp";
-import { ButtonComp } from "../../components/ButtonComp";
+import { TextInputComp, TextInputPassword } from "../../components/common/TextInputComp";
+import { ButtonComp } from "../../components/common/ButtonComp";
 import { useMutation } from "react-query";
 import { login } from "../../services/authService";
 import { showToast } from "../../utils/helpers";

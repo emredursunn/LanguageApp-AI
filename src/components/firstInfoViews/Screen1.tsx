@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Dimensions, FlatList, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { withTiming } from "react-native-reanimated";
 import { MAIN_COLOR, TEXT_BLACK, WHITE } from "../../utils/colors"; // Ensure these colors are defined in your colors file
-import { ButtonComp } from "../ButtonComp";
+import { ButtonComp } from "../common/ButtonComp";
 
 export type ScreenType = {
     stepper: number;

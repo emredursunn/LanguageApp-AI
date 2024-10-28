@@ -9,12 +9,12 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { ButtonComp } from "../../components/ButtonComp";
+import { ButtonComp } from "../../components/common/ButtonComp";
 import {
   PhoneInputComp,
   TextInputComp,
   TextInputPassword,
-} from "../../components/TextInputComp";
+} from "../../components/common/TextInputComp";
 import useI18n from "../../hooks/useI18n";
 import {
   BLACK_COLOR,

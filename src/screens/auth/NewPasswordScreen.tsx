@@ -16,8 +16,8 @@ import {
   WHITE,
 } from "../../utils/colors";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { TextInputPassword } from "../../components/TextInputComp";
-import { ButtonComp } from "../../components/ButtonComp";
+import { TextInputPassword } from "../../components/common/TextInputComp";
+import { ButtonComp } from "../../components/common/ButtonComp";
 import useI18n from "../../hooks/useI18n";
 import { useMutation } from "react-query";
 import { forgetPasswordResetPassword } from "../../services/authService";
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     width: Dimensions.get("screen").width * 0.89,
     alignSelf: "center",
     borderRadius: 19,
-    paddingHorizontal:10,
+    paddingHorizontal:4,
     justifyContent:'space-between'
   },
   textInput: {

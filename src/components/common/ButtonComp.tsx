@@ -1,5 +1,5 @@
 import { ActivityIndicator, StyleSheet, Text, TextStyle, TouchableOpacity, ViewStyle } from "react-native";
-import { MAIN_COLOR_GREEN, WHITE } from "../utils/colors";
+import { MAIN_COLOR_GREEN, WHITE } from "../../utils/colors";
 
 type ButtonCompParams = {
     loading?: boolean, 
