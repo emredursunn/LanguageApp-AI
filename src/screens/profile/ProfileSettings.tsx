@@ -1,11 +1,11 @@
-import { View, Text, TouchableOpacity } from "react-native";
-import React from "react";
+import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import React from "react";
+import { Text, TouchableOpacity, View } from "react-native";
 import { useAuthStore } from "../../store/useAuthStore";
-import { ButtonComp } from "../../components/common/ButtonComp";
-import { BLACK_COLOR, WHITE } from "../../utils/colors";
 import { TabStackParamList } from "../../types/stackNavigations";
+import { LIGHT_GRAY, LIGHT_RED, MAIN_COLOR_GREEN, TEXT_BLACK, WHITE } from "../../utils/colors";
 
 interface Page {
   id:number;
@@ -15,9 +15,11 @@ interface Page {
 
 const RenderPages = ({ pages }: { pages: Page[] }) => {
   return pages.map((page) => (
-    <TouchableOpacity style={{paddingVertical:24, borderRadius:16, justifyContent:'center'}} key={page.id} onPress={page.onPress}>
-      <Text style={{color:BLACK_COLOR, fontWeight:'700', fontSize:24}}>{page.title}</Text>
-      <Text style={{position:'absolute', right:2, color:BLACK_COLOR, fontWeight:'700', fontSize:24}}> ➜ </Text>
+    <TouchableOpacity style={{paddingVertical:24, borderRadius:16, flexDirection:"row", alignItems:"center", justifyContent:'space-between'}} key={page.id} onPress={page.onPress}>
+      <Text style={{color:TEXT_BLACK, fontWeight:'600', fontSize:20}}>{page.title}</Text>
+      <View>
+      <AntDesign name="right" size={24} color={MAIN_COLOR_GREEN} />
+      </View>
     </TouchableOpacity>
   ));
 };
@@ -38,7 +40,13 @@ const ProfileSettings = () => {
   return (
     <View style={{flex:1, padding:32, backgroundColor:WHITE}}>
       <RenderPages pages={pages} />
-      <ButtonComp onPress={logout} title="Logout" />
+      <TouchableOpacity style={{borderWidth:1, justifyContent:"center", alignItems:"center", marginTop:50, alignSelf:"center", paddingHorizontal:24, paddingVertical:8,
+        borderRadius:12, borderColor:LIGHT_GRAY
+      }}>
+        <Text style={{fontWeight:"800", fontSize:16, color:LIGHT_RED,}}>
+          Log Out
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 };
