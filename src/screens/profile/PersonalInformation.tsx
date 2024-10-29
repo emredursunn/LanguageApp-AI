@@ -276,7 +276,7 @@ const PersonalInformation = () => {
           </Text>
         </TouchableOpacity>
       </View>
-      <View style={{ gap: 3 }}>
+      <View style={{ gap: 3, borderRadius:12 }}>
         <Text style={styles.itemLabel}>Goal Language</Text>
         <TouchableOpacity
           onPress={() => {
@@ -317,9 +317,13 @@ const styles = StyleSheet.create({
   itemInput: {
     flexDirection: 'row',
     backgroundColor: WHITE,
+    alignItems:'center',
     borderColor: LIGHT_GRAY,
-    borderWidth:2,
-    borderRadius: 4,
+    borderBottomWidth:2,
+    borderTopWidth:2,
+    borderRightWidth:0.5,
+    borderLeftWidth:0.5,
+    borderRadius: 12,
     paddingHorizontal: 8,
     paddingVertical: 16,
     marginBottom: 12,

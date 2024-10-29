@@ -19,7 +19,14 @@ export type TabStackParamList = {
     Profile: undefined,
     Settings:undefined,
     PersonalInformation:undefined,
-    SavedWords:undefined,
+    SavedWordsMenu:undefined,
+    SavedWordsList:{
+        languageId:number
+    },
+    LearntWordsMenu:undefined,
+    LearntWordsList: {
+        languageId:number
+    },
     Login:undefined,
     Register:undefined
 }

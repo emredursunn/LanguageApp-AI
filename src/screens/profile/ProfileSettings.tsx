@@ -34,13 +34,14 @@ const ProfileSettings = () => {
 
   const pages = [
     { id:1,title: "Personal Information", onPress: () => navigate("PersonalInformation") },
-    { id:2,title: "Saved Words", onPress: () => navigate("SavedWords") },
+    { id:2,title: "Saved Words", onPress: () => navigate("SavedWordsMenu") },
+    { id:3,title: "Learnt Words", onPress: () => navigate("LearntWordsMenu") },
   ];
 
   return (
     <View style={{flex:1, padding:32, backgroundColor:WHITE}}>
       <RenderPages pages={pages} />
-      <TouchableOpacity style={{borderWidth:1, justifyContent:"center", alignItems:"center", marginTop:50, alignSelf:"center", paddingHorizontal:24, paddingVertical:8,
+      <TouchableOpacity onPress={logout} style={{borderWidth:1, justifyContent:"center", alignItems:"center", marginTop:50, alignSelf:"center", paddingHorizontal:24, paddingVertical:8,
         borderRadius:12, borderColor:LIGHT_GRAY
       }}>
         <Text style={{fontWeight:"800", fontSize:16, color:LIGHT_RED,}}>
