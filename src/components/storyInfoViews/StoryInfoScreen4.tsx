@@ -1,13 +1,22 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StoryRequestData } from "../../screens/StoryInfoScreen";
 import { MAIN_COLOR, TEXT_BLACK, WHITE } from "../../utils/colors";
 import { ButtonComp } from "../common/ButtonComp"; // Assuming you have a Button component
-import { StoryInfoScreenType } from "../../types/Story";
 
-export const StoryInfoScreen4: React.FC<StoryInfoScreenType> = ({
+export type StoryScreenType = {
+  handleNext: () => void;
+  requestData: StoryRequestData,
+  setRequestData: React.Dispatch<React.SetStateAction<StoryRequestData>>;
+
+};
+
+export const StoryInfoScreen4: React.FC<StoryScreenType> = ({
   handleNext,
+  requestData,
+  setRequestData
 }) => {
-  const [selectedDuration, setSelectedDuration] = useState<string>("");
+  const [selectedDuration, setSelectedDuration] = useState<string>(requestData.duration.length > 0 ? requestData.duration : "");
 
   const durations = [
     { label: "Short", value: "short" },
@@ -16,8 +25,21 @@ export const StoryInfoScreen4: React.FC<StoryInfoScreenType> = ({
   ];
 
   const handleDurationSelection = (duration: string) => {
-    setSelectedDuration(duration);
+    if(selectedDuration == duration){
+      setSelectedDuration("");
+    }else{
+      setSelectedDuration(duration);
+    }
   };
+  
+  const handleNextClick = () => {
+    setRequestData((prev) => ({
+        ...prev,
+        duration:selectedDuration
+    }));
+
+    handleNext()
+  }
 
   return (
     <>
@@ -50,7 +72,7 @@ export const StoryInfoScreen4: React.FC<StoryInfoScreenType> = ({
             loading={false}
             isActive={!!selectedDuration}
             title={"Next"}
-            onPress={handleNext}
+            onPress={handleNextClick}
           />
         </View>
     </>

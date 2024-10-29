@@ -1,11 +1,28 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
+import { StoryRequestData } from "../../screens/StoryInfoScreen";
 import { TEXT_BLACK } from "../../utils/colors";
 import { ButtonComp } from "../common/ButtonComp"; // Assuming you have a button component
-import { StoryInfoScreenType } from "../../types/Story";
 
-export const StoryInfoScreen3: React.FC<StoryInfoScreenType> = ({ handleNext }) => {
-    const [storyDescription, setStoryDescription] = useState<string>("");
+export type StoryScreenType = {
+    handleNext: () => void;
+    requestData: StoryRequestData,
+    setRequestData: React.Dispatch<React.SetStateAction<StoryRequestData>>;
+
+};
+
+export const StoryInfoScreen3: React.FC<StoryScreenType> = ({ handleNext, requestData, setRequestData  }) => {
+    const [storyDescription, setStoryDescription] = useState<string>(requestData.description.length > 0 ? requestData.description : "");
+    
+
+    const handleNextClick = () => {
+        setRequestData((prev) => ({
+            ...prev,
+            description: storyDescription,
+        }));
+
+        handleNext()
+    }
 
     return (
         <>
@@ -24,7 +41,7 @@ export const StoryInfoScreen3: React.FC<StoryInfoScreenType> = ({ handleNext }) 
                     loading={false}
                     isActive={storyDescription.length > 0}
                     title={"Next"}
-                    onPress={handleNext}
+                    onPress={handleNextClick}
                 />
             </View>
         </>

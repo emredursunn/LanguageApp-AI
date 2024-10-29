@@ -1,111 +1,157 @@
 import React, { useState } from "react";
-import { Dimensions, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { MAIN_COLOR, TEXT_BLACK, WHITE } from "../../utils/colors"; // Assuming these are defined in your colors
+import { Dimensions, FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { StoryRequestData } from "../../screens/StoryInfoScreen";
+import { MAIN_COLOR, TEXT_BLACK, WHITE } from "../../utils/colors";
 import { ButtonComp } from "../common/ButtonComp";
-import { StoryInfoScreenType } from "../../types/Story";
 
 const { height } = Dimensions.get("screen");
 
-const languagesData = [
-    { label: "English", value: "english" },
-    { label: "Spanish", value: "spanish" },
-    { label: "French", value: "french" },
-    { label: "German", value: "german" },
-    { label: "Chinese", value: "chinese" },
-    { label: "Japanese", value: "japanese" },
-    { label: "Korean", value: "korean" },
-    { label: "Russian", value: "russian" },
-    { label: "Italian", value: "italian" },
-    { label: "Portuguese", value: "portuguese" },
-    { label: "Arabic", value: "arabic" },
-    { label: "Turkish", value: "turkish" },
-    { label: "Dutch", value: "dutch" },
-    { label: "Greek", value: "greek" },
-    { label: "Hebrew", value: "hebrew" },
-    { label: "Thai", value: "thai" },
-    { label: "Vietnamese", value: "vietnamese" },
-    { label: "Swedish", value: "swedish" },
-    { label: "Norwegian", value: "norwegian" },
-];
+export type RequestData = {
+    countryId: number | null; 
+    languageId: number | null; 
+    spokenLanguageId: number | null;
+};
 
-export const StoryInfoScreen1: React.FC<StoryInfoScreenType> = ({handleNext }) => {
-    const [selectedLanguage, setSelectedLanguage] = useState<string | null>(null);
-    const [searchTerm, setSearchTerm] = useState("");
+export type LanguageData = {
+    id: number;        
+    language: string;
+    iconUrl: string;
+    countryCode: string;
+};
 
-    // Filter languages based on the search term
-    const filteredLanguages = languagesData.filter(language =>
-        language.label.toLowerCase().includes(searchTerm.toLowerCase())
+export type StoryScreenType = {
+    handleNext: () => void;
+    languageData: LanguageData[];
+    requestData: StoryRequestData,
+    setRequestData: React.Dispatch<React.SetStateAction<StoryRequestData>>;
+
+};
+
+export const StoryInfoScreen1: React.FC<StoryScreenType> = ({ handleNext, languageData, requestData, setRequestData }) => {
+    const [selectedLanguage, setSelectedLanguage] = useState<LanguageData | null>(() => {
+        if (requestData.languageId) {
+            return languageData.find(language => language.id === requestData.languageId) || null;
+        }
+        return null;
+    });    
+
+    const [searchQuery, setSearchQuery] = useState<string>("");
+
+    const filteredLanguages = languageData?.filter((language) =>
+        language.language.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    const handleLanguageSelection = (language: string) => {
-        if(language == selectedLanguage){
-            setSelectedLanguage("")
-        }else{
+    const handleLanguageSelection = (language: LanguageData) => {
+        if (language === selectedLanguage) {
+            setSelectedLanguage(null);
+            setRequestData((prev) => ({
+                ...prev,
+                languageId: null
+            }));
+        } else {
             setSelectedLanguage(language);
+            setRequestData((prev) => ({
+                ...prev,
+                languageId: language.id
+            }));
         }
+        setSearchQuery("");
+    };
+    
+
+    const handleNextClick = () => {
+        if (selectedLanguage) {
+            setRequestData((prev) => ({
+                ...prev,
+                languageId: selectedLanguage.id,
+            }));
+        }
+        handleNext();
     };
 
     return (
-        <>
+        <View style={{ paddingHorizontal: 8 }}>
             <Text style={{ fontSize: 24, fontWeight: "700", color: TEXT_BLACK, marginBottom: 16 }}>
                 Select the language of your story
             </Text>
 
             {/* Search Input */}
             <TextInput
-                style={{
-                    height: 40,
-                    borderColor: "gray",
-                    borderWidth: 1,
-                    borderRadius: 8,
-                    paddingHorizontal: 10,
-                    marginBottom: 16,
-                }}
+                style={styles.searchInput}
                 placeholder="Search for a language"
-                value={searchTerm}
-                onChangeText={setSearchTerm}
+                value={searchQuery}
+                onChangeText={setSearchQuery}
             />
-
-           
 
             {/* List of language options */}
             <FlatList
                 data={filteredLanguages}
-                keyExtractor={(item) => item.value}
+                keyExtractor={(item) => item.id.toString()}
                 style={{ maxHeight: height * 0.55 }}
                 renderItem={({ item }) => (
                     <TouchableOpacity
-                        onPress={() => handleLanguageSelection(item.label)}
-                        style={{
-                            padding: 12,
-                            marginVertical: 6,
-                            borderWidth: 1,
-                            borderColor: "gray",
-                            borderRadius: 8,
-                            backgroundColor: selectedLanguage === item.label ? MAIN_COLOR : WHITE,
-                        }}
+                        onPress={() => handleLanguageSelection(item)}
+                        style={[
+                            styles.languageItem,
+                            { backgroundColor: selectedLanguage?.language === item.language ? MAIN_COLOR : WHITE },
+                        ]}
                     >
-                        <Text style={{ fontSize: 18, color: selectedLanguage === item.label ? WHITE : TEXT_BLACK }}>
-                            {item.label}
-                        </Text>
+                        <View style={styles.languageContent}>
+                            <Image
+                                source={{ uri: item.iconUrl }}
+                                style={styles.flagIcon}
+                            />
+                            <Text style={{
+                                fontSize: 18,
+                                color: selectedLanguage?.language === item.language ? WHITE : TEXT_BLACK,
+                            }}>
+                                {item.language}
+                            </Text>
+                        </View>
                     </TouchableOpacity>
                 )}
                 showsVerticalScrollIndicator={false}
             />
-             <View style={styles.buttonContainer}>
-             <ButtonComp
-                loading={false}
-                isActive={selectedLanguage !== null && selectedLanguage.length > 0} // Updated condition
-                title={"Next"}
-                onPress={handleNext}
-            />
+
+            <View style={styles.buttonContainer}>
+                <ButtonComp
+                    loading={false}
+                    isActive={!!selectedLanguage}
+                    title={"Next"}
+                    onPress={handleNextClick}
+                />
             </View>
-        </>
+        </View>
     );
 };
 
 const styles = StyleSheet.create({
+    searchInput: {
+        height: 40,
+        borderColor: "gray",
+        borderWidth: 1,
+        borderRadius: 8,
+        paddingHorizontal: 10,
+        marginBottom: 16,
+        color: TEXT_BLACK,
+    },
+    languageItem: {
+        padding: 12,
+        marginVertical: 6,
+        borderWidth: 1,
+        borderColor: "gray",
+        borderRadius: 8,
+    },
+    languageContent: {
+        flexDirection: "row",
+        alignItems: "center",
+    },
+    flagIcon: {
+        width: 24,
+        height: 16,
+        marginRight: 8,
+    },
     buttonContainer: {
         marginTop: 32,
     },
-})
+});

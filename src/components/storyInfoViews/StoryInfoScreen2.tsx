@@ -1,13 +1,21 @@
 import React, { useState } from "react";
 import { Dimensions, FlatList, Text, TouchableOpacity, View } from "react-native";
+import { StoryRequestData } from "../../screens/StoryInfoScreen";
 import { MAIN_COLOR, TEXT_BLACK, WHITE } from "../../utils/colors"; // Assuming MAIN_COLOR and WHITE are defined in colors
 import { ButtonComp } from "../common/ButtonComp";
-import { StoryInfoScreenType } from "../../types/Story";
+
+
+export type StoryScreenType = {
+    handleNext: () => void;
+    requestData: StoryRequestData,
+    setRequestData: React.Dispatch<React.SetStateAction<StoryRequestData>>;
+
+};
 
 const { width, height } = Dimensions.get("screen");
 
-export const StoryInfoScreen2: React.FC<StoryInfoScreenType> = ({ handleNext }) => {
-    const [selectedTitle, setSelectedTitle] = useState<string>("");
+export const StoryInfoScreen2: React.FC<StoryScreenType> = ({ handleNext, requestData, setRequestData }) => {
+    const [selectedTitle, setSelectedTitle] = useState<string>(requestData.title.length > 0 ? requestData.title : "");
 
     const titles = [
         "Adventure Awaits", "My Day", "Memorable Moments", "Family Time",
@@ -15,14 +23,21 @@ export const StoryInfoScreen2: React.FC<StoryInfoScreenType> = ({ handleNext }) 
         "Celebration", "Work Life", "Fitness Journey", "Pet Moments",
         "Art & Creativity", "Life Goals", "Hobbies & Interests", "Mindfulness",
         "Friends Forever", "Love Story", "Self-Care", "Grateful For", "New Beginnings",
-        // Add more titles as needed
     ];
 
     const handleTitleSelection = (title: string) => {
-        if(title == selectedTitle){
+        if (title === selectedTitle) {
             setSelectedTitle("");
-        }else{
+            setRequestData((prev) => ({
+                ...prev,
+                title: "",
+            }));
+        } else {
             setSelectedTitle(title);
+            setRequestData((prev) => ({
+                ...prev,
+                title: title,
+            }));
         }
     };
 

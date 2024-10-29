@@ -1,14 +1,18 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StoryRequestData } from "../../screens/StoryInfoScreen";
 import { MAIN_COLOR, TEXT_BLACK, WHITE } from "../../utils/colors";
 import { ButtonComp } from "../common/ButtonComp"; // Assuming you have a Button component
 
-export type ScreenType = {
+export type StoryScreenType = {
     handleDoneInfo: () => void;
+    requestData: StoryRequestData,
+    setRequestData: React.Dispatch<React.SetStateAction<StoryRequestData>>;
+  
 };
 
-export const StoryInfoScreen5: React.FC<ScreenType> = ({ handleDoneInfo }) => {
-    const [selectedDifficulty, setSelectedDifficulty] = useState<string>("");
+export const StoryInfoScreen5: React.FC<StoryScreenType> = ({ handleDoneInfo, requestData, setRequestData }) => {
+    const [selectedDifficulty, setSelectedDifficulty] = useState<string>(requestData.difficulty.length > 0 ? requestData.difficulty : "");
 
     const difficulties = [
         { label: "Easy", value: "easy" },
@@ -17,7 +21,19 @@ export const StoryInfoScreen5: React.FC<ScreenType> = ({ handleDoneInfo }) => {
     ];
 
     const handleDifficultySelection = (difficulty: string) => {
-        setSelectedDifficulty(difficulty);
+        if (selectedDifficulty === difficulty) {
+            setSelectedDifficulty("");
+            setRequestData((prev) => ({
+                ...prev,
+                difficulty: "", 
+            }));
+        } else {
+            setSelectedDifficulty(difficulty);
+            setRequestData((prev) => ({
+                ...prev,
+                difficulty: difficulty, 
+            }));
+        }
     };
 
     return (
