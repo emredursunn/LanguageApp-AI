@@ -43,7 +43,6 @@ export default function LoginScreen() {
     onSuccess: (data) => {
       const { jwt, success } = data;
       if (success) {
-        console.log("d", data.user.infoStatus);
         setToken(jwt); // Update auth state in the store
         showToast("success", "Login successful", "Welcome!");
         if (data.user.infoStatus == 0 || data.user.infoStatus==null) {

@@ -22,10 +22,7 @@ export default function FirstInfoScreen() {
       spokenLanguageId: null
     });
 
-    console.log("request data", requestData);
-
     const [spokenLanguage, setSpokenLanguage] = useState<string>("");
-    console.log("spokenLanguage", spokenLanguage);
     
     const [stepper, setStepper] = useState(1);
     const MAX_STEP = 3
@@ -35,7 +32,6 @@ export default function FirstInfoScreen() {
     const { data, error, isLoading } = useQuery('country', getCountry);
 
     const { data:languageData, error:languageError, isLoading:languageLoading } = useQuery('language', getLanguage);
-    console.log("lang data", languageData);
 
     function handleCloseScreen() {
         setStepper(1);
