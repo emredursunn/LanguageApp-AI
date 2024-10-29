@@ -1,13 +1,13 @@
-import { Text } from 'react-native';
-import React, { useState } from 'react';
-import { useQuery } from 'react-query';
-import { getSavedWordsByLanguageId } from '../../services/userService';
 import { useRoute } from '@react-navigation/native';
-import { translateText } from '../../services/apiService';
-import { WordWithoutMeaning } from './LearntWordsListScreen';
+import React, { useState } from 'react';
+import { Text } from 'react-native';
+import { useQuery } from 'react-query';
+import Loading from '../../components/loading';
 import WordList from '../../components/profile/WordList';
+import { getSavedWordsByLanguageId } from '../../services/userService';
 import { useUserStore } from '../../store/useUserStore';
 import { IWord } from '../../types/Word';
+import { WordWithoutMeaning } from './LearntWordsListScreen';
 
 
 const SavedWordsList = () => {
@@ -41,12 +41,10 @@ const SavedWordsList = () => {
   );
 
   if (isFetching) {
-    return <Text>Loading...</Text>;
+    return 
+    <Loading/>
   }
 
-  if (isError) {
-    return <Text>Error loading words.</Text>;
-  }
 
   return (
     <WordList language={language} words={wordsWithMeanings} setWords={setWordsWithMeanings} type='SAVED'/>

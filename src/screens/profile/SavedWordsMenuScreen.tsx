@@ -1,8 +1,9 @@
-import { Text } from "react-native";
 import React from "react";
+import { Text } from "react-native";
 import { useQuery } from "react-query";
-import { getSavedLanguages } from "../../services/userService";
+import Loading from "../../components/loading";
 import LanguageMenu from "../../components/profile/LanguageMenu";
+import { getSavedLanguages } from "../../services/userService";
 
 const SavedWordsMenu = () => {
   const { data, isFetching, isError } = useQuery(
@@ -19,7 +20,9 @@ const SavedWordsMenu = () => {
   );
 
   if (isFetching) {
-    return <Text>Loading...</Text>;
+    return(
+      <Loading/>
+    )
   }
 
   if (isError) {
