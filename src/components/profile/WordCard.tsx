@@ -7,7 +7,7 @@ import { IWord } from "../../types/Word";
 
 export interface IWordCard extends IWord{
   onPress: (word:IWord) => void,
-  learntWord?: UseMutationResult<
+  learnedWord?: UseMutationResult<
     any,
     unknown,
     {
@@ -19,9 +19,9 @@ export interface IWordCard extends IWord{
   >;
 }
 
-const WordCard = ({ id, languageId, word, meaning, onPress, learntWord }: IWordCard) => {
-  const handleLearntWord = () => {
-    learntWord?.mutate({ id, languageId, word });
+const WordCard = ({ id, languageId, word, meaning, onPress, learnedWord }: IWordCard) => {
+  const handleLearnedWord = () => {
+    learnedWord?.mutate({ id, languageId, word });
   };
 
   const handleOnPress = () => {
@@ -36,13 +36,13 @@ const WordCard = ({ id, languageId, word, meaning, onPress, learntWord }: IWordC
       </View>
 
       <TouchableOpacity
-        disabled={!learntWord}
-        onPress={learntWord ? handleLearntWord : undefined}
+        disabled={!learnedWord}
+        onPress={learnedWord ? handleLearnedWord : undefined}
       >
         <Ionicons
           name="checkmark-done-circle-outline"
           size={32}
-          color={learntWord ? PINK : GREEN}
+          color={learnedWord ? PINK : GREEN}
         />
       </TouchableOpacity>
     </TouchableOpacity>

@@ -7,7 +7,7 @@ import WordList from '../../components/profile/WordList';
 import { getSavedWordsByLanguageId } from '../../services/userService';
 import { useUserStore } from '../../store/useUserStore';
 import { IWord } from '../../types/Word';
-import { WordWithoutMeaning } from './LearntWordsListScreen';
+import { WordWithoutMeaning } from './LearnedWordsListScreen';
 
 
 const SavedWordsList = () => {

@@ -17,7 +17,6 @@ type Props = {
   examples: { sentence: string; translation: string }[];
   isOpen: boolean;
   onClose: () => void;
-  isLoading:boolean;
 };
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("screen");
@@ -40,7 +39,7 @@ const DisplayLine = ({
   </View>
 );
 
-const WordBottomSheet = ({ word, examples, isOpen, onClose, isLoading }: Props) => {
+const WordBottomSheet = ({ word, examples, isOpen, onClose }: Props) => {
   return (
     <Actionsheet isOpen={isOpen} onClose={onClose}>
       <Actionsheet.Content style={styles.content}>

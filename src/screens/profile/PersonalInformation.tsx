@@ -29,7 +29,7 @@ const PersonalInformation = () => {
   const { auth } = useAuthStore();
   const [name, setName] = useState<string>("");
   const [surname, setSurname] = useState<string>("");
-  const { countryId, languageId, spokenLanguageId, setSpokenLanguageCode } = useUserStore();
+  const { countryId, languageId, spokenLanguageId, setSpokenLanguageCode, setCountryId,setLanguageId,setSpokenLanguageId, } = useUserStore();
 
   const { isOpen, onOpen, onClose } = useDisclose();
   const [mode, setMode] = useState(1); // 1-Country 2- Spoken Language 3- Goal language
@@ -97,6 +97,7 @@ const PersonalInformation = () => {
     mutationFn:updateFirstInfo,
     onSuccess(data) {
       console.log(data)
+      showToast("info", "Changes are saved!", "");
     },
     onError(error) {
       console.log(error)
@@ -108,7 +109,9 @@ const PersonalInformation = () => {
     if(countryId && languageId && spokenLanguageId && name && surname && selectedSpokenLanguage){
       updateFirstInfoMutation.mutate({countryId,languageId,spokenLanguageId})
       setSpokenLanguageCode(selectedSpokenLanguage?.countryCode)
-      showToast("info", "Changes are saved!", "");
+      setCountryId(countryId)
+      setLanguageId(languageId)
+      setSpokenLanguageId(spokenLanguageId)
     }
   }
 

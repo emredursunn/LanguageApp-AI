@@ -9,7 +9,7 @@ type ProfileScreenNavigationProp = NativeStackNavigationProp<any, "Profile">;
 
 type Props = {
   languages: ILanguageCard[];
-  type: "SAVED" | "LEARNT";
+  type: "SAVED" | "LEARNED";
 };
 
 const LanguageMenu = ({ languages, type }: Props) => {
@@ -18,8 +18,8 @@ const LanguageMenu = ({ languages, type }: Props) => {
   const handleNavigate = ({languageId, language} :{languageId: number, language:string}) => {
     if (type === "SAVED") {
       navigation.navigate("SavedWordsList", { languageId,language });
-    } else if (type === "LEARNT") {
-      navigation.navigate("LearntWordsList", { languageId, language });
+    } else if (type === "LEARNED") {
+      navigation.navigate("LearnedWordsList", { languageId, language });
     }
   };
 

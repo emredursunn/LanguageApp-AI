@@ -1,14 +1,14 @@
-import { useDisclose } from "native-base";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
-import { FlatList, StyleSheet, Text } from "react-native";
-import { useMutation } from "react-query";
-import { learntWord } from "../../services/userService";
-import { useUserStore } from "../../store/useUserStore";
-import { IWord } from "../../types/Word";
+import WordCard, { IWordCard } from "./WordCard";
 import { WHITE } from "../../utils/colors";
-import Loading from "../loading";
+import { useMutation } from "react-query";
 import WordBottomSheet from "./WordBottomSheet";
-import WordCard from "./WordCard";
+import { IWord } from "../../types/Word";
+import { useDisclose } from "native-base";
+import { useUserStore } from "../../store/useUserStore";
+import { learnedWord } from "../../services/userService";
+import Loading from "../loading";
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 type Props = {
@@ -36,7 +36,7 @@ const WordList = ({ language, words, setWords, type }: Props) => {
   useEffect(() => {
     if (selectedWord && language) {
       setGeminiLoading(true);
-
+      console.log(spokenLanguageCode)
       const fetchGeminiData = async () => {
         try {
           const prompt = `
@@ -75,8 +75,8 @@ const WordList = ({ language, words, setWords, type }: Props) => {
     onOpen();
   };
 
-  const learntWordMutation = useMutation({
-    mutationFn: learntWord,
+  const learnedWordMutation = useMutation({
+    mutationFn: learnedWord,
     onSuccess(data, variables, context) {
       if (setWords) {
         console.log(variables);
@@ -97,13 +97,13 @@ const WordList = ({ language, words, setWords, type }: Props) => {
       word={item.word}
       meaning={item.meaning}
       onPress={handleOnOpen}
-      learntWord={type === "SAVED" ? learntWordMutation : undefined}
+      learnedWord={type === "SAVED" ? learnedWordMutation : undefined}
     />
   );
 
   if(geminiLoading){
     return(
-      <Loading/>
+      <Loading />
     )
   }
 

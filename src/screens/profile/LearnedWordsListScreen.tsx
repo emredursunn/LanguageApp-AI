@@ -1,7 +1,7 @@
 import { StyleSheet, Text } from 'react-native';
 import React, { useState } from 'react';
 import { useQuery } from 'react-query';
-import { getLearntWords } from '../../services/userService';
+import { getLearnedWords } from '../../services/userService';
 import WordCard, { IWordCard } from '../../components/profile/WordCard';
 import { useRoute } from '@react-navigation/native';
 import WordList from '../../components/profile/WordList';
@@ -14,14 +14,14 @@ export interface WordWithoutMeaning {
   word:string,
 }
 
-const LearntWordsList = () => {
+const LearnedWordsList = () => {
 
   const {languageId, language} = useRoute<any>().params
   const [wordsWithMeanings, setWordsWithMeanings] = useState<IWordCard[]>([]);
   const {spokenLanguageCode} = useUserStore()
   const { data, isFetching, isError } = useQuery(
-    ['getLearntWordsByLanguageId', languageId],
-    () => getLearntWords({ languageId }),
+    ['getLearnedWordsByLanguageId', languageId],
+    () => getLearnedWords({ languageId }),
     {
       onSuccess: async (data) => {
         const wordsData = data.data; // Gelen data'nın içinden kelimeleri alıyoruz
@@ -57,7 +57,7 @@ const LearntWordsList = () => {
   );
 };
 
-export default LearntWordsList;
+export default LearnedWordsList;
 
 const styles = StyleSheet.create({
   list: {

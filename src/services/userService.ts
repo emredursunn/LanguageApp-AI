@@ -55,7 +55,7 @@ export const saveWord = async ({
   return response.data;
 };
 
-export const learntWord = async ({
+export const learnedWord = async ({
   id,
   languageId,
   word
@@ -68,12 +68,12 @@ export const learntWord = async ({
   return response.data;
 };
 
-export const getLearntLanguages = async () => {
+export const getLearnedLanguages = async () => {
   const response = await api.get("/user/learnt-languages");
   return response.data;
 };
 
-export const getLearntWords = async ({languageId} : {languageId:number}) => {
+export const getLearnedWords = async ({languageId} : {languageId:number}) => {
   const response = await api.get(`/user/learnt-language/${languageId}`);
   return response.data;
 };

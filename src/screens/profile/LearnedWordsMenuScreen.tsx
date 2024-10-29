@@ -1,14 +1,14 @@
 import { Text } from 'react-native'
 import React from 'react'
 import { useQuery } from 'react-query';
-import { getLearntLanguages } from '../../services/userService';
 import LanguageMenu from '../../components/profile/LanguageMenu';
+import { getLearnedLanguages } from '../../services/userService';
 
-const LearntWordsMenu = () => {
+const LearnedWordsMenu = () => {
 
   const { data, isFetching, isError } = useQuery(
-    ["getLearntLanguages"],
-    getLearntLanguages,
+    ["getLearnedLanguages"],
+    getLearnedLanguages,
     {
       onSuccess(data) {
         console.log(data);
@@ -28,9 +28,9 @@ const LearntWordsMenu = () => {
   }
 
   return (
-    <LanguageMenu type='LEARNT' languages={data && data.data} />
+    <LanguageMenu type='LEARNED' languages={data && data.data} />
   );
 };
 
 
-export default LearntWordsMenu
+export default LearnedWordsMenu

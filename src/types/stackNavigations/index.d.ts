@@ -24,11 +24,12 @@ export type TabStackParamList = {
         languageId:number,
         language:string,
     },
-    LearntWordsMenu:undefined,
-    LearntWordsList: {
+    LearnedWordsMenu:undefined,
+    LearnedWordsList: {
         languageId:number,
         language:string,
     },
+    PasswordUpdate: undefined,
     Login:undefined,
     Register:undefined
 }

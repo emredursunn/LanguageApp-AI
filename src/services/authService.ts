@@ -126,3 +126,25 @@ export const forgetPasswordResetPassword = async ({
 
   return response.data;
 };
+
+export const passwordUpdate = async ({
+  newPassword,
+}: {
+  newPassword: string;
+}) => {
+  const response = await api.put("/auth/password-update", {
+    newPassword,
+  });
+
+  return response.data;
+};
+
+export const logoutApi = async () => {
+  const response = await api.post("/auth/logout");
+  return response.data;
+};
+
+export const deactive = async () => {
+  const response = await api.post("/auth/deactive");
+  return response.data;
+};
