@@ -1,17 +1,18 @@
 import React, { useState } from "react";
 import {
-  Dimensions,
-  FlatList,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
+    Dimensions,
+    FlatList,
+    Image,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from "react-native";
-import { MAIN_COLOR, TEXT_BLACK } from "../../utils/colors"; // Ensure this path is correct
-import { ButtonComp } from "../common/ButtonComp"; // Ensure ButtonComp is imported
 import { useMutation } from "react-query";
 import { updateFirstInfo } from "../../services/userService";
 import { useUserStore } from "../../store/useUserStore";
+import { MAIN_COLOR, TEXT_BLACK } from "../../utils/colors"; // Ensure this path is correct
+import { ButtonComp } from "../common/ButtonComp"; // Ensure ButtonComp is imported
 
 export type RequestData = {
   countryId: number | null;
@@ -141,9 +142,15 @@ export const Screen3: React.FC<ScreenType> = ({
               borderColor: "gray",
               borderRadius: 8,
               backgroundColor:
-                selectedLanguage?.id === item.id ? MAIN_COLOR : "white", // Highlight selected item
+                selectedLanguage?.id === item.id ? MAIN_COLOR : "white", // Highlight selected item,
+            flexDirection:"row",
+            alignItems:"center"
             }}
           >
+             <Image
+                source={{ uri: item.iconUrl }} // Bayrağın URL'si
+                style={{ width: 24, height: 16, marginRight: 8 }} // Boyutları ve sağ kenar boşluğu
+            />
             <Text
               style={{
                 color: selectedLanguage?.id === item.id ? "white" : TEXT_BLACK,

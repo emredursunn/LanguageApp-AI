@@ -2,12 +2,11 @@ import { CommonActions, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useState } from "react";
 import {
-  Dimensions,
   SafeAreaView,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 import { useMutation } from "react-query";
 import { ButtonComp } from "../../components/common/ButtonComp";
@@ -20,11 +19,10 @@ import { login } from "../../services/authService";
 import { useAuthStore } from "../../store/useAuthStore";
 import {
   BLACK_COLOR,
-  LIGHT_GRAY,
   MAIN_COLOR,
   MAIN_COLOR_2,
   PINK,
-  WHITE,
+  WHITE
 } from "../../utils/colors";
 import { showToast } from "../../utils/helpers";
 import { CONTAINER_HORIZONTAL } from "../../utils/measurement";
@@ -37,17 +35,18 @@ export default function LoginScreen() {
   const { t } = useI18n("LoginScreen");
   const { setToken } = useAuthStore();
 
-  const [email, setEmail] = useState("uygareren1030@gmail.com");
-  const [password, setPassword] = useState("uygareren12345");
+  const [email, setEmail] = useState("uygareren1032@gmail.com");
+  const [password, setPassword] = useState("uygareren123");
 
   const loginMutation = useMutation({
     mutationFn: login,
     onSuccess: (data) => {
       const { jwt, success } = data;
       if (success) {
+        console.log("d", data.user.infoStatus);
         setToken(jwt); // Update auth state in the store
         showToast("success", "Login successful", "Welcome!");
-        if (data.user.infoStatus == 0) {
+        if (data.user.infoStatus == 0 || data.user.infoStatus==null) {
           navigation.dispatch(
             CommonActions.reset({
               index: 1,

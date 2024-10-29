@@ -35,6 +35,7 @@ export default function FirstInfoScreen() {
     const { data, error, isLoading } = useQuery('country', getCountry);
 
     const { data:languageData, error:languageError, isLoading:languageLoading } = useQuery('language', getLanguage);
+    console.log("lang data", languageData);
 
     function handleCloseScreen() {
         setStepper(1);
