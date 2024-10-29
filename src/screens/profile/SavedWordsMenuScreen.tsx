@@ -2,7 +2,7 @@ import { Text } from "react-native";
 import React from "react";
 import { useQuery } from "react-query";
 import { getSavedLanguages } from "../../services/userService";
-import LanguagesMenu from "../../components/savedWords/LanguagesMenu";
+import LanguageMenu from "../../components/profile/LanguageMenu";
 
 const SavedWordsMenu = () => {
   const { data, isFetching, isError } = useQuery(
@@ -27,7 +27,7 @@ const SavedWordsMenu = () => {
   }
 
   return (
-    <LanguagesMenu type={"SAVED"} languages={data && data.data}/>
+    <LanguageMenu type={"SAVED"} languages={data && data.data}/>
   );
 };
 

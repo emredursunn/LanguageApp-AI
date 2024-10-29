@@ -2,7 +2,7 @@ import { Text } from 'react-native'
 import React from 'react'
 import { useQuery } from 'react-query';
 import { getLearntLanguages } from '../../services/userService';
-import LanguagesMenu from '../../components/savedWords/LanguagesMenu';
+import LanguageMenu from '../../components/profile/LanguageMenu';
 
 const LearntWordsMenu = () => {
 
@@ -28,7 +28,7 @@ const LearntWordsMenu = () => {
   }
 
   return (
-    <LanguagesMenu type='LEARNT' languages={data && data.data} />
+    <LanguageMenu type='LEARNT' languages={data && data.data} />
   );
 };
 

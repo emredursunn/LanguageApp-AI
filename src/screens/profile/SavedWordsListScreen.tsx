@@ -2,18 +2,18 @@ import { Text } from 'react-native';
 import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 import { getSavedWordsByLanguageId } from '../../services/userService';
-import WordCard, { IWordCard } from '../../components/savedWords/WordCard';
 import { useRoute } from '@react-navigation/native';
 import { translateText } from '../../services/apiService';
 import { WordWithoutMeaning } from './LearntWordsListScreen';
-import WordList from '../../components/savedWords/WordList';
+import WordList from '../../components/profile/WordList';
 import { useUserStore } from '../../store/useUserStore';
+import { IWord } from '../../types/Word';
 
 
 const SavedWordsList = () => {
 
   const {languageId} = useRoute<any>().params
-  const [wordsWithMeanings, setWordsWithMeanings] = useState<IWordCard[]>([]);
+  const [wordsWithMeanings, setWordsWithMeanings] = useState<IWord[]>([]);
   const {spokenLanguageCode} = useUserStore()
 
   const { data, isFetching, isError } = useQuery(
@@ -29,7 +29,7 @@ const SavedWordsList = () => {
             languageId,
             word: wordObj.word,
             meaning: "meaningResponse", // Anlamı response içinden çekiyoruz
-          };
+          } as IWord;
         });
         const resolvedWordsWithMeanings = await Promise.all(wordsWithMeaningsPromises);
         setWordsWithMeanings(resolvedWordsWithMeanings);

@@ -2,9 +2,9 @@ import { StyleSheet, Text } from 'react-native';
 import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 import { getLearntWords } from '../../services/userService';
-import WordCard, { IWordCard } from '../../components/savedWords/WordCard';
+import WordCard, { IWordCard } from '../../components/profile/WordCard';
 import { useRoute } from '@react-navigation/native';
-import WordList from '../../components/savedWords/WordList';
+import WordList from '../../components/profile/WordList';
 import { translateText } from '../../services/apiService';
 import { useUserStore } from '../../store/useUserStore';
 

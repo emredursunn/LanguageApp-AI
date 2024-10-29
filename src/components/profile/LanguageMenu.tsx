@@ -12,7 +12,7 @@ type Props = {
   type: "SAVED" | "LEARNT";
 };
 
-const LanguagesMenu = ({ languages, type }: Props) => {
+const LanguageMenu = ({ languages, type }: Props) => {
   const navigation = useNavigation<ProfileScreenNavigationProp>();
 
   const handleNavigate = (languageId: number) => {
@@ -40,7 +40,7 @@ const LanguagesMenu = ({ languages, type }: Props) => {
   );
 };
 
-export default LanguagesMenu;
+export default LanguageMenu;
 
 const styles = StyleSheet.create({
   container: {

@@ -3,12 +3,10 @@ import React from "react";
 import { BLACK_COLOR, GREEN, PINK } from "../../utils/colors";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { UseMutationResult } from "react-query";
+import { IWord } from "../../types/Word";
 
-export interface IWordCard {
-  id: number;
-  languageId: number;
-  word: string;
-  meaning: string;
+export interface IWordCard extends IWord{
+  onPress: (word:IWord) => void,
   learntWord?: UseMutationResult<
     any,
     unknown,
@@ -21,13 +19,17 @@ export interface IWordCard {
   >;
 }
 
-const WordCard = ({ id, languageId, word, meaning, learntWord }: IWordCard) => {
+const WordCard = ({ id, languageId, word, meaning, onPress, learntWord }: IWordCard) => {
   const handleLearntWord = () => {
     learntWord?.mutate({ id, languageId, word });
   };
 
+  const handleOnPress = () => {
+    onPress({id,languageId,word,meaning})
+  }
+
   return (
-    <View style={styles.card}>
+    <TouchableOpacity onPress={handleOnPress} style={styles.card}>
       <View>
         <Text style={styles.word}>{word}</Text>
         <Text style={styles.meaning}>{meaning}</Text>
@@ -43,7 +45,7 @@ const WordCard = ({ id, languageId, word, meaning, learntWord }: IWordCard) => {
           color={learntWord ? PINK : GREEN}
         />
       </TouchableOpacity>
-    </View>
+    </TouchableOpacity>
   );
 };
 
