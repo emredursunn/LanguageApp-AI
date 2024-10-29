@@ -18,9 +18,10 @@ import { CONTAINER_HORIZONTAL } from "../../utils/measurement";
 import { Actionsheet, useDisclose } from "native-base";
 import { useUserStore } from "../../store/useUserStore";
 import { CountryData, RequestData } from "../../components/firstInfoViews/Screen1";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { getCountry, getLanguage } from "../../services/apiService";
 import { LanguageData } from "../../components/firstInfoViews/Screen2";
+import { updateFirstInfo } from "../../services/userService";
 
 const { height, width } = Dimensions.get("screen");
 
@@ -92,9 +93,23 @@ const PersonalInformation = () => {
     onClose();
   }, [requestData]);
 
+  const updateFirstInfoMutation = useMutation({
+    mutationFn:updateFirstInfo,
+    onSuccess(data) {
+      console.log(data)
+    },
+    onError(error) {
+      console.log(error)
+    },
+  })
+
   const handleSaveChanges = () => {
-    showToast("info", "Changes are saved!", "");
-  };
+    const { countryId, languageId, spokenLanguageId } = requestData
+    if(countryId && languageId && spokenLanguageId && name && surname){
+      updateFirstInfoMutation.mutate({countryId,languageId,spokenLanguageId})
+      showToast("info", "Changes are saved!", "");
+    }
+  }
 
   const RenderModals = () => {
     switch (mode) {
@@ -105,6 +120,7 @@ const PersonalInformation = () => {
             keyExtractor={(item) => item.id.toString()} // Use id for key
             showsVerticalScrollIndicator={false}
             style={{ maxHeight: height * 0.55, marginTop: 16 }} // Set max height for FlatList
+            contentContainerStyle={{ width: width }}
             renderItem={({ item }) => (
               <TouchableOpacity
                 onPress={() => {
@@ -116,6 +132,10 @@ const PersonalInformation = () => {
                   backgroundColor: requestData.countryId === item.id ? MAIN_COLOR : "white", // Highlight selected item
                 }}
               >
+                <Image
+            source={{ uri: item.iconUrl || 'default_icon_url' }} // Replace 'default_icon_url' with a valid URL
+            style={{ width: 24, height: 16, marginRight: 8 }}
+          />
                 <Text
                   style={{
                     color: requestData.countryId === item.id ? "white" : TEXT_BLACK,
@@ -136,6 +156,7 @@ const PersonalInformation = () => {
             keyExtractor={(item) => item.id.toString()} // Use id for key
             showsVerticalScrollIndicator={false}
             style={{ maxHeight: height * 0.55, marginTop: 16 }} // Set max height for FlatList
+            contentContainerStyle={{ width:width }}
             renderItem={({ item }) => (
               <TouchableOpacity
                 onPress={() => {
@@ -147,6 +168,10 @@ const PersonalInformation = () => {
                   backgroundColor: requestData.spokenLanguageId === item.id ? MAIN_COLOR : "white", // Highlight selected item
                 }}
               >
+                 <Image
+            source={{ uri: item.iconUrl || 'default_icon_url' }} // Replace 'default_icon_url' with a valid URL
+            style={{ width: 24, height: 16, marginRight: 8 }}
+          />
                 <Text
                   style={{
                     color: requestData.spokenLanguageId === item.id ? "white" : TEXT_BLACK,
@@ -167,6 +192,7 @@ const PersonalInformation = () => {
             keyExtractor={(item) => item.id.toString()} // Use id for key
             showsVerticalScrollIndicator={false}
             style={{ maxHeight: height * 0.55, marginTop: 16 }} // Set max height for FlatList
+            contentContainerStyle={{ width: width }}
             renderItem={({ item }) => (
               <TouchableOpacity
                 onPress={() => {
@@ -178,6 +204,10 @@ const PersonalInformation = () => {
                   backgroundColor: requestData.languageId === item.id ? MAIN_COLOR : "white", // Highlight selected item
                 }}
               >
+                 <Image
+            source={{ uri: item.iconUrl || 'default_icon_url' }} // Replace 'default_icon_url' with a valid URL
+            style={{ width: 24, height: 16, marginRight: 8 }}
+          />
                 <Text
                   style={{
                     color: requestData.languageId === item.id ? "white" : TEXT_BLACK,
@@ -197,7 +227,7 @@ const PersonalInformation = () => {
   };
 
   return (
-    <ScrollView contentContainerStyle={{ flexGrow: 1 }} style={{ flex: 1, backgroundColor: WHITE, padding: 24 }}>
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }} style={{ flex: 1, backgroundColor: WHITE, padding: 24, width:width }}>
       <TextInputComp
         label="Name"
         placeholder="Name"
@@ -269,7 +299,7 @@ const PersonalInformation = () => {
         onPress={handleSaveChanges}
       />
       <Actionsheet isOpen={isOpen} onClose={onClose}>
-        <Actionsheet.Content style={{ backgroundColor: WHITE }}>
+        <Actionsheet.Content style={{ backgroundColor: WHITE, width:width }}>
           <RenderModals />
         </Actionsheet.Content>
       </Actionsheet>
@@ -286,7 +316,6 @@ const styles = StyleSheet.create({
   },
   itemInput: {
     flexDirection: 'row',
-    alignItems: 'center',
     backgroundColor: WHITE,
     borderColor: LIGHT_GRAY,
     borderWidth:2,
@@ -296,6 +325,8 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   itemStyle: {
+    flexDirection:'row',
+    gap:4,
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderBottomWidth: 1,
