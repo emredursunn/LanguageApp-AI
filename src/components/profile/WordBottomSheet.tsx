@@ -17,6 +17,7 @@ type Props = {
   examples: { sentence: string; translation: string }[];
   isOpen: boolean;
   onClose: () => void;
+  isLoading:boolean;
 };
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("screen");
@@ -31,15 +32,15 @@ const DisplayLine = ({
   type: 'TITLE' | 'EXAMPLE'
 }) => (
   <View style={styles.line}>
-    <View>
+    <View style={styles.textContainer}>
       <Text style={type === 'TITLE' ? styles.word : styles.sentence}>{original}</Text>
       <Text style={type === 'TITLE' ? styles.meaning : styles.translation}>{meaning}</Text>
     </View>
-    <Feather name="headphones" size={36} color="yellow" />
+    <Feather name="headphones" size={36} color="yellow" style={styles.icon} />
   </View>
 );
 
-const WordBottomSheet = ({ word, examples, isOpen, onClose }: Props) => {
+const WordBottomSheet = ({ word, examples, isOpen, onClose, isLoading }: Props) => {
   return (
     <Actionsheet isOpen={isOpen} onClose={onClose}>
       <Actionsheet.Content style={styles.content}>
@@ -77,24 +78,26 @@ const styles = StyleSheet.create({
   },
   line: {
     flexDirection: "row",
-    alignItems:'center',
+    alignItems: "center",
     justifyContent: "space-between",
     marginBottom: 10,
     padding: 16,
     backgroundColor: GREEN,
     borderRadius: 10,
   },
+  textContainer: {
+    flex: 1,
+    marginRight: 10, // Space between text and icon
+  },
   word: {
     fontSize: 26,
     fontWeight: 'bold',
     color: 'yellow',
     marginBottom: 8,
-    paddingTop:20
   },
   meaning: {
     fontSize: 20,
     color: WHITE,
-    paddingBottom:20
   },
   examplesContainer: {
     marginTop: 20,
@@ -110,4 +113,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     fontWeight: "500",
   },
+  icon: {
+    flexShrink: 0, // Prevent the icon from shrinking
+  }
 });

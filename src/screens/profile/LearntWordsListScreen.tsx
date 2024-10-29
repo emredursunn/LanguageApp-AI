@@ -7,6 +7,7 @@ import { useRoute } from '@react-navigation/native';
 import WordList from '../../components/profile/WordList';
 import { translateText } from '../../services/apiService';
 import { useUserStore } from '../../store/useUserStore';
+import { IWord } from '../../types/Word';
 
 export interface WordWithoutMeaning {
   id:number,
@@ -15,7 +16,7 @@ export interface WordWithoutMeaning {
 
 const LearntWordsList = () => {
 
-  const {languageId} = useRoute<any>().params
+  const {languageId, language} = useRoute<any>().params
   const [wordsWithMeanings, setWordsWithMeanings] = useState<IWordCard[]>([]);
   const {spokenLanguageCode} = useUserStore()
   const { data, isFetching, isError } = useQuery(
@@ -31,7 +32,7 @@ const LearntWordsList = () => {
             languageId,
             word: wordObj.word,
             meaning: "meaningResponse", // Anlamı response içinden çekiyoruz
-          };
+          } as IWord;
         });
 
         const resolvedWordsWithMeanings = await Promise.all(wordsWithMeaningsPromises);
@@ -52,7 +53,7 @@ const LearntWordsList = () => {
   }
 
   return (
-    <WordList words={wordsWithMeanings} type='LEARNT'/>
+    <WordList language={language} words={wordsWithMeanings} type='LEARNT'/>
   );
 };
 

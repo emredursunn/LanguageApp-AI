@@ -12,7 +12,7 @@ import { IWord } from '../../types/Word';
 
 const SavedWordsList = () => {
 
-  const {languageId} = useRoute<any>().params
+  const {languageId, language} = useRoute<any>().params
   const [wordsWithMeanings, setWordsWithMeanings] = useState<IWord[]>([]);
   const {spokenLanguageCode} = useUserStore()
 
@@ -49,7 +49,7 @@ const SavedWordsList = () => {
   }
 
   return (
-    <WordList words={wordsWithMeanings} setWords={setWordsWithMeanings} type='SAVED'/>
+    <WordList language={language} words={wordsWithMeanings} setWords={setWordsWithMeanings} type='SAVED'/>
   );
 };
 

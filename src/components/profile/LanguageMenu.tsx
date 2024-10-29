@@ -15,14 +15,15 @@ type Props = {
 const LanguageMenu = ({ languages, type }: Props) => {
   const navigation = useNavigation<ProfileScreenNavigationProp>();
 
-  const handleNavigate = (languageId: number) => {
+  const handleNavigate = ({languageId, language} :{languageId: number, language:string}) => {
     if (type === "SAVED") {
-      navigation.navigate("SavedWordsList", { languageId });
+      navigation.navigate("SavedWordsList", { languageId,language });
     } else if (type === "LEARNT") {
-      navigation.navigate("LearntWordsList", { languageId });
+      navigation.navigate("LearntWordsList", { languageId, language });
     }
   };
 
+  console.log("languages",languages)
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {languages && languages.length > 0 ? (
@@ -30,7 +31,7 @@ const LanguageMenu = ({ languages, type }: Props) => {
           <LanguageCard
             key={languageCard.languageId.toString()}
             languageCard={languageCard}
-            handleNavigate={() => handleNavigate(languageCard.languageId)}
+            handleNavigate={() => handleNavigate({languageId:languageCard.languageId, language:languageCard.language})}
           />
         ))
       ) : (
