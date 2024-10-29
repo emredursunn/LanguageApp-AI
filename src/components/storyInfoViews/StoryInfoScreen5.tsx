@@ -40,6 +40,7 @@ export const StoryInfoScreen5: React.FC<StoryScreenType> = ({ handleDoneInfo, re
     const handleDone = async () =>{
         navigation.push("Story", 
             {
+            languageId:requestData.languageId, 
             languageName:languageName, 
             title:requestData.title, 
             description:requestData.description, 

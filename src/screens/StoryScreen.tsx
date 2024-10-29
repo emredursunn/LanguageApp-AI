@@ -2,14 +2,18 @@ import { FontAwesome } from '@expo/vector-icons';
 // import * as Speech from 'expo-speech';
 import { Actionsheet, useDisclose } from 'native-base';
 import React, { useEffect, useState } from "react";
-import { Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { MAIN_COLOR, WHITE } from '../utils/colors';
+import { Dimensions, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useQuery } from 'react-query';
+import { LanguageData } from '../components/firstInfoViews/Screen2';
+import { getLanguage } from '../services/apiService';
+import { MAIN_COLOR, MAIN_COLOR_GREEN, WHITE } from '../utils/colors';
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 
 const {width, height} = Dimensions.get("screen");
 
 export default function StoryScreen({route}:any) {
+  const languageId = route.params.languageId;
   const languageName = route.params.languageName;
   const title = route.params.title;
   const description = route.params.description;
@@ -22,6 +26,7 @@ export default function StoryScreen({route}:any) {
   const [currentWordIndex, setCurrentWordIndex] = useState(-1);
   const [countdown, setCountdown] = useState(3);
   const [wordLoading, setWordLoading] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
   const [currentWord, setCurrentWord] = useState(''); 
   const [translatedWord, setTranslatedWord] = useState('');
   const [savedWords, setSavedWords] = useState<string[]>([]); 
@@ -30,10 +35,12 @@ export default function StoryScreen({route}:any) {
   const [geminiLoading, setGeminiLoading] = useState(false);
 
   const genAI = new GoogleGenerativeAI("AIzaSyDdOKFuQSMcOgENADl2TeFjXODZZTOlNb4");
-
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
   const words = story.match(/\b[\w']+|[.,!?;:"()-]/g) || [];
+
+  const { data:languageData, error:languageError, isLoading:languageLoading } = useQuery('language', getLanguage);
+  const iconUrl = languageData?.data.filter((item:LanguageData) => item.id == languageId)[0]?.iconUrl;
 
   useEffect(() => {
     if (countdown > 0) {
@@ -62,10 +69,10 @@ export default function StoryScreen({route}:any) {
         const result = await model.generateContent([prompt]);
         console.log(result.response.text());
         setStory(result.response.text());
+        setGeminiLoading(false);
       }
 
       fetchGeminiData();
-      setGeminiLoading(false);
     
   }, []);
   
@@ -137,7 +144,11 @@ export default function StoryScreen({route}:any) {
         }
     };
 
-    if(geminiLoading){
+    const handleSave = () => {
+      setIsSaved(!isSaved);
+    }
+
+    if(geminiLoading || languageLoading){
       return(
         <View style={{flex:1, alignItems:"center", justifyContent:"center"}}>
             <Text>Loading Gemini..</Text>
@@ -155,6 +166,15 @@ export default function StoryScreen({route}:any) {
       }}
     >
       <View style={styles.centeredContent}>
+        <View style={{flexDirection:"row", alignItems:"flex-end", justifyContent:"space-between",borderWidth:1, width:width, paddingHorizontal:16}}> 
+          <Image source={{uri:iconUrl}} width={50} height={40} style={{borderRadius:8}} resizeMode='cover'/>
+          <TouchableOpacity 
+          onPress={() => handleSave()}
+          style={{alignSelf:"center", marginRight:16, marginTop:16, borderWidth:1}}>
+            <FontAwesome name={isSaved ? "heart" : "heart-o"} size={28} color={MAIN_COLOR_GREEN} />
+          </TouchableOpacity>
+        </View>
+         
           <View style={styles.wordsContainer}>
             {words.map((word, index) => (
               <Text 
@@ -227,7 +247,8 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems:"flex-start",
     paddingHorizontal:16,
-    paddingVertical:64
+    paddingVertical:32,
+    marginTop:16
   },
   word: {
     fontSize: 22,
