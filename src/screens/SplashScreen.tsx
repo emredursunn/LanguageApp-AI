@@ -1,6 +1,7 @@
 import { CommonActions, useNavigation } from "@react-navigation/native";
 import { useEffect } from "react";
 import { Text, View } from "react-native";
+import { MAIN_COLOR, MAIN_COLOR_GREEN, WHITE } from "../utils/colors";
 
 export default function SplashScreen() {
     const navigation = useNavigation();
@@ -14,14 +15,40 @@ export default function SplashScreen() {
                     routes: [{ name: "Tab" }],
                 })
             );
-        }, 2000);
+        }, 200000);
 
         return () => clearTimeout(timer);
     }, [navigation]);
 
     return (
-        <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-            <Text>Splash Screen...</Text>
+        <View style={{ flex: 1, alignItems: "center", justifyContent: "center", backgroundColor:WHITE }}>
+            <View style={{flexDirection:"row", alignItems:"center"}}>
+                <Text style={{fontSize:48, fontWeight:"800", color:MAIN_COLOR_GREEN}}>
+                    G
+                </Text>
+                <Text style={{fontSize:48, fontWeight:"600", color:MAIN_COLOR_GREEN}}>
+                    e
+                </Text>
+                <Text style={{fontSize:48, fontWeight:"400", color:MAIN_COLOR_GREEN}}>
+                    m
+                </Text>
+                <Text style={{fontSize:48, fontWeight:"800", color:MAIN_COLOR}}>
+                    S
+                </Text>
+                <Text style={{fontSize:48, fontWeight:"700", color:MAIN_COLOR}}>
+                    p
+                </Text>
+                <Text style={{fontSize:48, fontWeight:"600", color:MAIN_COLOR}}>
+                    e
+                </Text>
+                <Text style={{fontSize:48, fontWeight:"500", color:MAIN_COLOR}}>
+                    a
+                </Text>
+                <Text style={{fontSize:48, fontWeight:"400", color:MAIN_COLOR}}>
+                    k
+                </Text>
+            </View>
+            
         </View>
     );
 }
