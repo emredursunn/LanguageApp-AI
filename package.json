@@ -35,7 +35,8 @@
     "react-native-screens": "3.31.1",
     "react-native-toast-message": "^2.2.1",
     "react-query": "^3.39.3",
-    "zustand": "^5.0.0"
+    "zustand": "^5.0.0",
+    "lottie-react-native": "6.7.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

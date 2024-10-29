@@ -21,7 +21,7 @@ export default function SplashScreen() {
 
     return (
         <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-            <Text>Loading...</Text>
+            <Text>Splash Screen...</Text>
         </View>
     );
 }

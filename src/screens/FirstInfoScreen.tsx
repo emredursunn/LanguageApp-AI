@@ -1,13 +1,13 @@
 import { CommonActions, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useState } from "react";
-import { Text, View } from "react-native";
 import { useSharedValue, withTiming } from "react-native-reanimated";
 import { useQuery } from "react-query";
 import AnimatedFormContainer from "../components/common/AnimatedFormContainer";
 import { RequestData, Screen1 } from "../components/firstInfoViews/Screen1";
 import { Screen2 } from "../components/firstInfoViews/Screen2";
 import { Screen3 } from "../components/firstInfoViews/Screen3";
+import Loading from "../components/loading";
 import { getCountry, getLanguage } from "../services/apiService";
 import { RootStackParamList } from "../types/stackNavigations";
 
@@ -81,9 +81,7 @@ export default function FirstInfoScreen() {
   
     if(isLoading || languageLoading){
       return(
-        <View style={{flex:1}}>
-          <Text>Loading</Text>
-        </View>
+        <Loading/>
       )
     }
   return (

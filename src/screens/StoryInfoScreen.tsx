@@ -1,11 +1,11 @@
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useState } from "react";
-import { Text, View } from "react-native";
 import { useSharedValue, withTiming } from "react-native-reanimated";
 import { useQuery } from "react-query";
 import AnimatedFormContainer from "../components/common/AnimatedFormContainer";
 import { LanguageData } from "../components/firstInfoViews/Screen2";
+import Loading from "../components/loading";
 import { StoryInfoScreen1 } from "../components/storyInfoViews/StoryInfoScreen1";
 import { StoryInfoScreen2 } from "../components/storyInfoViews/StoryInfoScreen2";
 import { StoryInfoScreen3 } from "../components/storyInfoViews/StoryInfoScreen3";
@@ -80,9 +80,7 @@ export default function StoryInfoScreen() {
 
   if(languageLoading){
     return(
-      <View style={{flex:1}}>
-        <Text>Loading</Text>
-      </View>
+      <Loading/>
     )
   }
 

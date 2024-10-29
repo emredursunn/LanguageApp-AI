@@ -1,13 +1,14 @@
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import { useDisclose } from "native-base";
 import React, { useEffect, useState } from "react";
-import WordCard, { IWordCard } from "./WordCard";
-import { WHITE } from "../../utils/colors";
+import { FlatList, StyleSheet, Text } from "react-native";
 import { useMutation } from "react-query";
 import { learntWord } from "../../services/userService";
-import WordBottomSheet from "./WordBottomSheet";
-import { IWord } from "../../types/Word";
-import { useDisclose } from "native-base";
 import { useUserStore } from "../../store/useUserStore";
+import { IWord } from "../../types/Word";
+import { WHITE } from "../../utils/colors";
+import Loading from "../loading";
+import WordBottomSheet from "./WordBottomSheet";
+import WordCard from "./WordCard";
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 type Props = {
@@ -99,6 +100,12 @@ const WordList = ({ language, words, setWords, type }: Props) => {
       learntWord={type === "SAVED" ? learntWordMutation : undefined}
     />
   );
+
+  if(geminiLoading){
+    return(
+      <Loading/>
+    )
+  }
 
   return (
     <>
