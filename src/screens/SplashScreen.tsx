@@ -15,7 +15,7 @@ export default function SplashScreen() {
                     routes: [{ name: "Tab" }],
                 })
             );
-        }, 200000);
+        }, 2000);
 
         return () => clearTimeout(timer);
     }, [navigation]);
