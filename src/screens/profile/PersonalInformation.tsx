@@ -29,7 +29,7 @@ const PersonalInformation = () => {
   const { auth } = useAuthStore();
   const [name, setName] = useState<string>("");
   const [surname, setSurname] = useState<string>("");
-  const { countryId, languageId, spokenLanguageId } = useUserStore();
+  const { countryId, languageId, spokenLanguageId, setSpokenLanguageCode } = useUserStore();
 
   const { isOpen, onOpen, onClose } = useDisclose();
   const [mode, setMode] = useState(1); // 1-Country 2- Spoken Language 3- Goal language
@@ -105,8 +105,9 @@ const PersonalInformation = () => {
 
   const handleSaveChanges = () => {
     const { countryId, languageId, spokenLanguageId } = requestData
-    if(countryId && languageId && spokenLanguageId && name && surname){
+    if(countryId && languageId && spokenLanguageId && name && surname && selectedSpokenLanguage){
       updateFirstInfoMutation.mutate({countryId,languageId,spokenLanguageId})
+      setSpokenLanguageCode(selectedSpokenLanguage?.countryCode)
       showToast("info", "Changes are saved!", "");
     }
   }

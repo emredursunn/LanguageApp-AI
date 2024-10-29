@@ -57,7 +57,7 @@ export const Screen3: React.FC<ScreenType> = ({
     }
   );
 
-  const {setSpokenLanguageId} = useUserStore()
+  const {setSpokenLanguageId, setSpokenLanguageCode} = useUserStore()
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   const filteredLanguages = languageData.filter((language) =>
@@ -77,6 +77,7 @@ export const Screen3: React.FC<ScreenType> = ({
     mutationFn: updateFirstInfo,
     onSuccess(data) {
       setSpokenLanguageId(requestData.spokenLanguageId!)
+      selectedLanguage && setSpokenLanguageCode(selectedLanguage.countryCode)
       handleDoneInfo()
     },
     onError(error) {

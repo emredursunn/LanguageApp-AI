@@ -2,16 +2,32 @@ import { FlatList, StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 import WordCard, { IWordCard } from "./WordCard";
 import { WHITE } from "../../utils/colors";
+import { useMutation } from 'react-query';
+import { learntWord } from '../../services/userService';
 
 type Props = {
   words: IWordCard[];
+  setWords?: React.Dispatch<React.SetStateAction<IWordCard[]>>;
+  type: 'SAVED' | 'LEARNT'
 };
 
-const WordList = ({ words }: Props) => {
+const WordList = ({ words,setWords,type }: Props) => {
 
-    console.log(words)
+  const learntWordMutation = useMutation({
+    mutationFn:learntWord,
+    onSuccess(data, variables, context) {
+      if(setWords){
+        console.log(variables)
+        setWords((prevWords) => prevWords.filter((word) => word.id !== variables.id));  //set word parametresi varsa listeden sil.
+      }
+    },
+    onError(error, variables, context) {
+      console.log(error)
+    },
+  }) 
+
   const renderItem = ({ item }: { item: IWordCard }) => (
-    <WordCard id={item.id} word={item.word} meaning={item.meaning} />
+    <WordCard id={item.id} languageId={item.languageId} word={item.word} meaning={item.meaning} learntWord={type === 'SAVED' ? learntWordMutation : undefined} />
   );
 
   return (

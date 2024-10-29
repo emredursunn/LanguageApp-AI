@@ -64,7 +64,7 @@ export const learntWord = async ({
   languageId: number;
   word:string
 }) => {
-  const response = await api.post(`/user/learnt-word`, {id,languageId,word});
+  const response = await api.post(`/user/leant-word`, {id,languageId,word});
   return response.data;
 };
 

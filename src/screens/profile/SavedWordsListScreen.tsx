@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { Text } from 'react-native';
 import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 import { getSavedWordsByLanguageId } from '../../services/userService';
@@ -7,12 +7,14 @@ import { useRoute } from '@react-navigation/native';
 import { translateText } from '../../services/apiService';
 import { WordWithoutMeaning } from './LearntWordsListScreen';
 import WordList from '../../components/savedWords/WordList';
+import { useUserStore } from '../../store/useUserStore';
 
 
 const SavedWordsList = () => {
 
   const {languageId} = useRoute<any>().params
   const [wordsWithMeanings, setWordsWithMeanings] = useState<IWordCard[]>([]);
+  const {spokenLanguageCode} = useUserStore()
 
   const { data, isFetching, isError } = useQuery(
     ['getSavedWordsByLanguageId'],
@@ -21,11 +23,12 @@ const SavedWordsList = () => {
       onSuccess: async (data) => {
         const wordsData = data.data; // Gelen data'nın içinden kelimeleri alıyoruz
         const wordsWithMeaningsPromises = wordsData.map(async (wordObj:WordWithoutMeaning) => {
-          const meaningResponse = await translateText({text:wordObj.word,targetLang:"TR"});
+          // const meaningResponse = await translateText({text:wordObj.word,targetLang:spokenLanguageCode});
           return {
             id: wordObj.id,
+            languageId,
             word: wordObj.word,
-            meaning: meaningResponse, // Anlamı response içinden çekiyoruz
+            meaning: "meaningResponse", // Anlamı response içinden çekiyoruz
           };
         });
         const resolvedWordsWithMeanings = await Promise.all(wordsWithMeaningsPromises);
@@ -46,7 +49,7 @@ const SavedWordsList = () => {
   }
 
   return (
-    <WordList words={wordsWithMeanings}/>
+    <WordList words={wordsWithMeanings} setWords={setWordsWithMeanings} type='SAVED'/>
   );
 };
 

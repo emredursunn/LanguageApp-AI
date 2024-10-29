@@ -7,6 +7,8 @@ interface UserState {
   spokenLanguageId: number;
   languageId: number;
   countryId: number;
+  spokenLanguageCode: string;
+  setSpokenLanguageCode: (spokenLanguageCode: string) => void;
   setSpokenLanguageId: (spokenLanguageId: number) => void;
   setLanguageId: (languageId: number) => void;
   setCountryId: (countryId: number) => void;
@@ -16,8 +18,12 @@ export const useUserStore = create(
   persist<UserState>(
     (set) => ({
       spokenLanguageId: 1,
-      languageId:1,
-      countryId:1,
+      languageId: 1,
+      countryId: 1,
+      spokenLanguageCode:"tr",
+      setSpokenLanguageCode: (spokenLanguageCode) => {
+        set({ spokenLanguageCode });
+      },
       setSpokenLanguageId: (spokenLanguageId) => {
         set({ spokenLanguageId });
       },
