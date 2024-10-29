@@ -5,6 +5,7 @@ import { Text, View } from "react-native";
 import { useSharedValue, withTiming } from "react-native-reanimated";
 import { useQuery } from "react-query";
 import AnimatedFormContainer from "../components/common/AnimatedFormContainer";
+import { LanguageData } from "../components/firstInfoViews/Screen2";
 import { StoryInfoScreen1 } from "../components/storyInfoViews/StoryInfoScreen1";
 import { StoryInfoScreen2 } from "../components/storyInfoViews/StoryInfoScreen2";
 import { StoryInfoScreen3 } from "../components/storyInfoViews/StoryInfoScreen3";
@@ -12,7 +13,6 @@ import { StoryInfoScreen4 } from "../components/storyInfoViews/StoryInfoScreen4"
 import { StoryInfoScreen5 } from "../components/storyInfoViews/StoryInfoScreen5";
 import { getLanguage } from "../services/apiService";
 import { RootStackParamList } from "../types/stackNavigations";
-import { showToast } from "../utils/helpers";
 
 type StoryInfoScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -46,6 +46,8 @@ export default function StoryInfoScreen() {
 
   const { data:languageData, error:languageError, isLoading:languageLoading } = useQuery('language', getLanguage);
 
+  const languageName = languageData?.data.filter((item:LanguageData) => item.id == requestData?.languageId)[0]?.language;
+
   function handleCloseScreen() {
     setStepper(1);
     progress.value = withTiming(50, { duration: 500 }); // Reset progress to first step
@@ -73,8 +75,15 @@ export default function StoryInfoScreen() {
   }
 
   function handleDoneInfo() {
-    showToast("success", "Created", "");
     setStepper(1);
+  }
+
+  if(languageLoading){
+    return(
+      <View style={{flex:1}}>
+        <Text>Loading</Text>
+      </View>
+    )
   }
 
   const RenderCreateScreen = () => {
@@ -88,19 +97,12 @@ export default function StoryInfoScreen() {
       case 4:
         return <StoryInfoScreen4 handleNext={handleNext} requestData={requestData} setRequestData={setRequestData}/>;
       case 5:
-        return <StoryInfoScreen5 handleDoneInfo={handleDoneInfo} requestData={requestData} setRequestData={setRequestData}/>;
+        return <StoryInfoScreen5 handleDoneInfo={handleDoneInfo} requestData={requestData} setRequestData={setRequestData} languageName={languageName} navigation={navigation}/>;
       default:
         break;
     }
   };
 
-  if(languageLoading){
-    return(
-      <View style={{flex:1}}>
-        <Text>Loading</Text>
-      </View>
-    )
-  }
 
   return (
     <AnimatedFormContainer

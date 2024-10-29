@@ -8,10 +8,11 @@ export type StoryScreenType = {
     handleDoneInfo: () => void;
     requestData: StoryRequestData,
     setRequestData: React.Dispatch<React.SetStateAction<StoryRequestData>>;
-  
+    languageName:string;
+    navigation:any
 };
 
-export const StoryInfoScreen5: React.FC<StoryScreenType> = ({ handleDoneInfo, requestData, setRequestData }) => {
+export const StoryInfoScreen5: React.FC<StoryScreenType> = ({ handleDoneInfo, requestData, setRequestData, languageName, navigation }) => {
     const [selectedDifficulty, setSelectedDifficulty] = useState<string>(requestData.difficulty.length > 0 ? requestData.difficulty : "");
 
     const difficulties = [
@@ -35,6 +36,18 @@ export const StoryInfoScreen5: React.FC<StoryScreenType> = ({ handleDoneInfo, re
             }));
         }
     };
+
+    const handleDone = async () =>{
+        navigation.push("Story", 
+            {
+            languageName:languageName, 
+            title:requestData.title, 
+            description:requestData.description, 
+            duration:requestData.duration,
+            difficulty: requestData.difficulty
+        });
+        handleDoneInfo();
+    }
 
     return (
         <>
@@ -64,7 +77,7 @@ export const StoryInfoScreen5: React.FC<StoryScreenType> = ({ handleDoneInfo, re
                     loading={false}
                     isActive={!!selectedDifficulty}
                     title={"Done"}
-                    onPress={handleDoneInfo}
+                    onPress={handleDone}
                 />
             </View>
         </>

@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^14.0.4",
+    "@google/generative-ai": "^0.21.0",
     "@react-native-async-storage/async-storage": "^2.0.0",
     "@react-native-picker/picker": "^2.9.0",
     "@react-navigation/bottom-tabs": "^6.6.1",

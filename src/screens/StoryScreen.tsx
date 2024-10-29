@@ -1,16 +1,23 @@
 import { FontAwesome } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
-import * as Speech from 'expo-speech';
+// import * as Speech from 'expo-speech';
 import { Actionsheet, useDisclose } from 'native-base';
 import React, { useEffect, useState } from "react";
-import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { MAIN_COLOR } from '../utils/colors';
+import { Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { MAIN_COLOR, WHITE } from '../utils/colors';
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+
 
 const {width, height} = Dimensions.get("screen");
 
-export default function StoryScreen() {
-  const sentence = "In a small village, nestled between misty mountains";
-  const words = sentence.split(" ");
+export default function StoryScreen({route}:any) {
+  const languageName = route.params.languageName;
+  const title = route.params.title;
+  const description = route.params.description;
+  const duration = route.params.duration;
+  const difficulty = route.params.difficulty;
+
+  const [story, setStory] = useState(`
+  `);
   
   const [currentWordIndex, setCurrentWordIndex] = useState(-1);
   const [countdown, setCountdown] = useState(3);
@@ -20,6 +27,14 @@ export default function StoryScreen() {
   const [savedWords, setSavedWords] = useState<string[]>([]); 
   const { isOpen, onOpen, onClose } = useDisclose();
 
+  const [geminiLoading, setGeminiLoading] = useState(false);
+
+  const genAI = new GoogleGenerativeAI("AIzaSyDdOKFuQSMcOgENADl2TeFjXODZZTOlNb4");
+
+  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+  const words = story.match(/\b[\w']+|[.,!?;:"()-]/g) || [];
+
   useEffect(() => {
     if (countdown > 0) {
       const countdownTimer = setTimeout(() => setCountdown(countdown - 1), 1000);
@@ -28,10 +43,36 @@ export default function StoryScreen() {
       speakSentence();
     }
   }, [countdown]);
+  
+
+  useEffect(() => {
+      setGeminiLoading(true);
+
+      const fetchGeminiData = async() => {
+        const prompt = `
+        Create a story for me based on the following details:
+        Story Language: ${languageName},
+        Story Title: ${title},
+        Story Description: ${description},
+        Story Length: ${duration}, 
+        Story Language Difficulty: ${difficulty}
+
+        Do not give me any title for this story. Just give me the story without any punctuation mark.
+      `;
+        const result = await model.generateContent([prompt]);
+        console.log(result.response.text());
+        setStory(result.response.text());
+      }
+
+      fetchGeminiData();
+      setGeminiLoading(false);
+    
+  }, []);
+  
 
   const speakSentence = () => {
     setCurrentWordIndex(-1);
-    Speech.speak(sentence);
+    // Speech.speak(story);
     
     let index = 0;
 
@@ -95,30 +136,42 @@ export default function StoryScreen() {
             }
         }
     };
+
+    if(geminiLoading){
+      return(
+        <View style={{flex:1, alignItems:"center", justifyContent:"center"}}>
+            <Text>Loading Gemini..</Text>
+        </View>
+      )
+    }
     
 
   return (
-    <LinearGradient
-      colors={['#00c6ff', '#0072ff']}
+    <ScrollView
       style={styles.container}
+      contentContainerStyle={{
+        justifyContent: "center",
+        alignItems: "center"
+      }}
     >
       <View style={styles.centeredContent}>
-        {countdown > 0 ? (
-          <Text style={styles.countdownText}>{countdown}</Text>
-        ) : (
           <View style={styles.wordsContainer}>
             {words.map((word, index) => (
               <Text 
                 key={index} 
                 onPress={() => handleWordPress(word)}
-                style={[styles.word, index === currentWordIndex && styles.clickedWord]}
+                style={[
+                  styles.word, 
+                  index === currentWordIndex && styles.clickedWord, 
+                  { color: savedWords.includes(word) ? "red" : "black" }
+                ]}
               >
                 {word + " "}
               </Text>
             ))}
           </View>
-        )}
-      </View>
+        </View>
+
 
      {/* ActionSheet Component */}
      <Actionsheet isOpen={isOpen} onClose={onClose}>
@@ -150,15 +203,14 @@ export default function StoryScreen() {
 
 
 
-    </LinearGradient>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor:WHITE
   },
   centeredContent: {
     justifyContent: "center",
@@ -172,11 +224,16 @@ const styles = StyleSheet.create({
   wordsContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
-    justifyContent: "center",
+    justifyContent: "flex-start",
+    alignItems:"flex-start",
+    paddingHorizontal:16,
+    paddingVertical:64
   },
   word: {
-    fontSize: 20,
+    fontSize: 22,
+    alignSelf:"flex-start",
     color: "black",
+    fontWeight:"500"
   },
   clickedWord: {
     color: "blue",
