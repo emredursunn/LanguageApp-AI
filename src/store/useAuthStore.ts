@@ -7,7 +7,8 @@ interface IAuth {
   id:number,
   name:string,
   surname:string,
-  email:string
+  email:string,
+  imageUrl:string,
 }
 
 interface AuthState {
