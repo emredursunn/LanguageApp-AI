@@ -3,15 +3,20 @@ import { FontAwesome } from '@expo/vector-icons';
 import { Actionsheet, useDisclose } from 'native-base';
 import React, { useEffect, useState } from "react";
 import { Dimensions, Image, ScrollView, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
-import { useQuery } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import { LanguageData } from '../components/firstInfoViews/Screen2';
 import Loading from '../components/common/Loading';
 import { getLanguage, translateText } from '../services/apiService';
 import { MAIN_COLOR, MAIN_COLOR_GREEN, WHITE } from '../utils/colors';
 import { useUserStore } from '../store/useUserStore';
 import Animated, { SlideInDown, SlideOutDown } from 'react-native-reanimated';
+import { getLearnedWords, getSavedWordsByLanguageId, saveWord } from '../services/userService';
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
+interface SavedWord  {
+  id:number,
+  word:string
+}
 
 const {width, height : SCREEN_HEIGHT} = Dimensions.get("screen");
 
@@ -44,6 +49,37 @@ export default function StoryScreen({route}:any) {
 
   // const words = story.match(/\b[\w']+|[.,!?;:"()-]/g) || [];
   const words = story.match(/(\p{L}+|\p{N}+|\p{P}+|\p{Z}+)/gu) || [];
+
+  useQuery(['getSavedWords'],
+    () =>  getSavedWordsByLanguageId({languageId}),
+    {
+      enabled: !!languageId,
+      onSuccess(data) {
+        data.data.map((item:SavedWord) => {
+          setSavedWords((prev) => [...prev, item.word.toLowerCase()])
+        })
+      },
+    }
+  )
+  
+  useQuery(['getLearnedWords'],
+    () =>  getLearnedWords({languageId}),
+    {
+      enabled: !!languageId,
+      onSuccess(data) {
+        data.data.map((item:SavedWord) => {
+          setSavedWords((prev) => [...prev, item.word.toLowerCase()])
+        })
+      },
+    }
+  )
+
+  const saveWordMutation = useMutation({
+    mutationFn:saveWord,
+    onSuccess(data, variables, context) {
+      setSavedWords((prev) => [...prev, variables.word.toLowerCase()])
+    },
+  })
 
   const { data:languageData, error:languageError, isLoading:languageLoading } = useQuery('language', getLanguage);
   const iconUrl = languageData?.data.filter((item:LanguageData) => item.id == languageId)[0]?.iconUrl;
@@ -105,9 +141,10 @@ export default function StoryScreen({route}:any) {
   };
 
     const handleWordPress = async (word: string) => {
+      console.log(word)
     onOpen();
     setWordLoading(true);
-    setCurrentWord(word); 
+    setCurrentWord(word.toLowerCase()); 
     try {
         const cleanedWord = word.replace(/[.,!?;:'"()]/g, "");
         // const meaningResponse = await translateText({text:cleanedWord,targetLang:spokenLanguageCode});
@@ -124,12 +161,13 @@ export default function StoryScreen({route}:any) {
     };
 
     const handleSaveWord = () => {
-        if (currentWord) {
-            if (savedWords.includes(currentWord)) {
-                setSavedWords(savedWords.filter(word => word !== currentWord));
-            } else {
-                setSavedWords([...savedWords, currentWord]);
-            }
+        if (currentWord && !savedWords.includes(currentWord.toLowerCase())) {
+            saveWordMutation.mutate({languageId,word:currentWord.toLowerCase()})
+            // if (savedWords.includes(currentWord)) {
+            //     setSavedWords(savedWords.filter(word => word !== currentWord));
+            // } else {
+            //     setSavedWords([...savedWords, currentWord]);
+            // }
         }
     };
 
@@ -155,7 +193,7 @@ export default function StoryScreen({route}:any) {
         <View style={styles.centeredContent}>
           <View style={{flexDirection:"row", alignItems:"flex-end", justifyContent:"space-between", width:width, paddingHorizontal:16}}> 
             <Image source={{uri:iconUrl}} width={50} height={40} style={{borderRadius:8}} resizeMode='cover'/>
-            <TouchableOpacity 
+            <TouchableOpacity
             onPress={() => handleSave()}
             style={{alignSelf:"center", marginRight:16, marginTop:16, borderWidth:1}}>
               <FontAwesome name={isSaved ? "heart" : "heart-o"} size={28} color={MAIN_COLOR_GREEN} />
@@ -170,7 +208,7 @@ export default function StoryScreen({route}:any) {
                   style={[
                     styles.word, 
                     index === currentWordIndex && styles.clickedWord, 
-                    { color: savedWords.includes(word) ? "red" : "black" }
+                    { color: savedWords.includes(word.toLowerCase()) ? "red" : "black" }
                   ]}
                 >
                   {word + " "}
@@ -189,6 +227,7 @@ export default function StoryScreen({route}:any) {
                 <>
                   {/* Save Word Button */}
                   <TouchableOpacity  
+                      disabled={savedWords.includes(currentWord) || saveWordMutation.isLoading} 
                       onPress={handleSaveWord} // Call handleSaveWord on press
                       style={{ alignSelf: "flex-end", padding: 10 }}>
                       <FontAwesome 

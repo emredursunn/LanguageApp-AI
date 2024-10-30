@@ -131,8 +131,9 @@ export default WordList;
 
 const styles = StyleSheet.create({
   list: {
-    flex: 1,
+    flexGrow: 1,
     backgroundColor: WHITE,
     paddingVertical: 16,
+    paddingBottom:40
   },
 });
