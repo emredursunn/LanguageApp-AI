@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { Dimensions, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useQuery } from 'react-query';
 import { LanguageData } from '../components/firstInfoViews/Screen2';
-import Loading from '../components/loading';
+import Loading from '../components/common/Loading';
 import { getLanguage } from '../services/apiService';
 import { MAIN_COLOR, MAIN_COLOR_GREEN, WHITE } from '../utils/colors';
 const { GoogleGenerativeAI } = require("@google/generative-ai");

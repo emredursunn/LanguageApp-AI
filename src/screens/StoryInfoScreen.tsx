@@ -5,7 +5,7 @@ import { useSharedValue, withTiming } from "react-native-reanimated";
 import { useQuery } from "react-query";
 import AnimatedFormContainer from "../components/common/AnimatedFormContainer";
 import { LanguageData } from "../components/firstInfoViews/Screen2";
-import Loading from "../components/loading";
+import Loading from "../components/common/Loading";
 import { StoryInfoScreen1 } from "../components/storyInfoViews/StoryInfoScreen1";
 import { StoryInfoScreen2 } from "../components/storyInfoViews/StoryInfoScreen2";
 import { StoryInfoScreen3 } from "../components/storyInfoViews/StoryInfoScreen3";

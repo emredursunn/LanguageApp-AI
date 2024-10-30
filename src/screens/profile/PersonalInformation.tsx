@@ -22,6 +22,7 @@ import { useMutation, useQuery } from "react-query";
 import { getCountry, getLanguage } from "../../services/apiService";
 import { LanguageData } from "../../components/firstInfoViews/Screen2";
 import { updateFirstInfo } from "../../services/userService";
+import Animated, { SlideInRight } from "react-native-reanimated";
 
 const { height, width } = Dimensions.get("screen");
 
@@ -231,7 +232,7 @@ const PersonalInformation = () => {
   };
 
   return (
-    <ScrollView contentContainerStyle={{ flexGrow: 1 }} style={{ flex: 1, backgroundColor: WHITE, padding: 24, width:width }}>
+    <Animated.ScrollView entering={SlideInRight} contentContainerStyle={{ flexGrow: 1 }} style={{ flex: 1, backgroundColor: WHITE, padding: 24, width:width }}>
       <TextInputComp
         label="Name"
         placeholder="Name"
@@ -307,7 +308,7 @@ const PersonalInformation = () => {
           <RenderModals />
         </Actionsheet.Content>
       </Actionsheet>
-    </ScrollView>
+    </Animated.ScrollView>
   );
 };
 

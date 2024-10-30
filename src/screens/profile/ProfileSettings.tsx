@@ -148,10 +148,10 @@ const ProfileSettings = () => {
           paddingVertical: 16,
           borderRadius: 12,
           borderColor: LIGHT_GRAY,
-          backgroundColor: WHITE,
+          backgroundColor: LIGHT_RED,
         }}
       >
-        <Text style={{ fontWeight: "800", fontSize: 16, color: LIGHT_RED }}>
+        <Text style={{ fontWeight: "800", fontSize: 16, color: WHITE }}>
           Log Out
         </Text>
       </TouchableOpacity>

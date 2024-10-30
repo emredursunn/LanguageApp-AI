@@ -1,9 +1,10 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text } from "react-native";
 import React from "react";
 import LanguageCard, { ILanguageCard } from "./LanguageCard";
 import { WHITE } from "../../utils/colors";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import Animated, { SlideInRight } from "react-native-reanimated";
 
 type ProfileScreenNavigationProp = NativeStackNavigationProp<any, "Profile">;
 
@@ -23,9 +24,8 @@ const LanguageMenu = ({ languages, type }: Props) => {
     }
   };
 
-  console.log("languages",languages)
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <Animated.ScrollView entering={SlideInRight} contentContainerStyle={styles.container}>
       {languages && languages.length > 0 ? (
         languages.map((languageCard: ILanguageCard) => (
           <LanguageCard
@@ -37,7 +37,7 @@ const LanguageMenu = ({ languages, type }: Props) => {
       ) : (
         <Text>No saved languages found.</Text>
       )}
-    </ScrollView>
+    </Animated.ScrollView>
   );
 };
 

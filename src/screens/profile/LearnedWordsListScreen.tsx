@@ -8,6 +8,7 @@ import WordList from '../../components/profile/WordList';
 import { translateText } from '../../services/apiService';
 import { useUserStore } from '../../store/useUserStore';
 import { IWord } from '../../types/Word';
+import Loading from '../../components/common/Loading';
 
 export interface WordWithoutMeaning {
   id:number,
@@ -45,7 +46,7 @@ const LearnedWordsList = () => {
   );
 
   if (isFetching) {
-    return <Text>Loading...</Text>;
+    return <Loading />;
   }
 
   if (isError) {

@@ -1,7 +1,7 @@
 import React from "react";
 import { Text } from "react-native";
 import { useQuery } from "react-query";
-import Loading from "../../components/loading";
+import Loading from "../../components/common/Loading";
 import LanguageMenu from "../../components/profile/LanguageMenu";
 import { getSavedLanguages } from "../../services/userService";
 
@@ -20,9 +20,7 @@ const SavedWordsMenu = () => {
   );
 
   if (isFetching) {
-    return(
-      <Loading/>
-    )
+    return <Loading/>;
   }
 
   if (isError) {

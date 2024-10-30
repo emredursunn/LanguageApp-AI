@@ -11,12 +11,15 @@ import {
 } from "../../utils/colors";
 import { IWord } from "../../types/Word";
 import Feather from "@expo/vector-icons/Feather";
+import Loading from "../common/Loading";
+import Animated, { SlideInRight } from "react-native-reanimated";
 
 type Props = {
   word: IWord;
   examples: { sentence: string; translation: string }[];
   isOpen: boolean;
   onClose: () => void;
+  isLoading: boolean;
 };
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("screen");
@@ -24,37 +27,58 @@ const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("screen");
 const DisplayLine = ({
   original,
   meaning,
-  type
+  type,
+  index,
 }: {
   original: string;
   meaning: string;
-  type: 'TITLE' | 'EXAMPLE'
+  type: "TITLE" | "EXAMPLE";
+  index?:number
 }) => (
-  <View style={styles.line}>
+  <Animated.View entering={SlideInRight.duration(index ? 200 * (index + 1) : 200)} style={styles.line}>
     <View style={styles.textContainer}>
-      <Text style={type === 'TITLE' ? styles.word : styles.sentence}>{original}</Text>
-      <Text style={type === 'TITLE' ? styles.meaning : styles.translation}>{meaning}</Text>
+      <Text style={type === "TITLE" ? styles.word : styles.sentence}>
+        {original}
+      </Text>
+      <Text style={type === "TITLE" ? styles.meaning : styles.translation}>
+        {meaning}
+      </Text>
     </View>
     <Feather name="headphones" size={36} color="yellow" style={styles.icon} />
-  </View>
+  </Animated.View>
 );
 
-const WordBottomSheet = ({ word, examples, isOpen, onClose }: Props) => {
+const WordBottomSheet = ({
+  word,
+  examples,
+  isOpen,
+  onClose,
+  isLoading,
+}: Props) => {
   return (
     <Actionsheet isOpen={isOpen} onClose={onClose}>
       <Actionsheet.Content style={styles.content}>
         <ScrollView contentContainerStyle={styles.scrollContent}>
-          <DisplayLine type="TITLE" original={word.word} meaning={word.meaning} />
+          <DisplayLine
+            type="TITLE"
+            original={word.word}
+            meaning={word.meaning}
+          />
 
           <View style={styles.examplesContainer}>
-            {examples.map((example, index) => (
-              <DisplayLine
-                key={index}
-                type="EXAMPLE"
-                original={example.sentence}
-                meaning={example.translation}
-              />
-            ))}
+            {isLoading ? (
+              <Loading />
+            ) : (
+              examples.map((example, index) => (
+                <DisplayLine
+                  key={index}
+                  type="EXAMPLE"
+                  original={example.sentence}
+                  meaning={example.translation}
+                  index={index}
+                />
+              ))
+            )}
           </View>
         </ScrollView>
       </Actionsheet.Content>
@@ -90,8 +114,8 @@ const styles = StyleSheet.create({
   },
   word: {
     fontSize: 26,
-    fontWeight: 'bold',
-    color: 'yellow',
+    fontWeight: "bold",
+    color: "yellow",
     marginBottom: 8,
   },
   meaning: {
@@ -114,5 +138,5 @@ const styles = StyleSheet.create({
   },
   icon: {
     flexShrink: 0, // Prevent the icon from shrinking
-  }
+  },
 });

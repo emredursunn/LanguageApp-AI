@@ -1,6 +1,6 @@
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text } from "react-native";
 import React, { useEffect, useState } from "react";
-import WordCard, { IWordCard } from "./WordCard";
+import WordCard from "./WordCard";
 import { WHITE } from "../../utils/colors";
 import { useMutation } from "react-query";
 import WordBottomSheet from "./WordBottomSheet";
@@ -8,7 +8,7 @@ import { IWord } from "../../types/Word";
 import { useDisclose } from "native-base";
 import { useUserStore } from "../../store/useUserStore";
 import { learnedWord } from "../../services/userService";
-import Loading from "../loading";
+import Animated from "react-native-reanimated";
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 type Props = {
@@ -90,7 +90,7 @@ const WordList = ({ language, words, setWords, type }: Props) => {
     },
   });
 
-  const renderItem = ({ item }: { item: IWord }) => (
+  const renderItem = ({ item,index }: { item: IWord,index:number }) => (
     <WordCard
       id={item.id}
       languageId={item.languageId}
@@ -98,18 +98,13 @@ const WordList = ({ language, words, setWords, type }: Props) => {
       meaning={item.meaning}
       onPress={handleOnOpen}
       learnedWord={type === "SAVED" ? learnedWordMutation : undefined}
+      index={index}
     />
   );
 
-  if(geminiLoading){
-    return(
-      <Loading />
-    )
-  }
-
   return (
     <>
-      <FlatList
+      <Animated.FlatList
         data={words}
         renderItem={renderItem}
         keyExtractor={(item) => item.id.toString()}
@@ -122,6 +117,7 @@ const WordList = ({ language, words, setWords, type }: Props) => {
           examples={examples}
           isOpen={isOpen}
           onClose={handleOnClose}
+          isLoading={geminiLoading}
         />
       )}
     </>

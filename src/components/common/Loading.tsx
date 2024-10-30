@@ -1,6 +1,6 @@
 import LottieView from "lottie-react-native";
 import { View } from "react-native";
-import { WHITE } from "../utils/colors";
+import { WHITE } from "../../utils/colors";
 
 export default function Loading(){
     return(
@@ -9,7 +9,7 @@ export default function Loading(){
           autoPlay
           loop
           style={{ width: 150, height: 150 }}
-          source={require("../../assets/loading.json")}
+          source={require("../../../assets/loading.json")}
         />
       </View>
     )

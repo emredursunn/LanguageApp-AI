@@ -1,4 +1,4 @@
-import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Dimensions, Image, StyleSheet, Text, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { BLACK_COLOR, GRAY, WHITE } from '../../utils/colors'; // Ensure WHITE_COLOR is defined in your colors
 

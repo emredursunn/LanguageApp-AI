@@ -7,7 +7,7 @@ import AnimatedFormContainer from "../components/common/AnimatedFormContainer";
 import { RequestData, Screen1 } from "../components/firstInfoViews/Screen1";
 import { Screen2 } from "../components/firstInfoViews/Screen2";
 import { Screen3 } from "../components/firstInfoViews/Screen3";
-import Loading from "../components/loading";
+import Loading from "../components/common/Loading";
 import { getCountry, getLanguage } from "../services/apiService";
 import { RootStackParamList } from "../types/stackNavigations";
 

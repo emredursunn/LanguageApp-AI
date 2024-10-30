@@ -3,6 +3,7 @@ import React from 'react'
 import { useQuery } from 'react-query';
 import LanguageMenu from '../../components/profile/LanguageMenu';
 import { getLearnedLanguages } from '../../services/userService';
+import Loading from '../../components/common/Loading';
 
 const LearnedWordsMenu = () => {
 
@@ -20,7 +21,7 @@ const LearnedWordsMenu = () => {
   );
 
   if (isFetching) {
-    return <Text>Loading...</Text>;
+    return <Loading />;
   }
 
   if (isError) {
