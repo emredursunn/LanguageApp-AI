@@ -7,7 +7,7 @@ import {
   View,
 } from "react-native";
 import React from "react";
-import { LIGHT_GRAY, LIGHT_GRAY_2, TEXT_BLACK, WHITE } from "../../utils/colors";
+import { LIGHT_GRAY, LIGHT_GRAY_2, LIGHT_RED, TEXT_BLACK, WHITE } from "../../utils/colors";
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 const { width, height } = Dimensions.get("screen");
@@ -15,19 +15,21 @@ const { width, height } = Dimensions.get("screen");
 type Props = {
   currentSentence: string[];
   currentWordIndex: number;
+  savedWords: string[]
   handleWordPress: (index: number) => void;
-  onOpen: () => void;
+  voiceOnOpen: () => void;
 };
 
 const StoryCard = ({
   currentSentence,
   currentWordIndex,
+  savedWords,
   handleWordPress,
-  onOpen,
+  voiceOnOpen
 }: Props) => {
   return (
     <View style={styles.card}>
-        <TouchableOpacity style={styles.icon} activeOpacity={0.7} onPress={onOpen}>
+        <TouchableOpacity style={styles.icon} activeOpacity={0.7} onPress={voiceOnOpen}>
         <MaterialCommunityIcons name="account-tie-voice" size={36} color="white" />
         </TouchableOpacity>
       <Image
@@ -47,6 +49,7 @@ const StoryCard = ({
                 style={[
                   styles.word,
                   index === currentWordIndex ? styles.highlightedWord : {},
+                  savedWords.includes(word.toLowerCase()) && styles.savedWord
                 ]}
               >
                 {word + " "}
@@ -64,7 +67,7 @@ export default StoryCard;
 const styles = StyleSheet.create({
   card: {
     width: width * 0.8,
-    height: height * 0.6,
+    maxHeight: height * 0.75,
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
   },
@@ -81,7 +84,7 @@ const styles = StyleSheet.create({
   },
   img: {
     width: "100%",
-    height: "80%",
+    height: "70%",
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
   },
@@ -110,4 +113,7 @@ const styles = StyleSheet.create({
     fontWeight:'bold',
     color: 'green',
   },
+  savedWord: {
+    color:LIGHT_RED,
+  }
 });

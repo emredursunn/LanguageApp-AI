@@ -1,16 +1,18 @@
 import { FontAwesome } from '@expo/vector-icons';
-// import * as Speech from 'expo-speech';
+import * as Speech from 'expo-speech';
 import { Actionsheet, useDisclose } from 'native-base';
 import React, { useEffect, useState } from "react";
-import { Dimensions, Image, ScrollView, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
+import { Button, Dimensions, Image, ScrollView, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
 import { useMutation, useQuery } from 'react-query';
 import { LanguageData } from '../components/firstInfoViews/Screen2';
 import Loading from '../components/common/Loading';
 import { getLanguage, translateText } from '../services/apiService';
-import { MAIN_COLOR, MAIN_COLOR_GREEN, WHITE } from '../utils/colors';
+import { MAIN_COLOR, MAIN_COLOR_GREEN, TEXT_BLACK, WHITE } from '../utils/colors';
 import { useUserStore } from '../store/useUserStore';
 import Animated, { SlideInDown, SlideOutDown } from 'react-native-reanimated';
 import { getLearnedWords, getSavedWordsByLanguageId, saveWord } from '../services/userService';
+import StoryCard from '../components/story/StoryCard';
+import StoryCardButtons from '../components/story/StoryCardButtons';
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 interface SavedWord  {
@@ -18,7 +20,7 @@ interface SavedWord  {
   word:string
 }
 
-const {width, height : SCREEN_HEIGHT} = Dimensions.get("screen");
+const {width:SCREEN_WIDTH, height : SCREEN_HEIGHT} = Dimensions.get("screen");
 
 export default function StoryScreen({route}:any) {
   const languageId = route.params.languageId;
@@ -30,22 +32,78 @@ export default function StoryScreen({route}:any) {
 
   const { spokenLanguageCode } = useUserStore()
 
-  const [story, setStory] = useState(`
-  `);
+  const [story, setStory] = useState("");
+  const [sentences,setSentences] = useState<string[]>([])
+  const [currentSentence,setCurrentSentence] = useState<string[]>([])
   
-  const [currentWordIndex, setCurrentWordIndex] = useState(-1);
   const [countdown, setCountdown] = useState(3);
   const [wordLoading, setWordLoading] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
   const [currentWord, setCurrentWord] = useState(''); 
   const [translatedWord, setTranslatedWord] = useState('');
   const [savedWords, setSavedWords] = useState<string[]>([]); 
-  const { isOpen, onOpen, onClose } = useDisclose();
+  const { isOpen:wordIsOpen, onOpen:wordOnOpen, onClose:wordOnClose } = useDisclose();
+  const { isOpen:voiceIsOpen, onOpen:voiceOnOpen, onClose:voiceOnClose } = useDisclose();
+
+  const [currentWordIndex, setCurrentWordIndex] = useState(0);
+  const [currentSentenceIndex, setCurrentSentenceIndex] = useState(0);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [voices, setVoices] = useState<any[]>([]);
+  const [filteredVoices, setFilteredVoices] = useState<any[]>([]);
+  const [selectedVoice, setSelectedVoice] = useState<any>(null);
+  const wordDelay = 300;
 
   const [geminiLoading, setGeminiLoading] = useState(false);
 
   const genAI = new GoogleGenerativeAI("AIzaSyDdOKFuQSMcOgENADl2TeFjXODZZTOlNb4");
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+  useEffect(() => {
+    if (countdown > 0) {
+      const countdownTimer = setTimeout(() => setCountdown(countdown - 1), 1000);
+      return () => clearTimeout(countdownTimer);
+    } else {
+      speakSentence();
+    }
+  }, [countdown]);
+  
+  useEffect(() => {
+      setGeminiLoading(true);
+
+      const fetchGeminiData = async() => {
+        const prompt = `
+        Create a story for me based on the following details:
+        Story Language: ${languageName},
+        Story Title: ${title},
+        Story Description: ${description},
+        Story Length: ${duration}, 
+        Story Language Difficulty: ${difficulty}
+
+        Do not give me any title for this story. Just give me the story without any punctuation mark.
+        Ensure each sentence is 5-6 words long.
+        At the end of each sentence, place an asterisk (*) without adding a space before the next sentence.
+        `;
+        const result = await model.generateContent([prompt]);
+        console.log(result.response.text());
+        setStory(result.response.text());
+        setGeminiLoading(false);
+      }
+
+      fetchGeminiData();
+    
+  }, []);
+
+  useEffect(()=>{
+    const allSentences = story ? story.split("*").map(sentence => sentence.trim()).filter(sentence => sentence) : []
+    console.log("all",allSentences)
+    setSentences(allSentences)
+  },[story])
+ 
+  useEffect(()=>{
+    const nextSentence = sentences.length>0 ? sentences[currentSentenceIndex].split(" ") : []
+    console.log("one",nextSentence)
+    setCurrentSentence(nextSentence)
+  },[sentences,currentSentenceIndex])
 
   // const words = story.match(/\b[\w']+|[.,!?;:"()-]/g) || [];
   const words = story.match(/(\p{L}+|\p{N}+|\p{P}+|\p{Z}+)/gu) || [];
@@ -74,91 +132,105 @@ export default function StoryScreen({route}:any) {
     }
   )
 
-  const saveWordMutation = useMutation({
-    mutationFn:saveWord,
-    onSuccess(data, variables, context) {
-      setSavedWords((prev) => [...prev, variables.word.toLowerCase()])
-    },
-  })
-
   const { data:languageData, error:languageError, isLoading:languageLoading } = useQuery('language', getLanguage);
   const iconUrl = languageData?.data.filter((item:LanguageData) => item.id == languageId)[0]?.iconUrl;
 
-  useEffect(() => {
-    if (countdown > 0) {
-      const countdownTimer = setTimeout(() => setCountdown(countdown - 1), 1000);
-      return () => clearTimeout(countdownTimer);
-    } else {
-      speakSentence();
+  const getVoices = async () => {
+    const availableVoices = await Speech.getAvailableVoicesAsync();
+    const languagePrefix = 'tr'; // Change this as needed
+  
+    // Filter voices based on the prefix before the '-'
+    const filteredVoices = availableVoices.filter(voice =>
+      voice.language.startsWith(languagePrefix)
+    );
+  
+    setVoices(filteredVoices);
+    setFilteredVoices(filteredVoices); // Ensure to set the filtered voices
+  
+    // Set a default voice based on the prefix
+    const defaultVoice = filteredVoices.find(voice => voice.language.split('-')[0] === languagePrefix);
+    if (defaultVoice) {
+      setSelectedVoice(defaultVoice);
+    } else if (filteredVoices.length > 0) {
+      setSelectedVoice(filteredVoices[0]); // Fallback to the first voice if none found
     }
-  }, [countdown]);
+  };
   
 
   useEffect(() => {
-      setGeminiLoading(true);
-
-      const fetchGeminiData = async() => {
-        const prompt = `
-        Create a story for me based on the following details:
-        Story Language: ${languageName},
-        Story Title: ${title},
-        Story Description: ${description},
-        Story Length: ${duration}, 
-        Story Language Difficulty: ${difficulty}
-
-        Do not give me any title for this story. Just give me the story without any punctuation mark.
-      `;
-        const result = await model.generateContent([prompt]);
-        console.log(result.response.text());
-        setStory(result.response.text());
-        setGeminiLoading(false);
-      }
-
-      fetchGeminiData();
-    
+    getVoices();
   }, []);
-  
 
-  const speakSentence = () => {
-    setCurrentWordIndex(-1);
-    // Speech.speak(story);
-    
-    let index = 0;
-
-    const highlightNextWord = () => {
-      if (index < words.length) {
-        setCurrentWordIndex(index);
-        
-        const duration = words[index].length * 100;
-        setTimeout(() => {
-          index++;
-          highlightNextWord();
-        }, duration);
-      }
-    };
-
-    highlightNextWord();
+  const filterVoicesByLanguage = (language: string) => {
+    const langPrefix = language.split('-')[0]; // Get the prefix (e.g., 'tr' from 'tr-TR')
+    const filtered = voices.filter(voice => voice.language.startsWith(langPrefix));
+    setFilteredVoices(filtered);
   };
 
-    const handleWordPress = async (word: string) => {
-      console.log(word)
-    onOpen();
-    setWordLoading(true);
-    setCurrentWord(word.toLowerCase()); 
+  const speakSentence = () => {
+    const language = 'tr'; // Adjust this if you have multiple languages
+    setIsSpeaking(true);
+    Speech.speak(sentences[currentSentenceIndex], {
+      voice: selectedVoice?.identifier,
+      language: language,
+      onDone: () => {
+        setCurrentWordIndex(0);
+        setIsSpeaking(false);
+      },
+    });
+
+    currentSentence.forEach((word, index) => {
+      setTimeout(() => {
+        setCurrentWordIndex(index);
+      }, index * wordDelay);
+    });
+
+    filterVoicesByLanguage(language); // Filter voices based on the language
+  };
+
+  useEffect(() => {
+    if (!isSpeaking) {
+      speakSentence();
+    }
+  }, [currentSentenceIndex]);
+
+  const handleNextSentence = () => {
+    setCurrentSentenceIndex((prev) => Math.min(prev + 1, sentences.length - 1));
+  };
+
+  const handlePreviousSentence = () => {
+    setCurrentSentenceIndex((prev) => Math.max(prev - 1, 0));
+  };
+
+  const testVoice = (voice: any) => {
+    Speech.speak("Bu sesin önizlemesini dinliyorsunuz.", { voice: voice.identifier });
+  };
+  
+    const handleWordPress = async (index: number) => {
+      wordOnOpen();
+      setWordLoading(true);
+      setCurrentWord(currentSentence[index].toLowerCase()); 
     try {
-        const cleanedWord = word.replace(/[.,!?;:'"()]/g, "");
-        // const meaningResponse = await translateText({text:cleanedWord,targetLang:spokenLanguageCode});
-        // if (meaningResponse) {
-        //     setTranslatedWord(meaningResponse);
-        // } else {
-        //     console.error('Error: translation');
-        // }
+        const cleanedWord = currentSentence[index].replace(/[.,!?;:'"()]/g, "");
+        const meaningResponse = await translateText({text:cleanedWord,targetLang:spokenLanguageCode});
+        if (meaningResponse) {
+            setTranslatedWord(meaningResponse);
+        } else {
+            console.error('Error: translation');
+        }
     } catch (error) {
         console.error('Fetch error:', error);
     } finally {
         setWordLoading(false);
     }
     };
+
+    const saveWordMutation = useMutation({
+      mutationFn:saveWord,
+      onSuccess(data, variables, context) {
+        setSavedWords((prev) => [...prev, variables.word.toLowerCase()])
+      },
+    })  
 
     const handleSaveWord = () => {
         if (currentWord && !savedWords.includes(currentWord.toLowerCase())) {
@@ -190,38 +262,14 @@ export default function StoryScreen({route}:any) {
           alignItems: "center"
         }}
       >
-        <View style={styles.centeredContent}>
-          <View style={{flexDirection:"row", alignItems:"flex-end", justifyContent:"space-between", width:width, paddingHorizontal:16}}> 
-            <Image source={{uri:iconUrl}} width={50} height={40} style={{borderRadius:8}} resizeMode='cover'/>
-            <TouchableOpacity
-            onPress={() => handleSave()}
-            style={{alignSelf:"center", marginRight:16, marginTop:16, borderWidth:1}}>
-              <FontAwesome name={isSaved ? "heart" : "heart-o"} size={28} color={MAIN_COLOR_GREEN} />
-            </TouchableOpacity>
-          </View>
-          
-            <View style={styles.wordsContainer}>
-              {words.map((word, index) => (
-                <Text 
-                  key={index} 
-                  onPress={() => handleWordPress(word)}
-                  style={[
-                    styles.word, 
-                    index === currentWordIndex && styles.clickedWord, 
-                    { color: savedWords.includes(word.toLowerCase()) ? "red" : "black" }
-                  ]}
-                >
-                  {word + " "}
-                </Text>
-              ))}
-            </View>
-          </View>
 
+      <StoryCard savedWords={savedWords} currentSentence={currentSentence} currentWordIndex={currentWordIndex} handleWordPress={handleWordPress} voiceOnOpen={voiceOnOpen}/>
+      <StoryCardButtons currentSentenceIndex={currentSentenceIndex} sentences={sentences} handleNextSentence={handleNextSentence} handlePreviousSentence={handlePreviousSentence} />
 
-      {/* ActionSheet Component */}
-      <Actionsheet isOpen={isOpen} onClose={onClose} disableOverlay>
+      {/* WORD MEANING MODAL */}
+      <Actionsheet isOpen={wordIsOpen} onClose={wordOnClose} disableOverlay>
           <Actionsheet.Content>
-              <Animated.View entering={SlideInDown} exiting={SlideOutDown} style={{ padding: 16, width: width, backgroundColor: '#FFFFFF', borderRadius: 8, elevation: 5, minHeight: SCREEN_HEIGHT * .4}}>
+              <Animated.View entering={SlideInDown} exiting={SlideOutDown} style={{ padding: 16, width: SCREEN_WIDTH, backgroundColor: '#FFFFFF', borderRadius: 8, elevation: 5, minHeight: SCREEN_HEIGHT * .4}}>
                 {wordLoading ? <Loading />  
                 :
                 <>
@@ -246,6 +294,39 @@ export default function StoryScreen({route}:any) {
               </Animated.View>
           </Actionsheet.Content>
       </Actionsheet>
+
+        {/* VOICE SELECT MODAL */}
+        <Actionsheet isOpen={voiceIsOpen} onClose={voiceOnClose} disableOverlay>
+              <Actionsheet.Content style={styles.content}>
+              <ScrollView 
+                  contentContainerStyle={{
+                    justifyContent:'center',
+                    alignItems:'center',
+                      width: SCREEN_WIDTH - 20,
+                      minHeight: SCREEN_HEIGHT * 0.5,
+                  }}>
+                  <View style={styles.modalContent}>
+                    <Text style={styles.modalTitle}>Ses Seç</Text>
+                    {filteredVoices.map((voice) => (
+                      <View key={voice.identifier} style={styles.voiceOptionContainer}>
+                        <Text style={styles.voiceText}>{voice.name} ({voice.language})</Text>
+                        <View style={styles.voiceButtons}>
+                          <Button title="Test" onPress={() => testVoice(voice)} />
+                          <Button
+                            title="Select"
+                            onPress={() => {
+                              setSelectedVoice(voice); // Set the selected voice
+                              voiceOnClose() // Close the modal
+                            }}
+                          />
+                        </View>
+                      </View>
+                    ))}
+                  </View>
+                </ScrollView>
+              </Actionsheet.Content>
+              </Actionsheet>
+
       </ScrollView>
   );
 }
@@ -253,7 +334,8 @@ export default function StoryScreen({route}:any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor:WHITE
+    backgroundColor:WHITE,
+    paddingTop:64
   },
   centeredContent: {
     justifyContent: "center",
@@ -287,4 +369,48 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     padding: 20,
   },
+    content: {
+      backgroundColor: WHITE,
+      width: SCREEN_WIDTH,
+      borderTopLeftRadius: 20,
+      borderTopRightRadius: 20,
+    },
+    modalContainer: {
+      flex: 1,
+      backgroundColor: "rgba(0, 0, 0, 0.5)",
+      minHeight:SCREEN_HEIGHT * .5
+    },
+    modalContent: {
+      flex:1,
+      backgroundColor: WHITE,
+      borderRadius: 10,
+      padding: 20,
+      alignItems: "center",
+    },
+    modalTitle: {
+      fontSize: 20,
+      fontWeight: "bold",
+      marginBottom: 15,
+    },
+    voiceOptionContainer: {
+      flex:1,
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      width: '100%',
+      paddingVertical: 10,
+      borderBottomWidth: 1,
+      borderBottomColor: '#ccc',
+    },
+    voiceButtons: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      width: "40%", // Adjust as necessary
+      borderRadius:8,
+    },
+    voiceText: {
+      fontSize: 16,
+      color: TEXT_BLACK,
+    },
+  
 });

@@ -119,7 +119,7 @@ const PersonalInformation = () => {
       setCountryId(countryId)
       setLanguageId(languageId)
       setSpokenLanguageId(spokenLanguageId)
-      i18n.changeLanguage(selectedSpokenLanguage.countryCode);
+      // i18n.changeLanguage(selectedSpokenLanguage.countryCode);
     }
   }
 

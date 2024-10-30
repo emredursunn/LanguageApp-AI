@@ -20,7 +20,7 @@ export const useUserStore = create(
       spokenLanguageId: 1,
       languageId: 1,
       countryId: 1,
-      spokenLanguageCode:"tr",
+      spokenLanguageCode:"en",
       setSpokenLanguageCode: (spokenLanguageCode) => {
         set({ spokenLanguageCode });
       },
