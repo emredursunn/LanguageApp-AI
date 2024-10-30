@@ -11,7 +11,8 @@ type RootStackParamList = {
         email:string,
     }
     FirstInfo:undefined,
-    Story:undefined
+    Story:undefined,
+    Story2:undefined
 };
 
 export type TabStackParamList = {

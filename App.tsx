@@ -14,6 +14,7 @@ import FirstInfoScreen from "./src/screens/FirstInfoScreen";
 import SplashScren from "./src/screens/SplashScreen";
 import StoryInfoScreen from "./src/screens/StoryInfoScreen";
 import StoryScreen from "./src/screens/StoryScreen";
+import StoryScreen2 from "./src/screens/StoryScreen2";
 import { RootStackParamList } from "./src/types/stackNavigations";
 
 const App = () => {
@@ -45,6 +46,7 @@ const App = () => {
                   <Stack.Screen component={FirstInfoScreen} name="FirstInfo" />
                   <Stack.Screen component={StoryInfoScreen} name="StoryInfo" />
                   <Stack.Screen component={StoryScreen} name="Story" />
+                  <Stack.Screen component={StoryScreen2} name="Story2" />
                 </Stack.Navigator>
               </NavigationContainer>
             </SafeAreaView>
