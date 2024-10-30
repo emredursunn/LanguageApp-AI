@@ -1,28 +1,25 @@
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useState } from "react";
 import {
-  Dimensions,
   SafeAreaView,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
-import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-import useI18n from "../../hooks/useI18n";
+import { useMutation } from "react-query";
+import { ButtonComp } from "../../components/common/ButtonComp";
+import { TextInputComp } from "../../components/common/TextInputComp";
+import { forgetPasswordEmailVerification } from "../../services/authService";
 import {
   BLACK_COLOR,
-  LIGHT_GRAY,
   MAIN_COLOR_GREEN,
-  WHITE,
+  WHITE
 } from "../../utils/colors";
-import { BORDER_RADIUS_2, CONTAINER_HORIZONTAL } from "../../utils/measurement";
-import { TextInputComp } from "../../components/common/TextInputComp";
-import { ButtonComp } from "../../components/common/ButtonComp";
-import { forgetPasswordEmailVerification } from "../../services/authService";
 import { showToast, validateEmail } from "../../utils/helpers";
-import { useMutation } from "react-query";
+import { BORDER_RADIUS_2, CONTAINER_HORIZONTAL } from "../../utils/measurement";
 
 type EmailConfirmScreenNavigationProp = NativeStackNavigationProp<
   any,
@@ -30,7 +27,6 @@ type EmailConfirmScreenNavigationProp = NativeStackNavigationProp<
 >;
 
 export default function EmailConfirmScreen() {
-  const { t } = useI18n("LoginScreen");
 
   const [email, setEmail] = useState("");
 
@@ -89,8 +85,8 @@ export default function EmailConfirmScreen() {
             type="email"
             value={email}
             onchangeValue={setEmail}
-            label={t("email")}
-            placeholder={t("email_placeholder")}
+            label={"email"}
+            placeholder={"email_placeholder"}
           />
         </View>
 

@@ -9,32 +9,28 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import PhoneInput from "react-native-phone-number-input";
+import { useMutation } from "react-query";
 import { ButtonComp } from "../../components/common/ButtonComp";
 import {
   PhoneInputComp,
   TextInputComp,
   TextInputPassword,
 } from "../../components/common/TextInputComp";
-import useI18n from "../../hooks/useI18n";
+import { register } from "../../services/authService";
 import {
   BLACK_COLOR,
-  LIGHT_GRAY,
   MAIN_COLOR_2,
   PINK,
-  WHITE,
+  WHITE
 } from "../../utils/colors";
-import { CONTAINER_HORIZONTAL } from "../../utils/measurement";
-import { useMutation } from "react-query";
-import { register } from "../../services/authService";
 import { showToast } from "../../utils/helpers";
-import PhoneInput from "react-native-phone-number-input";
+import { CONTAINER_HORIZONTAL } from "../../utils/measurement";
 
 type RegisterScreenNavigationProp = NativeStackNavigationProp<any, "Register">;
 
 export default function RegisterScreen() {
   const navigation = useNavigation<RegisterScreenNavigationProp>();
-
-  const { t } = useI18n("RegisterScreen");
 
   const { width, height } = Dimensions.get("screen");
 
@@ -96,26 +92,26 @@ export default function RegisterScreen() {
         <TextInputComp
           value={name}
           onchangeValue={setName}
-          label={t("name")}
-          placeholder={t("name_placeholder")}
+          label={"name"}
+          placeholder={"name_placeholder"}
         />
         <TextInputComp
           value={surname}
           onchangeValue={setSurname}
-          label={t("surname")}
-          placeholder={t("surname_placeholder")}
+          label={"surname"}
+          placeholder={"surname_placeholder"}
         />
         <TextInputComp
           value={email}
           onchangeValue={setEmail}
-          label={t("email")}
-          placeholder={t("email_placeholder")}
+          label={"email"}
+          placeholder={"email_placeholder"}
         />
         <PhoneInputComp
           styleContainer={styles.TextInputComp}
-          label={t("phone")}
+          label={"phone"}
           phoneInput={phoneInput}
-          placeHolder={t("phone")}
+          placeHolder={"phone"}
           phone={phone}
           setPhone={setPhone}
           setFormattedValue={setFormattedValue}
@@ -124,21 +120,21 @@ export default function RegisterScreen() {
         <TextInputPassword
           value={password}
           onchangeValue={setPassword}
-          label={t("password")}
-          placeholder={t("password_placeholder")}
+          label={"password"}
+          placeholder={"password_placeholder"}
         />
         <TextInputPassword
           value={password2}
           onchangeValue={setPassword2}
-          label={t("confirm_password")}
-          placeholder={t("confirm_password_placeholder")}
+          label={"confirm_password"}
+          placeholder={"confirm_password_placeholder"}
         />
       </View>
 
       <View style={{ marginTop: 12 }}>
         <ButtonComp
           loading={registerMutation.isLoading}
-          title={t("register_btn")}
+          title={"register_btn"}
           onPress={() => handleRegister()}
         />
       </View>
@@ -153,7 +149,7 @@ export default function RegisterScreen() {
         }}
       >
         <Text style={{ fontSize: 13, fontWeight: "600" }}>
-          {t("already_have_account")}
+          {"already_have_account"}
         </Text>
         <TouchableOpacity onPress={() => navigation.navigate("Login")}>
           <Text
@@ -164,7 +160,7 @@ export default function RegisterScreen() {
               color: MAIN_COLOR_2,
             }}
           >
-            {t("sign_in")}
+            {"sign_in"}
           </Text>
         </TouchableOpacity>
       </View>

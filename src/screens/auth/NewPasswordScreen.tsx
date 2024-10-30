@@ -1,30 +1,26 @@
+import { FontAwesome5 } from "@expo/vector-icons";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import React, { useState } from "react";
 import {
-  View,
+  StyleSheet,
   Text,
   TouchableOpacity,
-  Dimensions,
-  StyleSheet,
+  View
 } from "react-native";
-import React, { useState } from "react";
-import { useNavigation, useRoute } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { BORDER_RADIUS_2, CONTAINER_HORIZONTAL } from "../../utils/measurement";
+import { useMutation } from "react-query";
+import { ButtonComp } from "../../components/common/ButtonComp";
+import { TextInputPassword } from "../../components/common/TextInputComp";
+import { forgetPasswordResetPassword } from "../../services/authService";
 import {
   BLACK_COLOR,
-  LIGHT_GRAY,
   MAIN_COLOR_GREEN,
-  WHITE,
+  WHITE
 } from "../../utils/colors";
-import { FontAwesome5 } from "@expo/vector-icons";
-import { TextInputPassword } from "../../components/common/TextInputComp";
-import { ButtonComp } from "../../components/common/ButtonComp";
-import useI18n from "../../hooks/useI18n";
-import { useMutation } from "react-query";
-import { forgetPasswordResetPassword } from "../../services/authService";
 import { showToast } from "../../utils/helpers";
+import { BORDER_RADIUS_2, CONTAINER_HORIZONTAL } from "../../utils/measurement";
 
 const NewPasswordScreen = () => {
-  const { t } = useI18n("LoginScreen");
 
   const [newPassword, setNewPassword] = useState("");
   const { email } = useRoute<any>().params;
@@ -76,8 +72,8 @@ const NewPasswordScreen = () => {
         <TextInputPassword
           value={newPassword}
           onchangeValue={setNewPassword}
-          label={t("new_password")}
-          placeholder={t("password_placeholder")}
+          label={"new_password"}
+          placeholder={"password_placeholder"}
         />
       </View>
 

@@ -14,7 +14,6 @@ import {
   TextInputComp,
   TextInputPassword,
 } from "../../components/common/TextInputComp";
-import useI18n from "../../hooks/useI18n";
 import { login } from "../../services/authService";
 import { useAuthStore } from "../../store/useAuthStore";
 import {
@@ -32,7 +31,6 @@ type LoginScreenNavigationProp = NativeStackNavigationProp<any, "Profile">;
 export default function LoginScreen() {
   const navigation = useNavigation<LoginScreenNavigationProp>();
 
-  const { t } = useI18n("LoginScreen");
   const { setToken } = useAuthStore();
 
   const [email, setEmail] = useState("uygareren1030@gmail.com");
@@ -90,14 +88,14 @@ export default function LoginScreen() {
         <TextInputComp
           value={email}
           onchangeValue={setEmail}
-          label={t("email")}
-          placeholder={t("email_placeholder")}
+          label={"email"}
+          placeholder={"email_placeholder"}
         />
         <TextInputPassword
           value={password}
           onchangeValue={setPassword}
-          label={t("password")}
-          placeholder={t("password_placeholder")}
+          label={"password"}
+          placeholder={"password_placeholder"}
         />
       </View>
 
@@ -113,7 +111,7 @@ export default function LoginScreen() {
       <View>
         <ButtonComp
           loading={loginMutation.isLoading}
-          title={t("btn_title")}
+          title={"btn_title"}
           onPress={handleLogin}
         />
       </View>
@@ -127,7 +125,7 @@ export default function LoginScreen() {
         }}
       >
         <Text style={{ fontSize: 13, fontWeight: "600" }}>
-          {t("no_account")}
+          {"no_account"}
         </Text>
         <TouchableOpacity onPress={() => navigation.navigate("Register")}>
           <Text
@@ -138,7 +136,7 @@ export default function LoginScreen() {
               color: MAIN_COLOR_2,
             }}
           >
-            {t("get_register")}
+            {"get_register"}
           </Text>
         </TouchableOpacity>
       </View>

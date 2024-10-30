@@ -1,3 +1,4 @@
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import React, { useEffect, useRef, useState } from "react";
 import {
@@ -16,8 +17,14 @@ import {
   useBlurOnFulfill,
   useClearByFocusCell,
 } from "react-native-confirmation-code-field";
-import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-import useI18n from "../../hooks/useI18n";
+import { useMutation } from "react-query";
+import { ButtonComp } from "../../components/common/ButtonComp";
+import {
+  forgetPasswordResendVerify,
+  forgetPasswordVerify,
+  registerResendVerify,
+  registerVerify,
+} from "../../services/authService";
 import {
   BLACK_COLOR,
   GRAY_2,
@@ -26,19 +33,10 @@ import {
   SOFT_BLUE,
   WHITE,
 } from "../../utils/colors";
-import { BORDER_RADIUS_2, CONTAINER_HORIZONTAL } from "../../utils/measurement";
-import { ButtonComp } from "../../components/common/ButtonComp";
-import { useMutation } from "react-query";
-import {
-  forgetPasswordResendVerify,
-  forgetPasswordVerify,
-  registerResendVerify,
-  registerVerify,
-} from "../../services/authService";
 import { showToast } from "../../utils/helpers";
+import { BORDER_RADIUS_2, CONTAINER_HORIZONTAL } from "../../utils/measurement";
 
 export default function CodeConfirmationScreen() {
-  const { t } = useI18n("LoginScreen");
   const { email, mode } = useRoute<any>().params;
   const navigation = useNavigation<any>();
   const [counter, setCounter] = useState(90);

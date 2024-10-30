@@ -7,7 +7,6 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { TabNavigation } from "./src/navigation/Tab";
-import ProtectProvider from "./src/provider/ProtectProvider";
 import CodeConfirmationScreen from "./src/screens/auth/CodeConfirmScreen";
 import EmailConfirmScreen from "./src/screens/auth/EmailConfirmScreen";
 import NewPasswordScreen from "./src/screens/auth/NewPasswordScreen";
@@ -27,7 +26,6 @@ const App = () => {
       <SafeAreaProvider>
         <GestureHandlerRootView style={{ flex: 1 }}>
           <NativeBaseProvider>
-            <ProtectProvider>
             <SafeAreaView style={{ flex: 1 }}>
               <NavigationContainer>
                 <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -52,7 +50,6 @@ const App = () => {
                 </Stack.Navigator>
               </NavigationContainer>
             </SafeAreaView>
-            </ProtectProvider>
             <Toast />
           </NativeBaseProvider>
         </GestureHandlerRootView>
