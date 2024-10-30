@@ -54,7 +54,7 @@ const LearnedWordsList = () => {
   }
 
   return (
-    <WordList language={language} words={wordsWithMeanings} type='LEARNT'/>
+    <WordList language={language} words={wordsWithMeanings} type='LEARNED'/>
   );
 };
 

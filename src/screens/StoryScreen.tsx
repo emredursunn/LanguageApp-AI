@@ -2,16 +2,18 @@ import { FontAwesome } from '@expo/vector-icons';
 // import * as Speech from 'expo-speech';
 import { Actionsheet, useDisclose } from 'native-base';
 import React, { useEffect, useState } from "react";
-import { Dimensions, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Dimensions, Image, ScrollView, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
 import { useQuery } from 'react-query';
 import { LanguageData } from '../components/firstInfoViews/Screen2';
 import Loading from '../components/common/Loading';
-import { getLanguage } from '../services/apiService';
+import { getLanguage, translateText } from '../services/apiService';
 import { MAIN_COLOR, MAIN_COLOR_GREEN, WHITE } from '../utils/colors';
+import { useUserStore } from '../store/useUserStore';
+import Animated, { SlideInDown, SlideOutDown } from 'react-native-reanimated';
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 
-const {width, height} = Dimensions.get("screen");
+const {width, height : SCREEN_HEIGHT} = Dimensions.get("screen");
 
 export default function StoryScreen({route}:any) {
   const languageId = route.params.languageId;
@@ -20,6 +22,8 @@ export default function StoryScreen({route}:any) {
   const description = route.params.description;
   const duration = route.params.duration;
   const difficulty = route.params.difficulty;
+
+  const { spokenLanguageCode } = useUserStore()
 
   const [story, setStory] = useState(`
   `);
@@ -101,34 +105,17 @@ export default function StoryScreen({route}:any) {
   };
 
     const handleWordPress = async (word: string) => {
+    onOpen();
     setWordLoading(true);
     setCurrentWord(word); 
     try {
         const cleanedWord = word.replace(/[.,!?;:'"()]/g, "");
-
-        const response = await fetch('https://api-free.deepl.com/v2/translate', {
-            method: 'POST',
-            headers: {
-                'Authorization': 'DeepL-Auth-Key cc430cba-68fd-42a0-8986-8cf4274f5017:fx',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                text: [cleanedWord],
-                target_lang: 'TR',
-            }),
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        if (data.translations) {
-            setTranslatedWord(data.translations[0].text);
-            onOpen();
-        } else {
-            console.error('Error:', data);
-        }
+        // const meaningResponse = await translateText({text:cleanedWord,targetLang:spokenLanguageCode});
+        // if (meaningResponse) {
+        //     setTranslatedWord(meaningResponse);
+        // } else {
+        //     console.error('Error: translation');
+        // }
     } catch (error) {
         console.error('Fetch error:', error);
     } finally {
@@ -158,68 +145,69 @@ export default function StoryScreen({route}:any) {
     
 
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={{
-        justifyContent: "center",
-        alignItems: "center"
-      }}
-    >
-      <View style={styles.centeredContent}>
-        <View style={{flexDirection:"row", alignItems:"flex-end", justifyContent:"space-between", width:width, paddingHorizontal:16}}> 
-          <Image source={{uri:iconUrl}} width={50} height={40} style={{borderRadius:8}} resizeMode='cover'/>
-          <TouchableOpacity 
-          onPress={() => handleSave()}
-          style={{alignSelf:"center", marginRight:16, marginTop:16, borderWidth:1}}>
-            <FontAwesome name={isSaved ? "heart" : "heart-o"} size={28} color={MAIN_COLOR_GREEN} />
-          </TouchableOpacity>
-        </View>
-         
-          <View style={styles.wordsContainer}>
-            {words.map((word, index) => (
-              <Text 
-                key={index} 
-                onPress={() => handleWordPress(word)}
-                style={[
-                  styles.word, 
-                  index === currentWordIndex && styles.clickedWord, 
-                  { color: savedWords.includes(word) ? "red" : "black" }
-                ]}
-              >
-                {word + " "}
-              </Text>
-            ))}
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={{
+          justifyContent: "center",
+          alignItems: "center"
+        }}
+      >
+        <View style={styles.centeredContent}>
+          <View style={{flexDirection:"row", alignItems:"flex-end", justifyContent:"space-between", width:width, paddingHorizontal:16}}> 
+            <Image source={{uri:iconUrl}} width={50} height={40} style={{borderRadius:8}} resizeMode='cover'/>
+            <TouchableOpacity 
+            onPress={() => handleSave()}
+            style={{alignSelf:"center", marginRight:16, marginTop:16, borderWidth:1}}>
+              <FontAwesome name={isSaved ? "heart" : "heart-o"} size={28} color={MAIN_COLOR_GREEN} />
+            </TouchableOpacity>
           </View>
-        </View>
-
-
-     {/* ActionSheet Component */}
-     <Actionsheet isOpen={isOpen} onClose={onClose}>
-        <Actionsheet.Content>
-            <View style={{ padding: 16, width: width, backgroundColor: '#FFFFFF', borderRadius: 8, elevation: 5 }}>
-                {/* Save Word Button */}
-                <TouchableOpacity  
-                    onPress={handleSaveWord} // Call handleSaveWord on press
-                    style={{ alignSelf: "flex-end", padding: 10 }}>
-                    <FontAwesome 
-                        name={savedWords.includes(currentWord) ? "star" : "star-o"} 
-                        size={28} 
-                        color={MAIN_COLOR} 
-                    />
-                </TouchableOpacity>
-                {/* Word Translation Display */}
-                <View style={{ marginTop: 24, alignItems: "center", borderBottomWidth: 1, borderBottomColor: '#E0E0E0', paddingBottom: 10 }}>
-                    <Text style={{ fontSize: 24, fontWeight: "600", textTransform: 'capitalize', color: '#333', textAlign:'center' }}>{currentWord}</Text>
-                    <Text style={{ fontSize: 24, fontWeight: "600", textTransform: 'capitalize', color: '#007BFF', marginLeft: 8, marginTop:8, textAlign:'center' }}>{translatedWord}</Text>
-                </View>
+          
+            <View style={styles.wordsContainer}>
+              {words.map((word, index) => (
+                <Text 
+                  key={index} 
+                  onPress={() => handleWordPress(word)}
+                  style={[
+                    styles.word, 
+                    index === currentWordIndex && styles.clickedWord, 
+                    { color: savedWords.includes(word) ? "red" : "black" }
+                  ]}
+                >
+                  {word + " "}
+                </Text>
+              ))}
             </View>
-        </Actionsheet.Content>
-    </Actionsheet>
+          </View>
 
 
-
-
-    </ScrollView>
+      {/* ActionSheet Component */}
+      <Actionsheet isOpen={isOpen} onClose={onClose} disableOverlay>
+          <Actionsheet.Content>
+              <Animated.View entering={SlideInDown} exiting={SlideOutDown} style={{ padding: 16, width: width, backgroundColor: '#FFFFFF', borderRadius: 8, elevation: 5, minHeight: SCREEN_HEIGHT * .4}}>
+                {wordLoading ? <Loading />  
+                :
+                <>
+                  {/* Save Word Button */}
+                  <TouchableOpacity  
+                      onPress={handleSaveWord} // Call handleSaveWord on press
+                      style={{ alignSelf: "flex-end", padding: 10 }}>
+                      <FontAwesome 
+                          name={savedWords.includes(currentWord) ? "star" : "star-o"} 
+                          size={28} 
+                          color={MAIN_COLOR} 
+                          />
+                  </TouchableOpacity>
+                  {/* Word Translation Display */}
+                  <View style={{ marginTop: 24, alignItems: "center", borderBottomWidth: 1, borderBottomColor: '#E0E0E0', paddingBottom: 10 }}>
+                      <Text style={{ fontSize: 24, fontWeight: "600", textTransform: 'capitalize', color: '#333', textAlign:'center' }}>{currentWord}</Text>
+                      <Text style={{ fontSize: 24, fontWeight: "600", textTransform: 'capitalize', color: '#007BFF', marginLeft: 8, marginTop:8, textAlign:'center' }}>{translatedWord}</Text>
+                  </View>
+                </>
+            }
+              </Animated.View>
+          </Actionsheet.Content>
+      </Actionsheet>
+      </ScrollView>
   );
 }
 

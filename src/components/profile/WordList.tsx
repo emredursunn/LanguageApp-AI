@@ -15,7 +15,7 @@ type Props = {
   language: string;
   words: IWord[];
   setWords?: React.Dispatch<React.SetStateAction<IWord[]>>;
-  type: "SAVED" | "LEARNT";
+  type: "SAVED" | "LEARNED";
 };
 
 const WordList = ({ language, words, setWords, type }: Props) => {
@@ -103,6 +103,7 @@ const WordList = ({ language, words, setWords, type }: Props) => {
   );
 
   return (
+    words && words.length > 0 ?
     <>
       <Animated.FlatList
         data={words}
@@ -121,6 +122,8 @@ const WordList = ({ language, words, setWords, type }: Props) => {
         />
       )}
     </>
+    :
+    null
   );
 };
 
