@@ -1,8 +1,8 @@
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import React from "react";
-import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import React, { useState } from "react";
+import { Alert, Dimensions, Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { useAuthStore } from "../../store/useAuthStore";
 import { TabStackParamList } from "../../types/stackNavigations";
 import {
@@ -14,7 +14,11 @@ import {
 } from "../../utils/colors";
 import { useMutation } from "react-query";
 import { deactive } from "../../services/authService";
-import { showToast } from "../../utils/helpers";
+import { getImageSource, showToast } from "../../utils/helpers";
+import Animated, { SlideOutLeft } from "react-native-reanimated";
+import { Actionsheet, useDisclose } from "native-base";
+import { ButtonComp } from "../../components/common/ButtonComp";
+import { updateProfile } from "../../services/userService";
 
 interface Page {
   id: number;
@@ -52,6 +56,29 @@ const ProfileSettings = () => {
   const { navigate } =
     useNavigation<NativeStackNavigationProp<TabStackParamList, "Settings">>();
   const { logout, auth } = useAuthStore();
+  const { isOpen, onOpen, onClose } = useDisclose()
+
+  const imageUrls = ["1", "2", "3", "4", "5", "6", "7", "8"];
+  const [imageUrl,setImageUrl] = useState(auth?.imageUrl || "1")
+  const imageSource = getImageSource(imageUrl);
+  const [profileImage,setProfileImage] = useState<any>(imageSource)
+
+  const handleImagePress = (_imageUrl:string) => {
+    setImageUrl(_imageUrl)
+    const selectedImage = getImageSource(_imageUrl);
+    setProfileImage(selectedImage);
+  };
+
+  const updateProfileMutation = useMutation({
+    mutationFn:updateProfile,
+    onSuccess: onClose
+  })
+
+  const handleSaveImage = () => {
+    if(auth){
+      updateProfileMutation.mutate({name:auth.name,surname:auth.surname,imageUrl})
+    }
+  }
 
   const deleteAccountMutation = useMutation({
     mutationFn: deactive,
@@ -112,22 +139,17 @@ const ProfileSettings = () => {
   ];
 
   return (
-    <ScrollView style={{ flex: 1, padding: 32, backgroundColor: WHITE }}>
+    <Animated.ScrollView exiting={SlideOutLeft} style={{ flex: 1, padding: 32, backgroundColor: WHITE }}>
       <View
         style={{ flexDirection: "row", alignItems: "center", marginBottom: 24 }}
       >
-        <View
-          style={{
-            width: 75,
-            height: 75,
-            backgroundColor: "red",
-            borderRadius: 180,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Text>Image</Text>
-        </View>
+        <TouchableOpacity onPress={onOpen} activeOpacity={.7} style={{width:75,height:75,borderRadius:38, backgroundColor:'red'}}>
+        <Image
+          source={profileImage}
+          style={{width: 75,height: 75,borderRadius: 38}}
+          resizeMode="cover"
+          />
+          </TouchableOpacity>
         <View style={{ marginLeft: 24, alignItems: "flex-start" }}>
           <Text style={{ fontWeight: "600", fontSize: 18 }}>
             {auth?.name} {auth?.surname}
@@ -155,7 +177,28 @@ const ProfileSettings = () => {
           Log Out
         </Text>
       </TouchableOpacity>
-    </ScrollView>
+
+      <Actionsheet isOpen={isOpen} onClose={onClose}>
+      <Actionsheet.Content style={{ backgroundColor: 'white', width: '100%' }}>
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
+          {imageUrls.map((imageUrl) => (
+            <TouchableOpacity
+              key={imageUrl}
+              style={{ margin: 5 }}
+              onPress={() => handleImagePress(imageUrl)}
+            >
+              <Image
+                source={getImageSource(imageUrl)}
+                style={{ width: 75, height: 75, borderRadius: 38 }}
+                resizeMode="cover"
+              />
+            </TouchableOpacity>
+          ))}
+        </View>
+        <ButtonComp title="Save" onPress={handleSaveImage} loading={updateProfileMutation.isLoading}/>
+      </Actionsheet.Content>
+    </Actionsheet>
+    </Animated.ScrollView>
   );
 };
 

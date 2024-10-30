@@ -30,6 +30,24 @@ export const updateFirstInfo = async ({
   return response.data;
 };
 
+export const updateProfile= async ({
+  name,
+  surname,
+  imageUrl,
+}: {
+  name: string;
+  surname: string;
+  imageUrl: string;
+}) => {
+  const response = await api.post("/user/update-profile", {
+    name,
+    surname,
+    imageUrl,
+  });
+
+  return response.data;
+};
+
 export const getSavedLanguages = async () => {
   const response = await api.get("/user/languages");
   return response.data;

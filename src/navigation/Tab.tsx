@@ -6,36 +6,10 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { BLACK_COLOR, GRAY, MAIN_COLOR_GREEN, WHITE } from "../utils/colors";
 import HomeNavigation from "./HomeNavigation";
 import ProfileNavigation from "./ProfileNavigation";
-import { useQuery } from "react-query";
-import { useAuthStore } from "../store/useAuthStore";
-import { loginWithToken } from "../services/authService";
-import { useUserStore } from "../store/useUserStore";
 
 const Tab = createBottomTabNavigator();
 
 export const TabNavigation = () => {
-  const { token, setAuth } = useAuthStore();
-  const { setLanguageId, setCountryId } = useUserStore();
-  
-  const { isLoading, isError } = useQuery(
-    ["fetchUser", token], // Query key includes token
-    loginWithToken, // Query function
-    {
-      enabled: !!token, // Only run this query if there's a token
-      onSuccess: (data) => {
-        if (data) {
-          const { userInfo } = data;
-          setAuth(userInfo);
-          console.log(userInfo)
-          setLanguageId(userInfo.languageId)
-          setCountryId(userInfo.countryId)
-        }
-      },
-      onError: (error) => {
-        console.error("Failed to fetch user data:", error);
-      },
-    }
-  );
 
   const navigation = useNavigation<any>();
 

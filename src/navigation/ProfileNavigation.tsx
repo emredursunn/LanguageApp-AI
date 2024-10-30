@@ -34,8 +34,8 @@ export default function ProfileNavigation() {
       enabled: !!token, // Only run this query if there's a token
       onSuccess: (data) => {
         if (data) {
-          const {id, email, name, surname, countryId, languageId, } = data.userInfo
-          setAuth({id,email,name,surname});
+          const {id, email, name, surname, countryId, languageId, imageUrl } = data.userInfo
+          setAuth({id,email,name,surname,imageUrl});
           setCountryId(countryId)
           setLanguageId(languageId)
         }

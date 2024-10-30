@@ -21,7 +21,7 @@ import { CountryData, RequestData } from "../../components/firstInfoViews/Screen
 import { useMutation, useQuery } from "react-query";
 import { getCountry, getLanguage } from "../../services/apiService";
 import { LanguageData } from "../../components/firstInfoViews/Screen2";
-import { updateFirstInfo } from "../../services/userService";
+import { updateFirstInfo, updateProfile } from "../../services/userService";
 import Animated, { SlideInRight } from "react-native-reanimated";
 
 const { height, width } = Dimensions.get("screen");
@@ -105,10 +105,15 @@ const PersonalInformation = () => {
     },
   })
 
+  const updateProfileMutation = useMutation({
+    mutationFn:updateProfile,
+  })
+
   const handleSaveChanges = () => {
     const { countryId, languageId, spokenLanguageId } = requestData
     if(countryId && languageId && spokenLanguageId && name && surname && selectedSpokenLanguage){
       updateFirstInfoMutation.mutate({countryId,languageId,spokenLanguageId})
+      updateProfileMutation.mutate({name,surname,imageUrl:auth?.imageUrl || "1"})
       setSpokenLanguageCode(selectedSpokenLanguage?.countryCode)
       setCountryId(countryId)
       setLanguageId(languageId)
@@ -302,6 +307,7 @@ const PersonalInformation = () => {
       <ButtonComp
         title="Save Changes"
         onPress={handleSaveChanges}
+        loading={updateFirstInfoMutation.isLoading || updateProfileMutation.isLoading}
       />
       <Actionsheet isOpen={isOpen} onClose={onClose}>
         <Actionsheet.Content style={{ backgroundColor: WHITE, width:width }}>
