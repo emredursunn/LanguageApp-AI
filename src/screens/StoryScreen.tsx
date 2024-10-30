@@ -38,7 +38,8 @@ export default function StoryScreen({route}:any) {
   const genAI = new GoogleGenerativeAI("AIzaSyDdOKFuQSMcOgENADl2TeFjXODZZTOlNb4");
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-  const words = story.match(/\b[\w']+|[.,!?;:"()-]/g) || [];
+  // const words = story.match(/\b[\w']+|[.,!?;:"()-]/g) || [];
+  const words = story.match(/(\p{L}+|\p{N}+|\p{P}+|\p{Z}+)/gu) || [];
 
   const { data:languageData, error:languageError, isLoading:languageLoading } = useQuery('language', getLanguage);
   const iconUrl = languageData?.data.filter((item:LanguageData) => item.id == languageId)[0]?.iconUrl;
@@ -165,7 +166,7 @@ export default function StoryScreen({route}:any) {
       }}
     >
       <View style={styles.centeredContent}>
-        <View style={{flexDirection:"row", alignItems:"flex-end", justifyContent:"space-between",borderWidth:1, width:width, paddingHorizontal:16}}> 
+        <View style={{flexDirection:"row", alignItems:"flex-end", justifyContent:"space-between", width:width, paddingHorizontal:16}}> 
           <Image source={{uri:iconUrl}} width={50} height={40} style={{borderRadius:8}} resizeMode='cover'/>
           <TouchableOpacity 
           onPress={() => handleSave()}
@@ -207,13 +208,9 @@ export default function StoryScreen({route}:any) {
                     />
                 </TouchableOpacity>
                 {/* Word Translation Display */}
-                <View style={{ marginTop: 24, flexDirection: "row", alignItems: "center", borderBottomWidth: 1, borderBottomColor: '#E0E0E0', paddingBottom: 10 }}>
-                    <Text style={{ fontSize: 24, fontWeight: "600", textTransform: 'capitalize', color: '#333' }}>{currentWord}:</Text>
-                    <Text style={{ fontSize: 24, fontWeight: "600", textTransform: 'capitalize', color: '#007BFF', marginLeft: 8 }}>{translatedWord}</Text>
-                </View>
-                {/* Optional Additions (e.g., Notes or Extra Info) */}
-                <View style={{ marginTop: 16 }}>
-                    <Text style={{ fontSize: 16, color: '#555' }}>You can save or remove this word from your favorites.</Text>
+                <View style={{ marginTop: 24, alignItems: "center", borderBottomWidth: 1, borderBottomColor: '#E0E0E0', paddingBottom: 10 }}>
+                    <Text style={{ fontSize: 24, fontWeight: "600", textTransform: 'capitalize', color: '#333', textAlign:'center' }}>{currentWord}</Text>
+                    <Text style={{ fontSize: 24, fontWeight: "600", textTransform: 'capitalize', color: '#007BFF', marginLeft: 8, marginTop:8, textAlign:'center' }}>{translatedWord}</Text>
                 </View>
             </View>
         </Actionsheet.Content>
