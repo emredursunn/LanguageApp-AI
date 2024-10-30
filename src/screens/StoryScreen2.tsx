@@ -1,7 +1,12 @@
 import * as Speech from "expo-speech";
 import React, { useEffect, useState } from "react";
-import { Button, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Button, Dimensions, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { TEXT_BLACK, WHITE } from "../utils/colors";
+import StoryCard from "../components/story/StoryCard";
+import StoryCardButtons from "../components/story/StoryCardButtons";
+import { Actionsheet, useDisclose } from "native-base";
+
+const {width:SCREEN_WIDTH,height:SCREEN_HEIGHT} = Dimensions.get("screen")
 
 export default function StoryScreen2() {
   const story = `
@@ -15,8 +20,8 @@ export default function StoryScreen2() {
   const [voices, setVoices] = useState<any[]>([]);
   const [filteredVoices, setFilteredVoices] = useState<any[]>([]);
   const [selectedVoice, setSelectedVoice] = useState<any>(null);
-  const [modalVisible, setModalVisible] = useState(false);
   const wordDelay = 300;
+  const {isOpen, onClose, onOpen} = useDisclose()
 
   console.log("filtred", filteredVoices);
 
@@ -100,48 +105,18 @@ export default function StoryScreen2() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.storyContent}>
-        {currentSentence.map((word, index) => (
-          <TouchableOpacity 
-            key={index} 
-            onPress={() => handleWordPress(index)}
-          >
-            <View style={index === currentWordIndex ? styles.highlightedWordWrapper : {}}>
-              <Text style={[styles.word, index === currentWordIndex ? styles.highlightedWord : {}]}>
-                {word + " "}
-              </Text>
-            </View>
-          </TouchableOpacity>
-        ))}
-      </View>
-
-      <View style={styles.buttonContainer}>
-        {currentSentenceIndex > 0 && (
-          <TouchableOpacity onPress={handlePreviousSentence} style={styles.button}>
-            <Text style={styles.buttonText}>Geri</Text>
-          </TouchableOpacity>
-        )}
-        {currentSentenceIndex < sentences.length - 1 && (
-          <TouchableOpacity onPress={handleNextSentence} style={styles.button}>
-            <Text style={styles.buttonText}>İleri</Text>
-          </TouchableOpacity>
-        )}
-        <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.button}>
-          <Text style={styles.buttonText}>Konuşmacı Seç</Text>
-        </TouchableOpacity>
-      </View>
+      <StoryCard currentSentence={currentSentence} currentWordIndex={currentWordIndex} handleWordPress={handleWordPress} onOpen={onOpen}/>
+      <StoryCardButtons currentSentenceIndex={currentSentenceIndex} sentences={sentences} handleNextSentence={handleNextSentence} handlePreviousSentence={handlePreviousSentence} />
 
       {/* Ses Seçim Modali */}
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <ScrollView style={styles.modalContainer}
+      <Actionsheet isOpen={isOpen} onClose={onClose} disableOverlay>
+      <Actionsheet.Content style={styles.content}>
+      <ScrollView 
           contentContainerStyle={{
-            justifyContent: "center",
-            alignItems: "center",
+            justifyContent:'center',
+            alignItems:'center',
+              width: SCREEN_WIDTH - 20,
+              minHeight: SCREEN_HEIGHT * 0.5,
           }}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Ses Seç</Text>
@@ -149,23 +124,22 @@ export default function StoryScreen2() {
               <View key={voice.identifier} style={styles.voiceOptionContainer}>
                 <Text style={styles.voiceText}>{voice.name} ({voice.language})</Text>
                 <View style={styles.voiceButtons}>
-                  <Button title="Test Et" onPress={() => testVoice(voice)} />
+                  <Button title="Test" onPress={() => testVoice(voice)} />
                   <Button
-                    title="Kullan"
+                    title="Select"
                     onPress={() => {
                       setSelectedVoice(voice); // Set the selected voice
-                      setModalVisible(false); // Close the modal
+                      onClose() // Close the modal
                     }}
                   />
                 </View>
               </View>
             ))}
-            <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closeButton}>
-              <Text style={styles.closeButtonText}>Kapat</Text>
-            </TouchableOpacity>
           </View>
         </ScrollView>
-      </Modal>
+      </Actionsheet.Content>
+      </Actionsheet>
+   
     </View>
   );
 }
@@ -178,47 +152,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 16,
   },
-  storyContent: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "center",
-  },
-  word: {
-    fontSize: 22,
-    color: TEXT_BLACK,
-    fontWeight: "600",
-  },
-  highlightedWordWrapper: {
-    backgroundColor: "red",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 4,
-  },
-  highlightedWord: {
-    color: WHITE,
-  },
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "80%",
-    marginVertical: 20,
-  },
-  button: {
-    backgroundColor: "#007BFF",
-    padding: 10,
-    borderRadius: 5,
-    marginHorizontal: 5,
-  },
-  buttonText: {
-    color: "white",
-    fontSize: 18,
+  content: {
+    backgroundColor: WHITE,
+    width: SCREEN_WIDTH,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
   },
   modalContainer: {
     flex: 1,
     backgroundColor: "rgba(0, 0, 0, 0.5)",
+    minHeight:SCREEN_HEIGHT * .5
   },
   modalContent: {
-    width: "80%",
+    flex:1,
     backgroundColor: WHITE,
     borderRadius: 10,
     padding: 20,
@@ -230,6 +176,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   voiceOptionContainer: {
+    flex:1,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -242,18 +189,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     width: "40%", // Adjust as necessary
+    borderRadius:8,
   },
   voiceText: {
     fontSize: 16,
     color: TEXT_BLACK,
-  },
-  closeButton: {
-    marginTop: 20,
-    padding: 10,
-    backgroundColor: "#FF5722",
-    borderRadius: 5,
-  },
-  closeButtonText: {
-    color: "white",
   },
 });
