@@ -23,6 +23,7 @@ import { getCountry, getLanguage } from "../../services/apiService";
 import { LanguageData } from "../../components/firstInfoViews/Screen2";
 import { updateFirstInfo, updateProfile } from "../../services/userService";
 import Animated, { SlideInRight } from "react-native-reanimated";
+import i18n from "../../utils/i18n";
 
 const { height, width } = Dimensions.get("screen");
 
@@ -114,10 +115,11 @@ const PersonalInformation = () => {
     if(countryId && languageId && spokenLanguageId && name && surname && selectedSpokenLanguage){
       updateFirstInfoMutation.mutate({countryId,languageId,spokenLanguageId})
       updateProfileMutation.mutate({name,surname,imageUrl:auth?.imageUrl || "1"})
-      setSpokenLanguageCode(selectedSpokenLanguage?.countryCode)
+      setSpokenLanguageCode(selectedSpokenLanguage.countryCode)
       setCountryId(countryId)
       setLanguageId(languageId)
       setSpokenLanguageId(spokenLanguageId)
+      i18n.changeLanguage(selectedSpokenLanguage.countryCode);
     }
   }
 
