@@ -16,7 +16,6 @@ export default function ProtectProvider({ children }: any) {
         
         i18n.changeLanguage(spokenLanguageCode);
 
-
     }
     
     return children;

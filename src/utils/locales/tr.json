@@ -1,5 +1,15 @@
 {
     "AllScreen":{
-        "name":"Tr deneme"
+        "hello":"Merhaba,",
+        "welcomeAgain":"Tekrar GemSpeak'e Hoşgeldin!",
+        "email":"Email",
+        "email_placeholder":"Lütfen Emailinizi Girin",
+        "password":"Parola",
+        "password_placeholder":"Lütfen Parolanızı Girin",
+        "forgetPassword":"Şifremi Unuttum",
+        "loginBtn":"Giriş Yap",
+        "no_account":"Hesabın Yok mu",
+        "register":"Kayıt Ol"
+       
     }
 }

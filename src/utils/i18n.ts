@@ -20,8 +20,8 @@ i18n
 .use(initReactI18next)
 .init({
     compatibilityJSON: "v3",
-    fallbackLng:"en",
-    lng:"en",
+    fallbackLng:"tr",
+    lng:"tr",
     debug: false,
     resources:{
         de: {

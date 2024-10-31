@@ -7,6 +7,8 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { TabNavigation } from "./src/navigation/Tab";
+import I18nProvider from "./src/provider/I18nProvider";
+import ProtectProvider from "./src/provider/ProtectProvider";
 import CodeConfirmationScreen from "./src/screens/auth/CodeConfirmScreen";
 import EmailConfirmScreen from "./src/screens/auth/EmailConfirmScreen";
 import NewPasswordScreen from "./src/screens/auth/NewPasswordScreen";
@@ -15,7 +17,6 @@ import SplashScren from "./src/screens/SplashScreen";
 import StoryInfoScreen from "./src/screens/StoryInfoScreen";
 import StoryScreen from "./src/screens/StoryScreen";
 import { RootStackParamList } from "./src/types/stackNavigations";
-import DENEME from "./src/screens/DENEME";
 
 const App = () => {
   const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -25,7 +26,9 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <SafeAreaProvider>
         <GestureHandlerRootView style={{ flex: 1 }}>
+          <I18nProvider>
           <NativeBaseProvider>
+            <ProtectProvider>
             <SafeAreaView style={{ flex: 1 }}>
               <NavigationContainer>
                 <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -46,12 +49,16 @@ const App = () => {
                   <Stack.Screen component={FirstInfoScreen} name="FirstInfo" />
                   <Stack.Screen component={StoryInfoScreen} name="StoryInfo" />
                   <Stack.Screen component={StoryScreen} name="Story" />
-                  <Stack.Screen component={DENEME} name="DENEME" />
+                  {/* <Stack.Screen component={DENEME} name="DENEME" /> */}
                 </Stack.Navigator>
               </NavigationContainer>
             </SafeAreaView>
+            </ProtectProvider>
+           
+
             <Toast />
           </NativeBaseProvider>
+          </I18nProvider>
         </GestureHandlerRootView>
       </SafeAreaProvider>
     </QueryClientProvider>

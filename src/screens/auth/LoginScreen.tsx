@@ -80,10 +80,10 @@ export default function LoginScreen() {
     <SafeAreaView style={styles.container}>
       <View style={{ marginTop: 95 }}>
         <Text style={{ color: BLACK_COLOR, fontSize: 23, fontWeight: "700" }}>
-          Hello,
+          {t("hello")}
         </Text>
         <Text style={{ color: BLACK_COLOR, fontSize: 23, fontWeight: "300" }}>
-          Welcome Back!
+          {t("welcomeAgain")}
         </Text>
       </View>
 
@@ -91,14 +91,14 @@ export default function LoginScreen() {
         <TextInputComp
           value={email}
           onchangeValue={setEmail}
-          label={t("name")}
-          placeholder={"email_placeholder"}
+          label={t("email")}
+          placeholder={t("email_placeholder")}
         />
         <TextInputPassword
           value={password}
           onchangeValue={setPassword}
-          label={"password"}
-          placeholder={"password_placeholder"}
+          label={t("password")}
+          placeholder={t("password_placeholder")}
         />
       </View>
 
@@ -107,14 +107,14 @@ export default function LoginScreen() {
         style={{ marginTop: 15, marginLeft: 10 }}
       >
         <Text style={{ fontSize: 12, fontWeight: "700", color: MAIN_COLOR_2 }}>
-          Forgot Password?
+          {t("forgetPassword")}
         </Text>
       </TouchableOpacity>
 
       <View>
         <ButtonComp
           loading={loginMutation.isLoading}
-          title={"btn_title"}
+          title={t("loginBtn")}
           onPress={handleLogin}
         />
       </View>
@@ -128,7 +128,7 @@ export default function LoginScreen() {
         }}
       >
         <Text style={{ fontSize: 13, fontWeight: "600" }}>
-          {"no_account"}
+          {t("no_account")}
         </Text>
         <TouchableOpacity onPress={() => navigation.navigate("Register")}>
           <Text
@@ -139,7 +139,7 @@ export default function LoginScreen() {
               color: MAIN_COLOR_2,
             }}
           >
-            {"get_register"}
+            {t("register")}
           </Text>
         </TouchableOpacity>
       </View>
