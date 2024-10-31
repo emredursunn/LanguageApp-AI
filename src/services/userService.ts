@@ -95,3 +95,36 @@ export const getLearnedWords = async ({languageId} : {languageId:number}) => {
   const response = await api.get(`/user/learnt-language/${languageId}`);
   return response.data;
 };
+
+export const getSavedStoryLanguages = async () => {
+  const response = await api.get(`/user/stories`);
+  return response.data;
+};
+
+export const getSavedStoriesByLanguageId = async ({languageId} : {languageId:number}) => {
+  const response = await api.get(`/user/story/${languageId}`);
+  return response.data;
+};
+
+export const saveStory = async ({
+  languageId,
+  storyTitle,
+  story,
+}: {
+  languageId: number;
+  storyTitle:string,
+  story:string
+}) => {
+  const response = await api.post(`/user/story`, {languageId,storyTitle,story});
+  return response.data;
+};
+
+export const getSavedStoryDetail = async ({storyId} : {storyId:number}) => {
+  const response = await api.get(`/user/story-detail/${storyId}`);
+  return response.data;
+};
+
+export const deleteSavedStory = async ({storyId} : {storyId:number}) => {
+  const response = await api.delete(`/user/story`, {data: {storyId}});
+  return response.data;
+};

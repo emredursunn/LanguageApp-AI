@@ -7,56 +7,104 @@ import {
   View,
 } from "react-native";
 import React from "react";
-import { LIGHT_GRAY, LIGHT_GRAY_2, LIGHT_RED, TEXT_BLACK, WHITE } from "../../utils/colors";
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import {
+  LIGHT_GRAY,
+  LIGHT_GRAY_2,
+  LIGHT_RED,
+  TEXT_BLACK,
+  WHITE,
+} from "../../utils/colors";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { AntDesign } from "@expo/vector-icons";
 
 const { width, height } = Dimensions.get("screen");
 
 type Props = {
   currentSentence: string[];
   currentWordIndex: number;
-  savedWords: string[]
+  savedWords: string[];
+  isSavedStory: boolean;
+  flagIcon: string;
   handleWordPress: (index: number) => void;
   voiceOnOpen: () => void;
+  titleOnOpen: () => void;
 };
 
 const StoryCard = ({
   currentSentence,
   currentWordIndex,
   savedWords,
+  isSavedStory,
+  flagIcon,
   handleWordPress,
-  voiceOnOpen
+  voiceOnOpen,
+  titleOnOpen,
 }: Props) => {
   return (
     <View style={styles.card}>
-        <TouchableOpacity style={styles.icon} activeOpacity={0.7} onPress={voiceOnOpen}>
-        <MaterialCommunityIcons name="account-tie-voice" size={36} color="white" />
-        </TouchableOpacity>
       <Image
-        source={require("../../../assets/cool.png")}
+        source={{ uri: flagIcon }}
         resizeMode="cover"
-        style={styles.img}
+        style={{
+          width: width * 0.8,
+          height: 100,
+          borderTopLeftRadius: 8,
+          borderTopRightRadius: 8,
+        }}
       />
-      <View style={styles.sentenceBox}>
-        {currentSentence.map((word, index) => (
-          <TouchableOpacity key={index} onPress={() => handleWordPress(index)}>
-            <View
-              style={
-                index === currentWordIndex ? styles.highlightedWordWrapper : {}
-              }
+      <View>
+        <TouchableOpacity
+          style={[styles.icon, { left: 4 }]}
+          activeOpacity={0.7}
+          onPress={voiceOnOpen}
+        >
+          <MaterialCommunityIcons
+            name="account-tie-voice"
+            size={36}
+            color="green"
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.icon, { right: 4 }]}
+          onPress={titleOnOpen}
+        >
+          <AntDesign
+            name={isSavedStory ? "heart" : "hearto"}
+            size={36}
+            color="green"
+          />
+        </TouchableOpacity>
+        <Image
+          source={require("../../../assets/cool.png")}
+          resizeMode="cover"
+          style={styles.img}
+        />
+        <View style={styles.sentenceBox}>
+          {currentSentence.map((word, index) => (
+            <TouchableOpacity
+              key={index}
+              onPress={() => handleWordPress(index)}
             >
-              <Text
-                style={[
-                  styles.word,
-                  index === currentWordIndex ? styles.highlightedWord : {},
-                  savedWords.includes(word.toLowerCase()) && styles.savedWord
-                ]}
+              <View
+                style={
+                  index === currentWordIndex
+                    ? styles.highlightedWordWrapper
+                    : {}
+                }
               >
-                {word + " "}
-              </Text>
-            </View>
-          </TouchableOpacity>
-        ))}
+                <Text
+                  style={[
+                    styles.word,
+                    index === currentWordIndex ? styles.highlightedWord : {},
+                    savedWords.includes(word.toLowerCase()) && styles.savedWord,
+                  ]}
+                >
+                  {word + " "}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          ))}
+        </View>
       </View>
     </View>
   );
@@ -72,24 +120,20 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 16,
   },
   icon: {
-    alignItems:'center',
-    justifyContent:'center',
-    zIndex:10,
-    position:'absolute',
-    top:8,
-    right:8,
-    padding:8,
-    backgroundColor:'green',
-    borderRadius:999
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 10,
+    position: "absolute",
+    top: 8,
+    padding: 8,
+    borderRadius: 999,
   },
   img: {
     width: "100%",
     height: "70%",
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
   },
   sentenceBox: {
-    flexWrap:'wrap',
+    flexWrap: "wrap",
     flexDirection: "row",
     backgroundColor: LIGHT_GRAY_2,
     minHeight: "20%",
@@ -110,10 +154,10 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   highlightedWord: {
-    fontWeight:'bold',
-    color: 'green',
+    fontWeight: "bold",
+    color: "green",
   },
   savedWord: {
-    color:LIGHT_RED,
-  }
+    color: LIGHT_RED,
+  },
 });
