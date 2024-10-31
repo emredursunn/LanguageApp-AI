@@ -26,7 +26,13 @@
         "resendCode":"Kodu Tekrar Gönder",
         "sendCode":"Kod Gönder",
         "tryAgain":"Tekrar Dene",
-        "seconds":"saniye"
+        "seconds":"saniye",
+        "passwordHasChanged":"Parola Değiştirildi!",
+        "passwordHasNotChanged":"Parola Değiştirilemedi!",
+        "enterYourPassword":"Parolanızı Girin!",
+        "newPasswordLabel":"Yeni Parola",
+        "newPasswordPlaceHolder":"Yeni Parolanızı Girin!",
+        "confirmBtn":"Onayla"
        
     }
 }

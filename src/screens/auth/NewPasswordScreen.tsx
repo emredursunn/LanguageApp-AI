@@ -11,6 +11,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useMutation } from "react-query";
 import { ButtonComp } from "../../components/common/ButtonComp";
 import { TextInputPassword } from "../../components/common/TextInputComp";
+import useI18n from "../../hooks/useI18n";
 import { forgetPasswordResetPassword } from "../../services/authService";
 import {
   BLACK_COLOR,
@@ -21,6 +22,7 @@ import { showToast } from "../../utils/helpers";
 import { BORDER_RADIUS_2, CONTAINER_HORIZONTAL } from "../../utils/measurement";
 
 const NewPasswordScreen = () => {
+  const {t} = useI18n("AllScreen");
 
   const [newPassword, setNewPassword] = useState("");
   const { email } = useRoute<any>().params;
@@ -29,11 +31,11 @@ const NewPasswordScreen = () => {
   const passwordResetMutation = useMutation({
     mutationFn: forgetPasswordResetPassword,
     onSuccess: () => {
-      showToast("success", "Password has changed", "");
+      showToast("success", t("passwordHasChanged"), "");
       navigation.navigate("Login");
     },
     onError: (error) =>
-      showToast("error", "Error", "Ensure your email and try again later"),
+      showToast("error", "Error", t("passwordHasNotChanged")),
   });
 
   const handleSendResetPasswordCode = () => {
@@ -65,22 +67,22 @@ const NewPasswordScreen = () => {
             marginTop: 35,
           }}
         >
-          Enter your new password!
+          {t("enterYourPassword")}
         </Text>
       </View>
       <View style={{ marginTop: 30 }}>
         <TextInputPassword
           value={newPassword}
           onchangeValue={setNewPassword}
-          label={"new_password"}
-          placeholder={"password_placeholder"}
+          label={t("newPasswordLabel")}
+          placeholder={t("newPasswordPlaceHolder")}
         />
       </View>
 
       <View>
         <ButtonComp
           loading={passwordResetMutation.isLoading}
-          title={"Confirm"}
+          title={t("confirmBtn")}
           onPress={handleSendResetPasswordCode}
         />
       </View>
