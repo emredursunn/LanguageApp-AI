@@ -12,6 +12,7 @@ import {
 import { useMutation } from "react-query";
 import { ButtonComp } from "../../components/common/ButtonComp";
 import { TextInputComp } from "../../components/common/TextInputComp";
+import useI18n from "../../hooks/useI18n";
 import { forgetPasswordEmailVerification } from "../../services/authService";
 import {
   BLACK_COLOR,
@@ -27,6 +28,7 @@ type EmailConfirmScreenNavigationProp = NativeStackNavigationProp<
 >;
 
 export default function EmailConfirmScreen() {
+  const {t} = useI18n("AllScreen");
 
   const [email, setEmail] = useState("");
 
@@ -35,11 +37,11 @@ export default function EmailConfirmScreen() {
   const emailVerificationMutation = useMutation({
     mutationFn: forgetPasswordEmailVerification,
     onSuccess: () => {
-      showToast("info", "We have sent a code to your email", ""),
+      showToast("info", t("emailConfirmInfoToast"), ""),
       navigation.navigate("CodeConfirm", { email, mode: "RESET" });
     },
     onError: (error) =>
-      showToast("error", "Error", "Ensure your email and try again later"),
+      showToast("error", "Error", t("emailConfirmInfoToast")),
     
   });
 
@@ -47,7 +49,7 @@ export default function EmailConfirmScreen() {
     if (validateEmail(email)) {
       emailVerificationMutation.mutate({ email })
     }else{
-      showToast("error", "Error", "Ensure your email and try again later")
+      showToast("error", "Error", t("emailConfirmInfoToast"))
     }
   };
 
@@ -76,7 +78,7 @@ export default function EmailConfirmScreen() {
             marginTop: 35,
           }}
         >
-          Enter email to get a reset code!
+          {t("emailConfirmTitle")}
         </Text>
       </View>
       <View style={{ alignSelf: "center" }}>
@@ -85,15 +87,15 @@ export default function EmailConfirmScreen() {
             type="email"
             value={email}
             onchangeValue={setEmail}
-            label={"email"}
-            placeholder={"email_placeholder"}
+            label={t("email")}
+            placeholder={t("email_placeholder")}
           />
         </View>
 
         <View>
           <ButtonComp
             loading={emailVerificationMutation.isLoading}
-            title={"Send"}
+            title={t("sendBtn")}
             onPress={handleSendResetPasswordCode}
           />
         </View>

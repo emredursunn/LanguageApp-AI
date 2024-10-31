@@ -19,6 +19,7 @@ import {
 } from "react-native-confirmation-code-field";
 import { useMutation } from "react-query";
 import { ButtonComp } from "../../components/common/ButtonComp";
+import useI18n from "../../hooks/useI18n";
 import {
   forgetPasswordResendVerify,
   forgetPasswordVerify,
@@ -37,6 +38,8 @@ import { showToast } from "../../utils/helpers";
 import { BORDER_RADIUS_2, CONTAINER_HORIZONTAL } from "../../utils/measurement";
 
 export default function CodeConfirmationScreen() {
+  const {t} = useI18n("AllScreen");
+
   const { email, mode } = useRoute<any>().params;
   const navigation = useNavigation<any>();
   const [counter, setCounter] = useState(90);
@@ -83,11 +86,11 @@ export default function CodeConfirmationScreen() {
   const registerVerifyMutation = useMutation({
     mutationFn: registerVerify,
     onSuccess(data, variables, context) {
-      showToast("success", "Successful Verify", "");
+      showToast("success", t("verifySuccess"), "");
       navigation.navigate("Login");
     },
     onError(error, variables, context) {
-      showToast("error", "Wrong code!", "");
+      showToast("error", t("errorCodeToast"), "");
       console.log(error);
     },
   });
@@ -95,11 +98,11 @@ export default function CodeConfirmationScreen() {
   const forgetPasswordVerifyMutation = useMutation({
     mutationFn: forgetPasswordVerify,
     onSuccess(data, variables, context) {
-      showToast("success", "Successful Reset", "");
+      showToast("success", t("successReset"), "");
       navigation.navigate("NewPassword", {email});
     },
     onError(error, variables, context) {
-      showToast("error", "Wrong code!", "");
+      showToast("error", t("errorCodeToast"), "");
       console.log(error);
     },
   });
@@ -107,21 +110,21 @@ export default function CodeConfirmationScreen() {
   const registerResendVerifyMutation = useMutation({
     mutationFn: registerResendVerify,
     onSuccess: (data) => {
-      showToast("info", "Resend successful", "Check your email");
+      showToast("info", t("resendSuccessfull"), t("checkEmail"));
       console.log(data);
     },
     onError: (error) =>
-      showToast("error", "Error", "Ensure your email and try again later"),
+      showToast("error", "Error", t("ensureEmail")),
   });
 
   const forgetPasswordResendVerifyMutation = useMutation({
     mutationFn: forgetPasswordResendVerify,
     onSuccess: (data) => {
-      showToast("info", "Resend successful", "Check your email");
+      showToast("info", t("resendSuccessfull"), t("checkEmail"));
       console.log(data);
     },
     onError: (error) =>
-      showToast("error", "Error", "Ensure your email and try again later"),
+      showToast("error", "Error", t("ensureEmail")),
   });
 
   function handleSendCode() {
@@ -163,8 +166,8 @@ export default function CodeConfirmationScreen() {
           }}
         >
           {mode === "RESET"
-            ? "Enter Code for reset password!"
-            : "Enter code for verify account!"}
+            ? t("enterCodeResetPassword")
+            : t("enterCodeVerifyAccount")}
         </Text>
       </View>
       <View style={{ alignSelf: "center" }}>
@@ -208,7 +211,7 @@ export default function CodeConfirmationScreen() {
           <Text
             style={{ fontSize: 13, fontWeight: "500", color: MAIN_COLOR_2 }}
           >
-            have problem?{" "}
+            {t("haveProblem")}{" "}
           </Text>
           <TouchableOpacity onPress={handleTryAgain}>
             <Text
@@ -218,7 +221,7 @@ export default function CodeConfirmationScreen() {
                 color: MAIN_COLOR_GREEN,
               }}
             >
-              Resend code
+              {t("resendCode")}
             </Text>
           </TouchableOpacity>
         </View>
@@ -227,12 +230,12 @@ export default function CodeConfirmationScreen() {
           <ButtonComp
             onPress={() => handleSendCode()}
             loading={registerVerifyMutation.isLoading || forgetPasswordVerifyMutation.isLoading}
-            title={"Send Code"}
+            title={t("sendCode")}
           />
         </View>
         <View style={{ marginTop: 25 }}>
           {counter > 0 ? (
-            <Text style={styles.timerText}>{counter} seconds</Text>
+            <Text style={styles.timerText}>{counter} {t("seconds")}</Text>
           ) : (
             <TouchableOpacity
               onPress={handleTryAgain}
@@ -245,7 +248,7 @@ export default function CodeConfirmationScreen() {
                 borderRadius: 5,
               }}
             >
-              <Text style={styles.tryAgainText}>Try again</Text>
+              <Text style={styles.tryAgainText}>{t("tryAgain")}</Text>
             </TouchableOpacity>
           )}
         </View>

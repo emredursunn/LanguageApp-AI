@@ -9,7 +9,24 @@
         "forgetPassword":"Şifremi Unuttum",
         "loginBtn":"Giriş Yap",
         "no_account":"Hesabın Yok mu",
-        "register":"Kayıt Ol"
+        "register":"Kayıt Ol",
+        "emailConfirmInfoToast":"Hesabınızı Doğrulamanız İçin Mailinize Kod Gönderdik!",
+        "emailConfirmErrorToast":"Hesabınızı Doğru Girdiğinizden Emin Olun!",
+        "emailConfirmTitle":"Doğrulama Kodu Almak İçin Emailinizi Girin!",
+        "sendBtn":"Gönder",
+        "verifySuccess":"Başarılı Bir Şekilde Doğrulandı!",
+        "errorCodeToast":"Başarılı Bir Şekilde Doğrulandı!",
+        "successReset":"Başarılı Bir Şekilde Sıfırlandı!",
+        "resendSuccessfull":"Başarıyla Tekrar Gönderildi!",
+        "checkEmail":"Emailinizi Kontrol Edin!",
+        "ensureEmail":"Emailinizin Doğru Olduğundan Emin Olun!",
+        "enterCodeResetPassword":"Parolanızı Sıfırlamak İçin Kodu Girin!",
+        "enterCodeVerifyAccount":"Hesabınızı Doğrulamak İçin Kodu Girin!",
+        "haveProblem":"Sorun Mu Var?",
+        "resendCode":"Kodu Tekrar Gönder",
+        "sendCode":"Kod Gönder",
+        "tryAgain":"Tekrar Dene",
+        "seconds":"saniye"
        
     }
 }
