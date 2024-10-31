@@ -14,6 +14,7 @@ import {
   TextInputComp,
   TextInputPassword,
 } from "../../components/common/TextInputComp";
+import useI18n from "../../hooks/useI18n";
 import { login } from "../../services/authService";
 import { useAuthStore } from "../../store/useAuthStore";
 import {
@@ -30,6 +31,8 @@ type LoginScreenNavigationProp = NativeStackNavigationProp<any, "Profile">;
 
 export default function LoginScreen() {
   const navigation = useNavigation<LoginScreenNavigationProp>();
+
+  const {t} = useI18n("AllScreen");
 
   const { setToken } = useAuthStore();
 
@@ -88,7 +91,7 @@ export default function LoginScreen() {
         <TextInputComp
           value={email}
           onchangeValue={setEmail}
-          label={"email"}
+          label={t("name")}
           placeholder={"email_placeholder"}
         />
         <TextInputPassword
