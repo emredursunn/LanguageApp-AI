@@ -30,6 +30,15 @@ export type TabStackParamList = {
         languageId:number,
         language:string,
     },
+    SavedStoriesMenu:undefined,
+    SavedStoriesList: {
+        languageId:number,
+        language:string,
+    },
+    SavedStoryScreen: {
+        storyId:number,
+        languageId:number,
+    },
     PasswordUpdate: undefined,
     Login:undefined,
     Register:undefined

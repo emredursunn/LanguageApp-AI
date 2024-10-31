@@ -10,7 +10,7 @@ import StoryCardButtons from './StoryCardButtons'
 import { AntDesign, FontAwesome } from '@expo/vector-icons'
 import Animated, { SlideInDown, SlideOutDown } from 'react-native-reanimated'
 import Loading from '../common/Loading'
-import { MAIN_COLOR, TEXT_BLACK, WHITE } from '../../utils/colors'
+import { LIGHT_RED, MAIN_COLOR, TEXT_BLACK, WHITE } from '../../utils/colors'
 import { LanguageData } from '../firstInfoViews/Screen2'
 import * as Speech from 'expo-speech';
 import { TextInputComp } from '../common/TextInputComp'
@@ -265,7 +265,7 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
             alignItems: "center"
           }}
         >
-        
+        <Text style={styles.storyTitle}>{storyTitle}</Text>
         <StoryCard flagIcon={iconUrl} savedWords={savedWords} currentSentence={currentSentence} currentWordIndex={currentWordIndex} handleWordPress={handleWordPress} voiceOnOpen={voiceOnOpen} titleOnOpen={titleOnOpen} isSavedStory={isSavedStory}/>
         <StoryCardButtons currentSentenceIndex={currentSentenceIndex} sentences={sentences} handleNextSentence={handleNextSentence} handlePreviousSentence={handlePreviousSentence} />
   
@@ -354,7 +354,8 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
     container: {
       flex: 1,
       backgroundColor:WHITE,
-      paddingTop:'10%'
+      paddingTop:10,
+      paddingBottom:300,
     },
     centeredContent: {
       justifyContent: "center",
@@ -429,9 +430,11 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
         fontSize: 16,
         color: TEXT_BLACK,
       },
-    icon: {
-
-    },
+      storyTitle:{
+        fontSize:36,
+        fontWeight:'bold',
+        textAlign:'center',
+      }
     
   });
   

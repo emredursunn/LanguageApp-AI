@@ -22,7 +22,7 @@ const LanguageCard = ({ languageCard,handleNavigate }: Props) => {
         <TouchableOpacity onPress={handleNavigate} activeOpacity={0.7} style={styles.card}>
             <Image source={{ uri: languageCard.iconUrl }} style={styles.flagImg} resizeMode='cover' />
             <Text style={styles.label}>{languageCard.language}</Text>
-            <Text style={styles.wordCount}>{languageCard.wordCount} words</Text>
+            <Text style={styles.wordCount}>{languageCard.wordCount}</Text>
         </TouchableOpacity>
     );
 };

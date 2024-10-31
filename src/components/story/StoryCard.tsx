@@ -44,12 +44,12 @@ const StoryCard = ({
     <View style={styles.card}>
       <Image
         source={{ uri: flagIcon }}
-        resizeMode="cover"
+        resizeMode="stretch"
         style={{
           width: width * 0.8,
-          height: 100,
-          borderTopLeftRadius: 8,
-          borderTopRightRadius: 8,
+          height: 75,
+          borderTopLeftRadius: 16,
+          borderTopRightRadius: 16,
         }}
       />
       <View>

@@ -128,7 +128,7 @@ const ProfileSettings = () => {
       onPress: () => navigate("LearnedWordsMenu"),
       isIcon: true,
     },
-    { id: 4, title: "Saved Story", onPress: () => null, isIcon: true },
+    { id: 4, title: "Saved Story", onPress: () => navigate("SavedStoriesMenu"), isIcon: true },
     { id: 5, title: "Password Update", onPress: () => navigate("PasswordUpdate"), isIcon: true },
     {
       id: 6,

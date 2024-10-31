@@ -17,6 +17,9 @@ import { useUserStore } from "../store/useUserStore";
 import LearnedWordsMenu from "../screens/profile/LearnedWordsMenuScreen";
 import LearnedWordsList from "../screens/profile/LearnedWordsListScreen";
 import PasswordUpdateScreen from "../screens/profile/PasswordUpdateScreen";
+import SavedStoriesListScreen from "../screens/profile/SavedStoriesListScreen";
+import SavedStoriesMenuScreen from "../screens/profile/SavedStoriesMenuScreen";
+import SavedStoryScreen from "../screens/profile/SavedStoryScreen";
 
 export type TabProfileScreenProps<T extends keyof TabStackParamList> =
   NativeStackScreenProps<TabStackParamList, T, T>;
@@ -83,6 +86,21 @@ export default function ProfileNavigation() {
           <Stack.Screen
             component={LearnedWordsList}
             name="LearnedWordsList"
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            component={SavedStoriesListScreen}
+            name="SavedStoriesList"
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            component={SavedStoriesMenuScreen}
+            name="SavedStoriesMenu"
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            component={SavedStoryScreen}
+            name="SavedStoryScreen"
             options={{ headerShown: false }}
           />
           <Stack.Screen
