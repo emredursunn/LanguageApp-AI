@@ -1,10 +1,11 @@
-import { StyleSheet, Text } from "react-native";
-import React from "react";
-import LanguageCard, { ILanguageCard } from "./LanguageCard";
-import { WHITE } from "../../utils/colors";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import React from "react";
+import { StyleSheet, Text } from "react-native";
 import Animated, { SlideInRight } from "react-native-reanimated";
+import useI18n from "../../hooks/useI18n";
+import { WHITE } from "../../utils/colors";
+import LanguageCard, { ILanguageCard } from "./LanguageCard";
 
 type ProfileScreenNavigationProp = NativeStackNavigationProp<any, "Profile">;
 
@@ -14,6 +15,8 @@ type Props = {
 };
 
 const LanguageMenu = ({ languages, type }: Props) => {
+
+  const {t} = useI18n("AllScreen");
   const navigation = useNavigation<ProfileScreenNavigationProp>();
 
   const handleNavigate = ({languageId, language} :{languageId: number, language:string}) => {
@@ -38,7 +41,7 @@ const LanguageMenu = ({ languages, type }: Props) => {
           />
         ))
       ) : (
-        <Text>No saved languages found.</Text>
+        <Text>{t("noSavedWords")}</Text>
       )}
     </Animated.ScrollView>
   );

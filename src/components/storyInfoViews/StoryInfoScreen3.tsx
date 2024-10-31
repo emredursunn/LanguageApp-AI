@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
+import useI18n from "../../hooks/useI18n";
 import { StoryRequestData } from "../../screens/StoryInfoScreen";
 import { TEXT_BLACK } from "../../utils/colors";
 import { ButtonComp } from "../common/ButtonComp"; // Assuming you have a button component
@@ -12,8 +13,8 @@ export type StoryScreenType = {
 };
 
 export const StoryInfoScreen3: React.FC<StoryScreenType> = ({ handleNext, requestData, setRequestData  }) => {
+    const {t} = useI18n("AllScreen");
     const [storyDescription, setStoryDescription] = useState<string>(requestData.description.length > 0 ? requestData.description : "");
-    
 
     const handleNextClick = () => {
         setRequestData((prev) => ({
@@ -26,10 +27,10 @@ export const StoryInfoScreen3: React.FC<StoryScreenType> = ({ handleNext, reques
 
     return (
         <>
-            <Text style={styles.title}>Write a Description for Your Story</Text>
+            <Text style={styles.title}>{t("describeTitle")}</Text>
 
             <TextInput
-                placeholder="Describe your story topic..."
+                placeholder={t("describeTopic")}
                 value={storyDescription}
                 onChangeText={(text) => setStoryDescription(text)}
                 style={styles.input}
@@ -40,7 +41,7 @@ export const StoryInfoScreen3: React.FC<StoryScreenType> = ({ handleNext, reques
                 <ButtonComp
                     loading={false}
                     isActive={storyDescription.length > 0}
-                    title={"Next"}
+                    title={t("nextBtn")}
                     onPress={handleNextClick}
                 />
             </View>

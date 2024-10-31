@@ -1,20 +1,21 @@
-import { StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
-import { TextInputPassword } from "../../components/common/TextInputComp";
-import { t } from "i18next";
-import { ButtonComp } from "../../components/common/ButtonComp";
-import { useMutation } from "react-query";
-import { passwordUpdate } from "../../services/authService";
-import { showToast } from "../../utils/helpers";
-import { BLACK_COLOR, WHITE } from "../../utils/colors";
+import { StyleSheet, Text } from "react-native";
 import Animated, { SlideInRight } from "react-native-reanimated";
+import { useMutation } from "react-query";
+import { ButtonComp } from "../../components/common/ButtonComp";
+import { TextInputPassword } from "../../components/common/TextInputComp";
+import useI18n from "../../hooks/useI18n";
+import { passwordUpdate } from "../../services/authService";
+import { BLACK_COLOR, WHITE } from "../../utils/colors";
+import { showToast } from "../../utils/helpers";
 
 const PasswordUpdateScreen = () => {
   const [newPassword, setNewPassword] = useState("");
+  const {t} = useI18n("AllScreen");
 
   const updatePasswordMutation = useMutation({
     mutationFn: passwordUpdate,
-    onSuccess: () => showToast("info", "Password has updated", ""),
+    onSuccess: () => showToast("info", t("passwordUpdated"), ""),
     onError: (error: any) => {
       const errorMessage = error.response?.data?.message;
       showToast("error", "Uupss", errorMessage);
@@ -31,7 +32,7 @@ const PasswordUpdateScreen = () => {
       style={{ flex: 1, backgroundColor: WHITE, padding: 22, paddingTop: 100 }}
     >
       <Text style={{ fontWeight: "800", color: BLACK_COLOR, fontSize: 24 }}>
-        Enter your new password!
+        {t("enterPassword")}
       </Text>
       <TextInputPassword
         value={newPassword}

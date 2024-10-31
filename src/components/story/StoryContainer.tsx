@@ -1,21 +1,22 @@
-import { Button, Dimensions, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { useUserStore } from '../../store/useUserStore'
+import { FontAwesome } from '@expo/vector-icons'
+import * as Speech from 'expo-speech'
 import { Actionsheet, useDisclose } from 'native-base'
+import React, { useEffect, useState } from 'react'
+import { Button, Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import Animated, { SlideInDown, SlideOutDown } from 'react-native-reanimated'
 import { useMutation, useQuery } from 'react-query'
-import { deleteSavedStory, getLearnedWords, getSavedWordsByLanguageId, saveStory, saveWord } from '../../services/userService'
+import useI18n from '../../hooks/useI18n'
 import { getLanguage, translateText } from '../../services/apiService'
+import { deleteSavedStory, getLearnedWords, getSavedWordsByLanguageId, saveStory, saveWord } from '../../services/userService'
+import { useUserStore } from '../../store/useUserStore'
+import { ILanguage } from '../../types/Language'
+import { MAIN_COLOR, TEXT_BLACK, WHITE } from '../../utils/colors'
+import { ButtonComp } from '../common/ButtonComp'
+import Loading from '../common/Loading'
+import { TextInputComp } from '../common/TextInputComp'
+import { LanguageData } from '../firstInfoViews/Screen2'
 import StoryCard from './StoryCard'
 import StoryCardButtons from './StoryCardButtons'
-import { AntDesign, FontAwesome } from '@expo/vector-icons'
-import Animated, { SlideInDown, SlideOutDown } from 'react-native-reanimated'
-import Loading from '../common/Loading'
-import { LIGHT_RED, MAIN_COLOR, TEXT_BLACK, WHITE } from '../../utils/colors'
-import { LanguageData } from '../firstInfoViews/Screen2'
-import * as Speech from 'expo-speech';
-import { TextInputComp } from '../common/TextInputComp'
-import { ButtonComp } from '../common/ButtonComp'
-import { ILanguage } from '../../types/Language'
 
 
 interface SavedWord  {
@@ -33,6 +34,7 @@ type Props = {
 const {width:SCREEN_WIDTH, height : SCREEN_HEIGHT} = Dimensions.get("screen");
 
 export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
+    const {t} = useI18n("AllScreen");
 
     const { spokenLanguageCode } = useUserStore()
     const [flagIcon, setFlagIcon] = useState("")
@@ -190,7 +192,7 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
   };
 
   const testVoice = (voice: any) => {
-    Speech.speak("Bu sesin önizlemesini dinliyorsunuz.", { voice: voice.identifier });
+    Speech.speak(t("hello"), { voice: voice.identifier });
   };
   
     const handleWordPress = async (index: number) => {
@@ -316,7 +318,7 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
                           <View style={styles.voiceButtons}>
                             <Button title="Test" onPress={() => testVoice(voice)} />
                             <Button
-                              title="Select"
+                              title={t("select")}
                               onPress={() => {
                                 setSelectedVoice(voice); // Set the selected voice
                                 voiceOnClose() // Close the modal
@@ -338,9 +340,9 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
                 <TextInputComp
                 value={newStoryTitle}
                 onchangeValue={setNewStoryTitle}
-                placeholder="Enter story title"
+                placeholder={t("enterStoryTitle")}
                 />
-                <ButtonComp title="Save" onPress={handleSaveStory} />
+                <ButtonComp title={t("save")} onPress={handleSaveStory} />
             </View>
             </Animated.View>
             </Actionsheet.Content>

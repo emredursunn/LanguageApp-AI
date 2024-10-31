@@ -1,9 +1,9 @@
-import { Text } from 'react-native'
-import React from 'react'
+import React from 'react';
 import { useQuery } from 'react-query';
+import Error from '../../components/common/Error';
+import Loading from '../../components/common/Loading';
 import LanguageMenu from '../../components/profile/LanguageMenu';
 import { getLearnedLanguages } from '../../services/userService';
-import Loading from '../../components/common/Loading';
 
 const LearnedWordsMenu = () => {
 
@@ -25,7 +25,9 @@ const LearnedWordsMenu = () => {
   }
 
   if (isError) {
-    return <Text>Error loading languages.</Text>;
+    return(
+      <Error/>
+    )
   }
 
   return (

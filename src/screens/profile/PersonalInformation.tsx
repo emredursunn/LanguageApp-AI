@@ -1,33 +1,34 @@
+import { Actionsheet, useDisclose } from "native-base";
+import React, { useEffect, useState } from "react";
 import {
   Dimensions,
   FlatList,
   Image,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
-import React, { useEffect, useState } from "react";
-import { useAuthStore } from "../../store/useAuthStore";
-import { showToast } from "../../utils/helpers";
+import Animated, { SlideInRight } from "react-native-reanimated";
+import { useMutation, useQuery } from "react-query";
 import { ButtonComp } from "../../components/common/ButtonComp";
 import { TextInputComp } from "../../components/common/TextInputComp";
-import { BLACK_COLOR, LIGHT_GRAY, MAIN_COLOR, TEXT_BLACK, WHITE } from "../../utils/colors";
-import { CONTAINER_HORIZONTAL } from "../../utils/measurement";
-import { Actionsheet, useDisclose } from "native-base";
-import { useUserStore } from "../../store/useUserStore";
 import { CountryData, RequestData } from "../../components/firstInfoViews/Screen1";
-import { useMutation, useQuery } from "react-query";
-import { getCountry, getLanguage } from "../../services/apiService";
 import { LanguageData } from "../../components/firstInfoViews/Screen2";
+import useI18n from "../../hooks/useI18n";
+import { getCountry, getLanguage } from "../../services/apiService";
 import { updateFirstInfo, updateProfile } from "../../services/userService";
-import Animated, { SlideInRight } from "react-native-reanimated";
-import i18n from "../../utils/i18n";
+import { useAuthStore } from "../../store/useAuthStore";
+import { useUserStore } from "../../store/useUserStore";
+import { BLACK_COLOR, LIGHT_GRAY, MAIN_COLOR, TEXT_BLACK, WHITE } from "../../utils/colors";
+import { showToast } from "../../utils/helpers";
 
 const { height, width } = Dimensions.get("screen");
 
 const PersonalInformation = () => {
+  
+  const {t} = useI18n("AllScreen");
+
   const { auth } = useAuthStore();
   const [name, setName] = useState<string>("");
   const [surname, setSurname] = useState<string>("");
@@ -99,7 +100,7 @@ const PersonalInformation = () => {
     mutationFn:updateFirstInfo,
     onSuccess(data) {
       console.log(data)
-      showToast("info", "Changes are saved!", "");
+      showToast("info", t("changesSaved"), "");
     },
     onError(error) {
       console.log(error)
@@ -241,14 +242,14 @@ const PersonalInformation = () => {
   return (
     <Animated.ScrollView entering={SlideInRight} contentContainerStyle={{ flexGrow: 1 }} style={{ flex: 1, backgroundColor: WHITE, padding: 24, width:width }}>
       <TextInputComp
-        label="Name"
-        placeholder="Name"
+        label={t("name")}
+        placeholder={t("namePlacehHolder")}
         value={name}
         onchangeValue={setName}
       />
       <TextInputComp
-        label="Surname"
-        placeholder="Surname"
+        label={t("surname")}
+        placeholder={t("surnamePlacehHolder")}
         value={surname}
         onchangeValue={setSurname}
       />
@@ -266,12 +267,12 @@ const PersonalInformation = () => {
             style={{ width: 24, height: 16, marginRight: 8 }}
           />
           <Text style={{ fontSize: 18, color: BLACK_COLOR }}>
-            {selectedCountry?.countryName || 'Select Country'}
+            {selectedCountry?.countryName || t("selectCountry")}
           </Text>
         </TouchableOpacity>
       </View>
       <View style={{ gap: 3 }}>
-        <Text style={styles.itemLabel}>Spoken Language</Text>
+        <Text style={styles.itemLabel}>{t("spokenLanguage")}</Text>
         <TouchableOpacity
           onPress={() => {
             setMode(2);
@@ -284,12 +285,12 @@ const PersonalInformation = () => {
             style={{ width: 24, height: 16, marginRight: 8 }}
           />
           <Text style={{ fontSize: 18, color: BLACK_COLOR }}>
-            {selectedSpokenLanguage?.language || 'Select Spoken Language'}
+            {selectedSpokenLanguage?.language || t("selectSpokenLanguage")}
           </Text>
         </TouchableOpacity>
       </View>
       <View style={{ gap: 3, borderRadius:12 }}>
-        <Text style={styles.itemLabel}>Goal Language</Text>
+        <Text style={styles.itemLabel}>{t("targetLanguage")}</Text>
         <TouchableOpacity
           onPress={() => {
             setMode(3);
@@ -302,12 +303,12 @@ const PersonalInformation = () => {
             style={{ width: 24, height: 16, marginRight: 8 }}
           />
           <Text style={{ fontSize: 18, color: BLACK_COLOR }}>
-            {selectedLanguage?.language || 'Select Goal Language'}
+            {selectedLanguage?.language || t("selectTargetLanguage")}
           </Text>
         </TouchableOpacity>
       </View>
       <ButtonComp
-        title="Save Changes"
+        title={t("saveChangesBtn")}
         onPress={handleSaveChanges}
         loading={updateFirstInfoMutation.isLoading || updateProfileMutation.isLoading}
       />

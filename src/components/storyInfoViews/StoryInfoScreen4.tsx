@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import useI18n from "../../hooks/useI18n";
 import { StoryRequestData } from "../../screens/StoryInfoScreen";
 import { MAIN_COLOR, TEXT_BLACK, WHITE } from "../../utils/colors";
 import { ButtonComp } from "../common/ButtonComp"; // Assuming you have a Button component
@@ -16,12 +17,14 @@ export const StoryInfoScreen4: React.FC<StoryScreenType> = ({
   requestData,
   setRequestData
 }) => {
+  const {t} = useI18n("AllScreen");
+
   const [selectedDuration, setSelectedDuration] = useState<string>(requestData.duration.length > 0 ? requestData.duration : "");
 
   const durations = [
-    { label: "Short", value: "short" },
-    { label: "Medium", value: "medium" },
-    { label: "Long", value: "long" },
+    { label: t("short"), value: "short" },
+    { label: t("medium"), value: "medium" },
+    { label: t("long"), value: "long" },
   ];
 
   const handleDurationSelection = (duration: string) => {
@@ -43,7 +46,7 @@ export const StoryInfoScreen4: React.FC<StoryScreenType> = ({
 
   return (
     <>
-        <Text style={styles.title}>Select the Story Duration</Text>
+        <Text style={styles.title}>{t("durationTitle")}</Text>
 
         {durations.map((item) => (
           <TouchableOpacity
@@ -71,7 +74,7 @@ export const StoryInfoScreen4: React.FC<StoryScreenType> = ({
           <ButtonComp
             loading={false}
             isActive={!!selectedDuration}
-            title={"Next"}
+            title={t("nextBtn")}
             onPress={handleNextClick}
           />
         </View>

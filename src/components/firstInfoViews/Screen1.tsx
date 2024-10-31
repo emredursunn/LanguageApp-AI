@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Dimensions, FlatList, Image, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { MAIN_COLOR, TEXT_BLACK, WHITE } from "../../utils/colors"; // Ensure these colors are defined in your colors file
+import useI18n from "../../hooks/useI18n";
+import { LIGHT_GRAY, MAIN_COLOR, TEXT_BLACK, WHITE } from "../../utils/colors"; // Ensure these colors are defined in your colors file
 import { ButtonComp } from "../common/ButtonComp";
 
 export type CountryData = {
@@ -27,6 +28,8 @@ export type ScreenType = {
 const { height } = Dimensions.get("screen");
 
 export const Screen1: React.FC<ScreenType> = ({ handleNext, countryData, requestData, setRequestData }) => {
+  const {t} = useI18n("AllScreen");
+
     const [selectedCountry, setSelectedCountry] = useState<CountryData | null>(() => {
         if (requestData.countryId) {
             return countryData.find(country => country.id == requestData.countryId) || null;
@@ -59,12 +62,12 @@ export const Screen1: React.FC<ScreenType> = ({ handleNext, countryData, request
     return (
         <>
             <Text style={{ fontSize: 24, fontWeight: "700", color: TEXT_BLACK, marginBottom: 16 }}>
-                Which country are you from?
+                {t("whichCountry")}
             </Text>
 
             {/* Search Input */}
             <TextInput
-                placeholder="Search for your country..."
+                placeholder={t("searchCountry")}
                 value={searchQuery}
                 onChangeText={setSearchQuery}
                 style={{
@@ -89,9 +92,9 @@ export const Screen1: React.FC<ScreenType> = ({ handleNext, countryData, request
                             padding: 12,
                             marginVertical: 6,
                             borderWidth: 1,
-                            borderColor: "gray",
+                            borderColor: LIGHT_GRAY,
                             borderRadius: 8,
-                            backgroundColor: selectedCountry?.id === item.id ? MAIN_COLOR : "white",
+                            backgroundColor: selectedCountry?.id === item.id ? MAIN_COLOR : WHITE,
                             flexDirection: 'row', // Ülke adını ve resmi yan yana yerleştirmek için
                             alignItems: 'center',  // Ortalamak için
                         }}

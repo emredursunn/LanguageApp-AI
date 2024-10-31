@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import useI18n from "../../hooks/useI18n";
 import { StoryRequestData } from "../../screens/StoryInfoScreen";
 import { MAIN_COLOR, TEXT_BLACK, WHITE } from "../../utils/colors";
 import { ButtonComp } from "../common/ButtonComp"; // Assuming you have a Button component
@@ -13,12 +14,14 @@ export type StoryScreenType = {
 };
 
 export const StoryInfoScreen5: React.FC<StoryScreenType> = ({ handleDoneInfo, requestData, setRequestData, languageName, navigation }) => {
+    const {t} = useI18n("AllScreen");
+    
     const [selectedDifficulty, setSelectedDifficulty] = useState<string>(requestData.difficulty.length > 0 ? requestData.difficulty : "");
 
     const difficulties = [
-        { label: "Easy", value: "easy" },
-        { label: "Medium", value: "medium" },
-        { label: "Hard", value: "hard" },
+        { label: t("easy"), value: "easy" },
+        { label: t("medium"), value: "medium" },
+        { label: t("hard"), value: "hard" },
     ];
 
     const handleDifficultySelection = (difficulty: string) => {
@@ -77,7 +80,7 @@ export const StoryInfoScreen5: React.FC<StoryScreenType> = ({ handleDoneInfo, re
                 <ButtonComp
                     loading={false}
                     isActive={!!selectedDifficulty}
-                    title={"Done"}
+                    title={t("done")}
                     onPress={handleDone}
                 />
             </View>

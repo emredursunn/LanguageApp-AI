@@ -1,6 +1,6 @@
 import React from "react";
-import { Text } from "react-native";
 import { useQuery } from "react-query";
+import Error from "../../components/common/Error";
 import Loading from "../../components/common/Loading";
 import LanguageMenu from "../../components/profile/LanguageMenu";
 import { getSavedLanguages } from "../../services/userService";
@@ -24,7 +24,9 @@ const SavedWordsMenu = () => {
   }
 
   if (isError) {
-    return <Text>Error loading languages.</Text>;
+    return(
+      <Error/>
+    )
   }
 
   return (

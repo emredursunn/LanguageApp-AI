@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Dimensions, FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import useI18n from "../../hooks/useI18n";
 import { StoryRequestData } from "../../screens/StoryInfoScreen";
 import { MAIN_COLOR, TEXT_BLACK, WHITE } from "../../utils/colors";
 import { ButtonComp } from "../common/ButtonComp";
@@ -28,6 +29,8 @@ export type StoryScreenType = {
 };
 
 export const StoryInfoScreen1: React.FC<StoryScreenType> = ({ handleNext, languageData, requestData, setRequestData }) => {
+  const {t} = useI18n("AllScreen");
+
     const [selectedLanguage, setSelectedLanguage] = useState<LanguageData | null>(() => {
         if (requestData.languageId) {
             return languageData.find(language => language.id === requestData.languageId) || null;
@@ -72,13 +75,13 @@ export const StoryInfoScreen1: React.FC<StoryScreenType> = ({ handleNext, langua
     return (
         <View style={{ paddingHorizontal: 8 }}>
             <Text style={{ fontSize: 24, fontWeight: "700", color: TEXT_BLACK, marginBottom: 16 }}>
-                Select the language of your story
+                {t("storyLanguage")}
             </Text>
 
             {/* Search Input */}
             <TextInput
                 style={styles.searchInput}
-                placeholder="Search for a language"
+                placeholder={t("searchLanguage")}
                 value={searchQuery}
                 onChangeText={setSearchQuery}
             />
@@ -117,7 +120,7 @@ export const StoryInfoScreen1: React.FC<StoryScreenType> = ({ handleNext, langua
                 <ButtonComp
                     loading={false}
                     isActive={!!selectedLanguage}
-                    title={"Next"}
+                    title={t("nextBtn")}
                     onPress={handleNextClick}
                 />
             </View>

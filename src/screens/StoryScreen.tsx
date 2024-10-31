@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import Loading from '../components/common/Loading';
-const { GoogleGenerativeAI } = require("@google/generative-ai");
-import { StoryContainer } from '../components/story/StoryContainer';
 import { ScrollView, StyleSheet } from "react-native";
+import Loading from '../components/common/Loading';
+import { StoryContainer } from '../components/story/StoryContainer';
 import { WHITE } from "../utils/colors";
+const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 export default function StoryScreen({route}:any) {
+
   const languageId = route.params.languageId;
   const languageName = route.params.languageName;
   const title = route.params.title;

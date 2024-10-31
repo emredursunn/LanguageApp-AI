@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Dimensions, FlatList, Text, TouchableOpacity, View } from "react-native";
+import useI18n from "../../hooks/useI18n";
 import { StoryRequestData } from "../../screens/StoryInfoScreen";
 import { MAIN_COLOR, TEXT_BLACK, WHITE } from "../../utils/colors"; // Assuming MAIN_COLOR and WHITE are defined in colors
 import { ButtonComp } from "../common/ButtonComp";
@@ -15,6 +16,8 @@ export type StoryScreenType = {
 const { width, height } = Dimensions.get("screen");
 
 export const StoryInfoScreen2: React.FC<StoryScreenType> = ({ handleNext, requestData, setRequestData }) => {
+    const {t} = useI18n("AllScreen");
+
     const [selectedTitle, setSelectedTitle] = useState<string>(requestData.title.length > 0 ? requestData.title : "");
 
     const titles = [
@@ -44,13 +47,13 @@ export const StoryInfoScreen2: React.FC<StoryScreenType> = ({ handleNext, reques
     return (
         <>
             <Text style={{ fontSize: 24, fontWeight: "700", color: TEXT_BLACK, marginBottom: 16 }}>
-                Select a title for your story
+                {t("titleStory")}
             </Text>
 
             {/* Display selected title */}
             {selectedTitle ? (
                 <Text style={{ fontSize: 18, color: TEXT_BLACK, marginBottom: 16, }}>
-                    Title: {selectedTitle}
+                    {t("topic")}: {selectedTitle}
                 </Text>
             ) : 
             <Text style={{ fontSize: 18, color: TEXT_BLACK, marginBottom: 16, display:"flex"}}>
@@ -83,7 +86,7 @@ export const StoryInfoScreen2: React.FC<StoryScreenType> = ({ handleNext, reques
                 showsVerticalScrollIndicator={false}
             />
              <View style={{marginTop:32}}>
-                <ButtonComp loading={false} isActive={selectedTitle.length > 0 ? true : false} title={"Next"} onPress={() => handleNext()} 
+                <ButtonComp loading={false} isActive={selectedTitle.length > 0 ? true : false} title={t("nextBtn")} onPress={() => handleNext()} 
                 />
             </View>
         </>

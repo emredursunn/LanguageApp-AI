@@ -1,14 +1,15 @@
-import { StyleSheet, Text } from "react-native";
-import React, { useEffect, useState } from "react";
-import WordCard from "./WordCard";
-import { WHITE } from "../../utils/colors";
-import { useMutation } from "react-query";
-import WordBottomSheet from "./WordBottomSheet";
-import { IWord } from "../../types/Word";
 import { useDisclose } from "native-base";
-import { useUserStore } from "../../store/useUserStore";
-import { learnedWord } from "../../services/userService";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, Text } from "react-native";
 import Animated from "react-native-reanimated";
+import { useMutation } from "react-query";
+import useI18n from "../../hooks/useI18n";
+import { learnedWord } from "../../services/userService";
+import { useUserStore } from "../../store/useUserStore";
+import { IWord } from "../../types/Word";
+import { WHITE } from "../../utils/colors";
+import WordBottomSheet from "./WordBottomSheet";
+import WordCard from "./WordCard";
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 type Props = {
@@ -19,7 +20,8 @@ type Props = {
 };
 
 const WordList = ({ language, words, setWords, type }: Props) => {
-  console.log("lng",language)
+  const {t} = useI18n("AllScreen");
+
   const { spokenLanguageCode } = useUserStore();
   const [selectedWord, setSelectedWord] = useState<IWord | null>(null);
   const [examples, setExamples] = useState<
@@ -110,7 +112,7 @@ const WordList = ({ language, words, setWords, type }: Props) => {
         renderItem={renderItem}
         keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={styles.list}
-        ListEmptyComponent={<Text>No words found.</Text>}
+        ListEmptyComponent={<Text>{t("noWords")}</Text>}
       />
       {selectedWord && (
         <WordBottomSheet

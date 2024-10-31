@@ -1,14 +1,14 @@
-import { StyleSheet, Text } from 'react-native';
-import React, { useState } from 'react';
-import { useQuery } from 'react-query';
-import { getLearnedWords } from '../../services/userService';
-import WordCard, { IWordCard } from '../../components/profile/WordCard';
 import { useRoute } from '@react-navigation/native';
+import React, { useState } from 'react';
+import { StyleSheet } from 'react-native';
+import { useQuery } from 'react-query';
+import Error from '../../components/common/Error';
+import Loading from '../../components/common/Loading';
+import { IWordCard } from '../../components/profile/WordCard';
 import WordList from '../../components/profile/WordList';
-import { translateText } from '../../services/apiService';
+import { getLearnedWords } from '../../services/userService';
 import { useUserStore } from '../../store/useUserStore';
 import { IWord } from '../../types/Word';
-import Loading from '../../components/common/Loading';
 
 export interface WordWithoutMeaning {
   id:number,
@@ -50,7 +50,9 @@ const LearnedWordsList = () => {
   }
 
   if (isError) {
-    return <Text>Error loading words.</Text>;
+    return(
+      <Error/>
+    )
   }
 
   return (

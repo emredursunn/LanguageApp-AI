@@ -1,8 +1,15 @@
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { Actionsheet, useDisclose } from "native-base";
 import React, { useState } from "react";
-import { Alert, Dimensions, Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Image, Text, TouchableOpacity, View } from "react-native";
+import Animated, { SlideOutLeft } from "react-native-reanimated";
+import { useMutation } from "react-query";
+import { ButtonComp } from "../../components/common/ButtonComp";
+import useI18n from "../../hooks/useI18n";
+import { deactive } from "../../services/authService";
+import { updateProfile } from "../../services/userService";
 import { useAuthStore } from "../../store/useAuthStore";
 import { TabStackParamList } from "../../types/stackNavigations";
 import {
@@ -12,13 +19,7 @@ import {
   TEXT_BLACK,
   WHITE,
 } from "../../utils/colors";
-import { useMutation } from "react-query";
-import { deactive } from "../../services/authService";
 import { getImageSource, showToast } from "../../utils/helpers";
-import Animated, { SlideOutLeft } from "react-native-reanimated";
-import { Actionsheet, useDisclose } from "native-base";
-import { ButtonComp } from "../../components/common/ButtonComp";
-import { updateProfile } from "../../services/userService";
 
 interface Page {
   id: number;
@@ -28,6 +29,7 @@ interface Page {
 }
 
 const RenderPages = ({ pages }: { pages: Page[] }) => {
+
   return pages.map((page) => (
     <TouchableOpacity
       style={{
@@ -56,7 +58,9 @@ const ProfileSettings = () => {
   const { navigate } =
     useNavigation<NativeStackNavigationProp<TabStackParamList, "Settings">>();
   const { logout, auth } = useAuthStore();
-  const { isOpen, onOpen, onClose } = useDisclose()
+  const { isOpen, onOpen, onClose } = useDisclose();
+
+  const {t} = useI18n("AllScreen");
 
   const imageUrls = ["1", "2", "3", "4", "5", "6", "7", "8"];
   const [imageUrl,setImageUrl] = useState(auth?.imageUrl || "1")
@@ -83,25 +87,25 @@ const ProfileSettings = () => {
   const deleteAccountMutation = useMutation({
     mutationFn: deactive,
     onSuccess: () => {
-      showToast("info", "Goodbye!", "Account has been deleted.");
+      showToast("info", t("goodBye"), t("accountDeleted"));
       logout();
     },
-    onError: () => showToast("error", "Try again later", ""),
+    onError: () => showToast("error", t("tryAgain"), ""),
   });
 
   const handleDeleteAccount = () => {
     Alert.alert(
-      "Are you sure you want to delete your account?",
-      "This action is irreversible and all your data will be deleted.",
+      t("areYouSureDelete"),
+      t("areYouSureDelete2"),
       [
         {
-          text: "Delete Account",
+          text: t("deleteAccount"),
           isPreferred: false,
           onPress: () => deleteAccountMutation.mutate(),
           style: "destructive",
         },
         {
-          text: "Cancel",
+          text: t("cancel"),
           isPreferred: true,
           style: "cancel",
         },
@@ -112,27 +116,27 @@ const ProfileSettings = () => {
   const pages = [
     {
       id: 1,
-      title: "Personal Information",
+      title: t("personalInfo"),
       onPress: () => navigate("PersonalInformation"),
       isIcon: true,
     },
     {
       id: 2,
-      title: "Saved Words",
+      title: t("savedWords"),
       onPress: () => navigate("SavedWordsMenu"),
       isIcon: true,
     },
     {
       id: 3,
-      title: "Learned Words",
+      title: t("learntWords"),
       onPress: () => navigate("LearnedWordsMenu"),
       isIcon: true,
     },
-    { id: 4, title: "Saved Story", onPress: () => navigate("SavedStoriesMenu"), isIcon: true },
-    { id: 5, title: "Password Update", onPress: () => navigate("PasswordUpdate"), isIcon: true },
+    { id: 4, title: t("savedStories"), onPress: () => navigate("SavedStoriesMenu"), isIcon: true },
+    { id: 5, title: t("passwordUpdate"), onPress: () => navigate("PasswordUpdate"), isIcon: true },
     {
       id: 6,
-      title: "Delete Account",
+      title: t("deleteAccountNavigation"),
       onPress: handleDeleteAccount,
       isIcon: false,
     },
@@ -174,7 +178,7 @@ const ProfileSettings = () => {
         }}
       >
         <Text style={{ fontWeight: "800", fontSize: 16, color: WHITE }}>
-          Log Out
+          {t("logoutBtn")}
         </Text>
       </TouchableOpacity>
 

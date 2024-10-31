@@ -1,17 +1,18 @@
 import React, { useState } from "react";
 import {
-    Dimensions,
-    FlatList,
-    Image,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Dimensions,
+  FlatList,
+  Image,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { useMutation } from "react-query";
+import useI18n from "../../hooks/useI18n";
 import { updateFirstInfo } from "../../services/userService";
 import { useUserStore } from "../../store/useUserStore";
-import { MAIN_COLOR, TEXT_BLACK } from "../../utils/colors"; // Ensure this path is correct
+import { LIGHT_GRAY, MAIN_COLOR, TEXT_BLACK, WHITE } from "../../utils/colors"; // Ensure this path is correct
 import { ButtonComp } from "../common/ButtonComp"; // Ensure ButtonComp is imported
 
 export type RequestData = {
@@ -44,6 +45,8 @@ export const Screen3: React.FC<ScreenType> = ({
   setRequestData,
   spokenLanguage,
 }) => {
+  const {t} = useI18n("AllScreen");
+
   const [selectedLanguage, setSelectedLanguage] = useState<LanguageData | null>(
     () => {
       if (requestData.spokenLanguageId) {
@@ -108,19 +111,19 @@ export const Screen3: React.FC<ScreenType> = ({
       {/* TITLE */}
       <View>
         <Text style={{ fontSize: 24, fontWeight: "700", color: TEXT_BLACK }}>
-          What language do you want to speak?
+          {t("wantSpeakLanguage")}
         </Text>
       </View>
 
       {/* SEARCH INPUT */}
       <TextInput
-        placeholder="Search for your language..."
+        placeholder={t("wantSearchLanguage")}
         value={searchQuery}
         onChangeText={setSearchQuery}
         style={{
           padding: 8,
           borderWidth: 1,
-          borderColor: "gray",
+          borderColor: LIGHT_GRAY,
           borderRadius: 4,
           marginTop: 16,
           color: TEXT_BLACK,
@@ -140,10 +143,10 @@ export const Screen3: React.FC<ScreenType> = ({
               padding: 12,
               marginVertical: 6,
               borderWidth: 1,
-              borderColor: "gray",
+              borderColor: LIGHT_GRAY,
               borderRadius: 8,
               backgroundColor:
-                selectedLanguage?.id === item.id ? MAIN_COLOR : "white", // Highlight selected item,
+                selectedLanguage?.id === item.id ? MAIN_COLOR : WHITE, // Highlight selected item,
             flexDirection:"row",
             alignItems:"center"
             }}
@@ -154,7 +157,7 @@ export const Screen3: React.FC<ScreenType> = ({
             />
             <Text
               style={{
-                color: selectedLanguage?.id === item.id ? "white" : TEXT_BLACK,
+                color: selectedLanguage?.id === item.id ? WHITE : TEXT_BLACK,
                 fontSize: 18,
               }}
             >
@@ -168,7 +171,7 @@ export const Screen3: React.FC<ScreenType> = ({
         <ButtonComp
           loading={false}
           isActive={!!selectedLanguage} // Active if a language is selected
-          title={"Finish"}
+          title={t("finishBtn")}
           onPress={handleFinish}
         />
       </View>

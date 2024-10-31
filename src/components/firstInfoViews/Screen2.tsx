@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Dimensions, FlatList, Image, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { MAIN_COLOR, TEXT_BLACK } from "../../utils/colors"; // Ensure this path is correct
+import useI18n from "../../hooks/useI18n";
+import { LIGHT_GRAY, MAIN_COLOR, TEXT_BLACK, WHITE } from "../../utils/colors"; // Ensure this path is correct
 import { ButtonComp } from "../common/ButtonComp"; // Ensure ButtonComp is imported
 
 export type RequestData = {
@@ -28,6 +29,8 @@ export type ScreenType = {
 const { height } = Dimensions.get("screen");
 
 export const Screen2: React.FC<ScreenType> = ({ handleNext, languageData, requestData, setRequestData, setSpokenLanguage }) => {
+  const {t} = useI18n("AllScreen");
+
     const [selectedLanguage, setSelectedLanguage] = useState<LanguageData | null>(() => {
         if (requestData.spokenLanguageId) {
             return languageData.find(language => language.id === requestData.spokenLanguageId) || null;
@@ -66,19 +69,19 @@ export const Screen2: React.FC<ScreenType> = ({ handleNext, languageData, reques
             {/* TITLE */}
             <View>
                 <Text style={{ fontSize: 24, fontWeight: "700", color: TEXT_BLACK }}>
-                    What language do you speak?
+                    {t("whatLanguage")}
                 </Text>
             </View>
 
             {/* SEARCH INPUT */}
             <TextInput
-                placeholder="Search for your language..."
+                placeholder={t("searchLanguage")}
                 value={searchQuery}
                 onChangeText={setSearchQuery}
                 style={{
                     padding: 8,
                     borderWidth: 1,
-                    borderColor: "gray",
+                    borderColor: LIGHT_GRAY,
                     borderRadius: 4,
                     marginTop: 16,
                     color: TEXT_BLACK,
@@ -98,9 +101,9 @@ export const Screen2: React.FC<ScreenType> = ({ handleNext, languageData, reques
                             padding: 12,
                             marginVertical: 6,
                             borderWidth: 1,
-                            borderColor: "gray",
+                            borderColor: LIGHT_GRAY,
                             borderRadius: 8,
-                            backgroundColor: selectedLanguage?.id === item.id ? MAIN_COLOR : "white", // Highlight selected item
+                            backgroundColor: selectedLanguage?.id === item.id ? MAIN_COLOR : WHITE, // Highlight selected item
                             flexDirection:"row",
                             alignItems:"center"
                         }}
@@ -109,7 +112,7 @@ export const Screen2: React.FC<ScreenType> = ({ handleNext, languageData, reques
                             source={{ uri: item.iconUrl }} // Bayrağın URL'si
                             style={{ width: 24, height: 16, marginRight: 8 }} // Boyutları ve sağ kenar boşluğu
                         />
-                        <Text style={{ color: selectedLanguage?.id === item.id ? "white" : TEXT_BLACK, fontSize: 18 }}>
+                        <Text style={{ color: selectedLanguage?.id === item.id ? WHITE : TEXT_BLACK, fontSize: 18 }}>
                             {item.language}
                         </Text>
                     </TouchableOpacity>

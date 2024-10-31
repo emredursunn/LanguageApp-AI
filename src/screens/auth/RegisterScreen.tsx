@@ -17,6 +17,7 @@ import {
   TextInputComp,
   TextInputPassword,
 } from "../../components/common/TextInputComp";
+import useI18n from "../../hooks/useI18n";
 import { register } from "../../services/authService";
 import {
   BLACK_COLOR,
@@ -31,6 +32,8 @@ type RegisterScreenNavigationProp = NativeStackNavigationProp<any, "Register">;
 
 export default function RegisterScreen() {
   const navigation = useNavigation<RegisterScreenNavigationProp>();
+
+  const {t} = useI18n("AllScreen");
 
   const { width, height } = Dimensions.get("screen");
 
@@ -49,7 +52,7 @@ export default function RegisterScreen() {
     mutationFn: register,
     onSuccess(data) {
       console.log(data);
-      showToast("info", "Verify Code", "");
+      showToast("info", t("verifyCode"), "");
       navigation.navigate("CodeConfirm", { email, mode: "VERIFY" });
     },
     onError(error:any) {
@@ -79,11 +82,11 @@ export default function RegisterScreen() {
 
       <View style={{ marginTop: 95 }}>
         <Text style={{ fontSize: 22, fontWeight: "500" }}>
-          Create an account
+          {t("createAccount")}
         </Text>
         <View style={{ width: width * 0.6, marginTop: 5 }}>
           <Text style={{ color: BLACK_COLOR, fontSize: 13, fontWeight: "300" }}>
-            Open your account now and start using
+            {t("registerSubTitle")}
           </Text>
         </View>
       </View>
@@ -92,26 +95,26 @@ export default function RegisterScreen() {
         <TextInputComp
           value={name}
           onchangeValue={setName}
-          label={"name"}
-          placeholder={"name_placeholder"}
+          label={t("name")}
+          placeholder={t("namePlacehHolder")}
         />
         <TextInputComp
           value={surname}
           onchangeValue={setSurname}
-          label={"surname"}
-          placeholder={"surname_placeholder"}
+          label={t("surname")}
+          placeholder={"surnamePlacehHolder"}
         />
         <TextInputComp
           value={email}
           onchangeValue={setEmail}
-          label={"email"}
-          placeholder={"email_placeholder"}
+          label={t("email")}
+          placeholder={t("email_placeholder")}
         />
         <PhoneInputComp
           styleContainer={styles.TextInputComp}
-          label={"phone"}
+          label={t("phone")}
           phoneInput={phoneInput}
-          placeHolder={"phone"}
+          placeHolder={t("phonePlacehHolder")}
           phone={phone}
           setPhone={setPhone}
           setFormattedValue={setFormattedValue}
@@ -120,21 +123,21 @@ export default function RegisterScreen() {
         <TextInputPassword
           value={password}
           onchangeValue={setPassword}
-          label={"password"}
-          placeholder={"password_placeholder"}
+          label={t("password")}
+          placeholder={t("password_placeholder")}
         />
         <TextInputPassword
           value={password2}
           onchangeValue={setPassword2}
-          label={"confirm_password"}
-          placeholder={"confirm_password_placeholder"}
+          label={t("confirm_password")}
+          placeholder={t("confirm_password_placeholder")}
         />
       </View>
 
       <View style={{ marginTop: 12 }}>
         <ButtonComp
           loading={registerMutation.isLoading}
-          title={"register_btn"}
+          title={t("registerBtn")}
           onPress={() => handleRegister()}
         />
       </View>
@@ -149,7 +152,7 @@ export default function RegisterScreen() {
         }}
       >
         <Text style={{ fontSize: 13, fontWeight: "600" }}>
-          {"already_have_account"}
+          {t("alreadyHaveAccount")}
         </Text>
         <TouchableOpacity onPress={() => navigation.navigate("Login")}>
           <Text
@@ -160,7 +163,7 @@ export default function RegisterScreen() {
               color: MAIN_COLOR_2,
             }}
           >
-            {"sign_in"}
+            {t("signIn")}
           </Text>
         </TouchableOpacity>
       </View>
