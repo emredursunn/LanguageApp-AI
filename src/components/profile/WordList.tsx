@@ -31,7 +31,7 @@ const WordList = ({ language, words, setWords, type }: Props) => {
 
   const [geminiLoading, setGeminiLoading] = useState(false);
   const genAI = new GoogleGenerativeAI(
-    "AIzaSyDdOKFuQSMcOgENADl2TeFjXODZZTOlNb4"
+    `${process.env.GEMINI_API_KEY}`
   );
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 

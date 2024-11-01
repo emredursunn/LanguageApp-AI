@@ -17,7 +17,7 @@ export const translateText = async ({text, targetLang} : {text:string,targetLang
         const response = await fetch('https://api-free.deepl.com/v2/translate', {
             method: 'POST',
             headers: {
-                'Authorization': 'DeepL-Auth-Key cc430cba-68fd-42a0-8986-8cf4274f5017:fx',
+                'Authorization': `DeepL-Auth-Key ${process.env.DEEPL_AUTH_KEY}`,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
