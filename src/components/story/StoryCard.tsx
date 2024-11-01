@@ -1,3 +1,6 @@
+import { AntDesign } from "@expo/vector-icons";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import React from "react";
 import {
   Dimensions,
   Image,
@@ -6,16 +9,11 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React from "react";
 import {
-  LIGHT_GRAY,
   LIGHT_GRAY_2,
   LIGHT_RED,
-  TEXT_BLACK,
-  WHITE,
+  TEXT_BLACK
 } from "../../utils/colors";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { AntDesign } from "@expo/vector-icons";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -44,13 +42,15 @@ const StoryCard = ({
     <View style={styles.card}>
       <Image
         source={{ uri: flagIcon }}
-        resizeMode="stretch"
+        resizeMode="cover"
         style={{
-          width: width * 0.8,
-          height: 75,
-          borderTopLeftRadius: 16,
-          borderTopRightRadius: 16,
+          width: width * 0.25,
+          height: 50,
+          borderRadius:12,
+          marginBottom:24,
+          alignSelf:"center"
         }}
+        
       />
       <View>
         <TouchableOpacity
