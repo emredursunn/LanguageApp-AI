@@ -30,7 +30,12 @@ export default function HomeScreen(){
                 <Text style={{color:"white"}}>story</Text>
             </TouchableOpacity>
             <TouchableOpacity 
-            onPress={() => navigation.push("DENEME")}
+            onPress={() => navigation.push("SpeechToText")}
+            style={{borderWidth:1, padding:15, backgroundColor:"green"}}>
+                <Text style={{color:"white"}}>DENEME</Text>
+            </TouchableOpacity>
+            <TouchableOpacity 
+            onPress={() => navigation.push("SpeechToText2")}
             style={{borderWidth:1, padding:15, backgroundColor:"green"}}>
                 <Text style={{color:"white"}}>DENEME</Text>
             </TouchableOpacity>

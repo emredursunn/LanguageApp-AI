@@ -13,6 +13,8 @@ import CodeConfirmationScreen from "./src/screens/auth/CodeConfirmScreen";
 import EmailConfirmScreen from "./src/screens/auth/EmailConfirmScreen";
 import NewPasswordScreen from "./src/screens/auth/NewPasswordScreen";
 import FirstInfoScreen from "./src/screens/FirstInfoScreen";
+import SpeechToTextScreen from "./src/screens/SpeechToTextScreen";
+import SpeechToTextScreen2 from "./src/screens/SpeechToTextScreen2";
 import SplashScren from "./src/screens/SplashScreen";
 import StoryInfoScreen from "./src/screens/StoryInfoScreen";
 import StoryScreen from "./src/screens/StoryScreen";
@@ -49,6 +51,8 @@ const App = () => {
                   <Stack.Screen component={FirstInfoScreen} name="FirstInfo" />
                   <Stack.Screen component={StoryInfoScreen} name="StoryInfo" />
                   <Stack.Screen component={StoryScreen} name="Story" />
+                  <Stack.Screen component={SpeechToTextScreen} name="SpeechToText" />
+                  <Stack.Screen component={SpeechToTextScreen2} name="SpeechToText2" />
                   {/* <Stack.Screen component={DENEME} name="DENEME" /> */}
                 </Stack.Navigator>
               </NavigationContainer>

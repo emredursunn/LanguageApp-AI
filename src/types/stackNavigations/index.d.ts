@@ -12,7 +12,9 @@ type RootStackParamList = {
     }
     FirstInfo:undefined,
     Story:undefined,
-    DENEME:undefined
+    DENEME:undefined,
+    SpeechToText:undefined,
+    SpeechToText2: undefined
 };
 
 export type TabStackParamList = {
