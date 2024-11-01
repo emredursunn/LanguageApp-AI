@@ -1,13 +1,10 @@
-import { AntDesign } from "@expo/vector-icons";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import React from "react";
 import {
   Dimensions,
-  Image,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 import {
   LIGHT_GRAY_2,
@@ -40,20 +37,8 @@ const StoryCard = ({
 }: Props) => {
   return (
     <View style={styles.card}>
-      <Image
-        source={{ uri: flagIcon }}
-        resizeMode="cover"
-        style={{
-          width: width * 0.25,
-          height: 50,
-          borderRadius:12,
-          marginBottom:24,
-          alignSelf:"center"
-        }}
-        
-      />
       <View>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={[styles.icon, { left: 4 }]}
           activeOpacity={0.7}
           onPress={voiceOnOpen}
@@ -78,7 +63,7 @@ const StoryCard = ({
           source={require("../../../assets/cool.png")}
           resizeMode="cover"
           style={styles.img}
-        />
+        /> */}
         <View style={styles.sentenceBox}>
           {currentSentence.map((word, index) => (
             <TouchableOpacity
@@ -136,11 +121,10 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     flexDirection: "row",
     backgroundColor: LIGHT_GRAY_2,
-    minHeight: "20%",
+    paddingVertical:24,
     width: "100%",
     padding: 8,
-    borderBottomLeftRadius: 16,
-    borderBottomRightRadius: 16,
+    borderRadius:12
   },
   word: {
     fontSize: 22,

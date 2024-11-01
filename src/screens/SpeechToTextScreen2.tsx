@@ -143,9 +143,6 @@ const SpeechToTextScreen2 = () => {
         languageCode: "en-US",
       };
   
-      // Log audio config for debugging
-      console.log("Audio Config:", audioConfig);
-  
       const response = await fetch("http://3.79.207.37/api/v1/user/speech-to-text", {
         method: "POST",
         headers: {

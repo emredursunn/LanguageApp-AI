@@ -1,4 +1,4 @@
-import { FontAwesome } from '@expo/vector-icons'
+import { FontAwesome, Fontisto, MaterialCommunityIcons } from '@expo/vector-icons'
 import * as Speech from 'expo-speech'
 import { Actionsheet, useDisclose } from 'native-base'
 import React, { useEffect, useState } from 'react'
@@ -10,7 +10,7 @@ import { getLanguage, translateText } from '../../services/apiService'
 import { deleteSavedStory, getLearnedWords, getSavedWordsByLanguageId, saveStory, saveWord } from '../../services/userService'
 import { useUserStore } from '../../store/useUserStore'
 import { ILanguage } from '../../types/Language'
-import { MAIN_COLOR, TEXT_BLACK, WHITE } from '../../utils/colors'
+import { MAIN_COLOR, MAIN_COLOR_2, MAIN_COLOR_GREEN, TEXT_BLACK, WHITE } from '../../utils/colors'
 import { ButtonComp } from '../common/ButtonComp'
 import Loading from '../common/Loading'
 import { TextInputComp } from '../common/TextInputComp'
@@ -259,6 +259,7 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
             }
       };
 
+
     return (
         <ScrollView
           style={styles.container}
@@ -268,6 +269,65 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
           }}
         >
         <Text style={styles.storyTitle}>{storyTitle}</Text>
+        <View style={{borderWidth:0, marginBottom:24, width:"90%", flexDirection:"row", alignItems:"center", justifyContent:"space-between", paddingHorizontal:4}}>
+          <TouchableOpacity
+            onPress={voiceOnOpen}
+            style={{
+              alignItems: "center",
+              padding: 4,
+              borderRadius: 8,
+              backgroundColor: 'white', // Add background color for better shadow visibility
+              // iOS shadow properties
+              shadowColor: "#000",
+              shadowOffset: {
+                width: 0,
+                height: 1,
+              },
+              shadowOpacity: 0.5, // Adjust opacity for subtle effect
+              shadowRadius: 2, // Adjust the blur radius
+              // Android elevation
+              elevation: 2, // Adjust elevation for Android
+            }}
+          >
+            <MaterialCommunityIcons name="speaker-wireless" size={24} color={MAIN_COLOR_2} />
+            <Text style={{ fontSize: 12, fontWeight: "600", color: MAIN_COLOR_GREEN }}>Konuşmacı</Text>
+          </TouchableOpacity>
+          <View>
+          {/* <Image
+              source={{ uri: flagIcon }}
+              resizeMode="cover"
+              style={{
+                width: 50,
+                height: 50,
+                borderRadius:12,
+                marginBottom:24,
+                alignSelf:"center"
+              }}
+              
+            /> */}
+          </View>
+          <TouchableOpacity
+            onPress={titleOnOpen}
+            style={{
+              alignItems: "center",
+              padding: 4,
+              borderRadius: 8,
+              backgroundColor: 'white', 
+              shadowColor: "#000",
+              shadowOffset: {
+                width: 0,
+                height: 1,
+              },
+              shadowOpacity: 0.5, 
+              shadowRadius: 2,
+              elevation: 2, 
+            }}
+          >
+            <Fontisto name="favorite" size={24} color={MAIN_COLOR_2} />
+            <Text style={{ fontSize: 12, fontWeight: "600", color: MAIN_COLOR_GREEN }}>{isSavedStory ? "Favorilere Eklendi" : "Favorilere Ekle"}</Text>
+          </TouchableOpacity>
+
+        </View>
         <StoryCard flagIcon={iconUrl} savedWords={savedWords} currentSentence={currentSentence} currentWordIndex={currentWordIndex} handleWordPress={handleWordPress} voiceOnOpen={voiceOnOpen} titleOnOpen={titleOnOpen} isSavedStory={isSavedStory}/>
         <StoryCardButtons currentSentenceIndex={currentSentenceIndex} sentences={sentences} handleNextSentence={handleNextSentence} handlePreviousSentence={handlePreviousSentence} />
   
