@@ -7,6 +7,8 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 export default function StoryScreen({route}:any) {
 
+  console.log("process.env.GEMINI_API_KEYy", process.env.BASE_URL)
+
   // const languageId = route.params.languageId;
   // const languageName = route.params.languageName;
   // const title = route.params.title;

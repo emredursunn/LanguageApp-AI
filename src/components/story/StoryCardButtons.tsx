@@ -1,6 +1,6 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
 import Ionicons from '@expo/vector-icons/Ionicons';
+import React from 'react';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
 type Props = {
     sentences:string[]
@@ -33,15 +33,15 @@ const styles = StyleSheet.create({
     buttonContainer: {
         flexDirection: "row",
         justifyContent: "space-around",
-        width: "80%",
         marginVertical: 20,
+        width:"100%",
       },
       button: {
         alignItems:'center',
         justifyContent:'center',
         backgroundColor: "green",
-        width:'40%',
         paddingVertical:12,
+        paddingHorizontal:16,
         borderRadius: 5,
         marginHorizontal: 5,
       },

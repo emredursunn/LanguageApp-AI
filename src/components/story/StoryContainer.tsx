@@ -1,16 +1,17 @@
 import { FontAwesome, Fontisto, MaterialCommunityIcons } from '@expo/vector-icons'
+import { GoogleGenerativeAI } from '@google/generative-ai'
 import * as Speech from 'expo-speech'
 import { Actionsheet, useDisclose } from 'native-base'
 import React, { useEffect, useState } from 'react'
-import { Button, Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Button, Dimensions, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import Animated, { SlideInDown, SlideOutDown } from 'react-native-reanimated'
 import { useMutation, useQuery } from 'react-query'
 import useI18n from '../../hooks/useI18n'
-import { getLanguage, translateText } from '../../services/apiService'
+import { getLanguage, translateText, transleMeaning } from '../../services/apiService'
 import { deleteSavedStory, getLearnedWords, getSavedWordsByLanguageId, saveStory, saveWord } from '../../services/userService'
 import { useUserStore } from '../../store/useUserStore'
 import { ILanguage } from '../../types/Language'
-import { MAIN_COLOR, MAIN_COLOR_2, MAIN_COLOR_GREEN, TEXT_BLACK, WHITE } from '../../utils/colors'
+import { BLACK_COLOR, MAIN_COLOR, MAIN_COLOR_2, MAIN_COLOR_GREEN, TEXT_BLACK, WHITE } from '../../utils/colors'
 import { ButtonComp } from '../common/ButtonComp'
 import Loading from '../common/Loading'
 import { TextInputComp } from '../common/TextInputComp'
@@ -42,6 +43,8 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
     const [sentences,setSentences] = useState<string[]>([])
     const [currentSentence,setCurrentSentence] = useState<string[]>([])
     
+    const [meaning, setMeaning] = useState("");
+
     const [countdown, setCountdown] = useState(3);
     const [wordLoading, setWordLoading] = useState(false);
     const [newStoryTitle, setNewStoryTitle] = useState('');
@@ -60,6 +63,9 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
     const [filteredVoices, setFilteredVoices] = useState<any[]>([]);
     const [selectedVoice, setSelectedVoice] = useState<any>(null);
     const wordDelay = 300;
+
+    const genAI = new GoogleGenerativeAI(`${process.env.GEMINI_API_KEY}`);
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
   
     useEffect(() => {
         if (countdown > 0) {
@@ -194,6 +200,21 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
   const testVoice = (voice: any) => {
     Speech.speak(t("hello"), { voice: voice.identifier });
   };
+
+  const getMeaningFromTranslatedText = async({text, spokenLanguageCode}: {text:string, spokenLanguageCode:string}) => {
+    
+    const prompt = `
+  In the "${spokenLanguageCode.toUpperCase()}" language, give a one-sentence definition of the word "${text.toLowerCase()}" as it would be understood in that language. Provide only the definition of the word between two hyphens without additional information. For example, if the word is "curious" in English, respond with: - Showing a strong desire to know or learn something -.
+`;
+
+  
+    console.log("prompt", prompt);
+    
+    const result = await model.generateContent([prompt]);
+    const wordMeaningResponse = await transleMeaning({text:result.response.text(),targetLang:spokenLanguageCode});
+    setMeaning(wordMeaningResponse);
+    
+  }
   
     const handleWordPress = async (index: number) => {
       wordOnOpen();
@@ -202,6 +223,7 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
     try {
         const cleanedWord = currentSentence[index].replace(/[.,!?;:'"()]/g, "");
         const meaningResponse = await translateText({text:cleanedWord,targetLang:spokenLanguageCode});
+        await getMeaningFromTranslatedText({ text: meaningResponse,spokenLanguageCode:spokenLanguageCode });
         if (meaningResponse) {
             setTranslatedWord(meaningResponse);
         } else {
@@ -269,7 +291,7 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
           }}
         >
         <Text style={styles.storyTitle}>{storyTitle}</Text>
-        <View style={{borderWidth:0, marginBottom:24, width:"90%", flexDirection:"row", alignItems:"center", justifyContent:"space-between", paddingHorizontal:4}}>
+        <View style={{ marginBottom:24, width:"90%", flexDirection:"row", alignItems:"center", justifyContent:"space-between", paddingHorizontal:4}}>
           <TouchableOpacity
             onPress={voiceOnOpen}
             style={{
@@ -293,18 +315,17 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
             <Text style={{ fontSize: 12, fontWeight: "600", color: MAIN_COLOR_GREEN }}>Konuşmacı</Text>
           </TouchableOpacity>
           <View>
-          {/* <Image
-              source={{ uri: flagIcon }}
+          <Image
+              source={{ uri: iconUrl }}
               resizeMode="cover"
               style={{
                 width: 50,
-                height: 50,
-                borderRadius:12,
-                marginBottom:24,
+                height: 40,
+                borderRadius:8,
                 alignSelf:"center"
               }}
               
-            /> */}
+            />
           </View>
           <TouchableOpacity
             onPress={titleOnOpen}
@@ -351,8 +372,12 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
                     </TouchableOpacity>
                     {/* Word Translation Display */}
                     <View style={{ marginTop: 24, alignItems: "center", borderBottomWidth: 1, borderBottomColor: '#E0E0E0', paddingBottom: 10 }}>
-                        <Text style={{ fontSize: 24, fontWeight: "600", textTransform: 'capitalize', color: '#333', textAlign:'center' }}>{currentWord}</Text>
-                        <Text style={{ fontSize: 24, fontWeight: "600", textTransform: 'capitalize', color: '#007BFF', marginLeft: 8, marginTop:8, textAlign:'center' }}>{translatedWord}</Text>
+                      <View style={{flexDirection:"row", alignItems:"center"}}>
+                        <Text style={{ fontSize: 24, fontWeight: "600", textTransform: 'capitalize', color: '#007BFF', textAlign:'center' }}>{currentWord}: </Text>
+                        <Text style={{ fontSize: 24, fontWeight: "600", textTransform: 'capitalize', color: '#333', marginLeft: 8,}}>{translatedWord}</Text>
+                      </View>
+
+                        <Text style={{ fontSize: 14, fontWeight: "400", textTransform: 'capitalize', color: BLACK_COLOR, marginLeft: 8, marginTop:16, textAlign:'center' }}>*{meaning}</Text>
                     </View>
                   </>
               }
