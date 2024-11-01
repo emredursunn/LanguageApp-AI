@@ -41,34 +41,6 @@ export default function HomeScreen(){
       }
 
     return(
-<<<<<<< Updated upstream
-        <View style={{flex:1, alignItems:"center", justifyContent:"center"}}>
-            <Text>Home Screen</Text>
-            <TouchableOpacity 
-            onPress={() => navigation.navigate("FirstInfo")}
-            style={{borderWidth:1, padding:15, backgroundColor:"red"}}>
-                <Text style={{color:"white"}}>İlk Girişten sonraki sayfaya git</Text>
-            </TouchableOpacity>
-            <TouchableOpacity 
-            onPress={() => navigation.navigate("StoryInfo")}
-            style={{borderWidth:1, padding:15, backgroundColor:"green"}}>
-                <Text style={{color:"white"}}>Hikaye bilgi sayfasına git</Text>
-            </TouchableOpacity>
-            <TouchableOpacity 
-            onPress={() => navigation.push("Story")}
-            style={{borderWidth:1, padding:15, backgroundColor:"green"}}>
-                <Text style={{color:"white"}}>story</Text>
-            </TouchableOpacity>
-            <TouchableOpacity 
-            onPress={() => navigation.push("SpeechToText")}
-            style={{borderWidth:1, padding:15, backgroundColor:"green"}}>
-                <Text style={{color:"white"}}>DENEME</Text>
-            </TouchableOpacity>
-            <TouchableOpacity 
-            onPress={() => navigation.push("SpeechToText2")}
-            style={{borderWidth:1, padding:15, backgroundColor:"green"}}>
-                <Text style={{color:"white"}}>DENEME</Text>
-=======
         <View style={styles.container}>
            <View style={styles.header}>
                 <Image source={require("../../../assets/profile-images/1.jpeg")} style={styles.profileImage} resizeMode="cover" />
@@ -81,7 +53,6 @@ export default function HomeScreen(){
             <TouchableOpacity style={styles.button} onPress={handleGenerate}>
             <FontAwesome6 name="wand-magic-sparkles" size={24} color="white" />
                 <Text style={styles.buttonText}>Generate</Text>
->>>>>>> Stashed changes
             </TouchableOpacity>
             </View>
 

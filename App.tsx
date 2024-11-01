@@ -53,14 +53,8 @@ const App = () => {
                   <Stack.Screen component={FirstInfoScreen} name="FirstInfo" />
                   <Stack.Screen component={StoryInfoScreen} name="StoryInfo" />
                   <Stack.Screen component={StoryScreen} name="Story" />
-<<<<<<< Updated upstream
-                  <Stack.Screen component={SpeechToTextScreen} name="SpeechToText" />
-                  <Stack.Screen component={SpeechToTextScreen2} name="SpeechToText2" />
-                  {/* <Stack.Screen component={DENEME} name="DENEME" /> */}
-=======
                   <Stack.Screen component={HomeScreen} name="Home" />
                   <Stack.Screen component={DefaultStoriesListScreen} name="DefaultStoriesList" />
->>>>>>> Stashed changes
                 </Stack.Navigator>
               </NavigationContainer>
             </SafeAreaView>
