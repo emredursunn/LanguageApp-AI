@@ -1,12 +1,12 @@
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { RootStackParamList, TabStackParamList } from "../../types/stackNavigations";
-import HomeStoryLanguages from "../../components/home/HomeStoryLanguages";
 import { useQuery } from "react-query";
+import HomeStoryLanguages from "../../components/home/HomeStoryLanguages";
 import { getLanguage } from "../../services/apiService";
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { useAuthStore } from "../../store/useAuthStore";
+import { RootStackParamList, TabStackParamList } from "../../types/stackNavigations";
 
 
 export default function HomeScreen(){
@@ -21,8 +21,6 @@ export default function HomeScreen(){
         error: languageError,
         isLoading: languageLoading,
       } = useQuery("language", getLanguage);
-
-      console.log(languageData)
 
       const handleGenerate = () => {
         if(auth){
@@ -43,6 +41,12 @@ export default function HomeScreen(){
     return(
         <View style={styles.container}>
            <View style={styles.header}>
+            <TouchableOpacity onPress={() => navigationStack.navigate("Story")}>
+                <Text>
+                story
+
+                </Text>
+            </TouchableOpacity>
                 <Image source={require("../../../assets/profile-images/1.jpeg")} style={styles.profileImage} resizeMode="cover" />
                 <Text style={{fontSize:28,fontWeight:'800',color:'purple', marginRight:10, fontStyle:'italic'}}>Merhaba</Text>
                 <Text style={{fontSize:24,fontWeight:'bold',color:'black', paddingTop:3, fontStyle:'italic'}}>Emre</Text>

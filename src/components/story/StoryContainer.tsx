@@ -1,9 +1,11 @@
-import { FontAwesome, Fontisto, MaterialCommunityIcons } from '@expo/vector-icons'
+import { FontAwesome, Fontisto, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons'
 import { GoogleGenerativeAI } from '@google/generative-ai'
+import { Audio } from "expo-av"
+import * as FileSystem from "expo-file-system"
 import * as Speech from 'expo-speech'
 import { Actionsheet, useDisclose } from 'native-base'
 import React, { useEffect, useState } from 'react'
-import { Button, Dimensions, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, Button, Dimensions, Image, Platform, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import Animated, { SlideInDown, SlideOutDown } from 'react-native-reanimated'
 import { useMutation, useQuery } from 'react-query'
 import useI18n from '../../hooks/useI18n'
@@ -11,11 +13,12 @@ import { getLanguage, translateText, transleMeaning } from '../../services/apiSe
 import { deleteSavedStory, getLearnedWords, getSavedWordsByLanguageId, saveStory, saveWord } from '../../services/userService'
 import { useUserStore } from '../../store/useUserStore'
 import { ILanguage } from '../../types/Language'
-import { BLACK_COLOR, MAIN_COLOR, MAIN_COLOR_2, MAIN_COLOR_GREEN, TEXT_BLACK, WHITE } from '../../utils/colors'
+import { BLACK_COLOR, LIGHT_GRAY_2, LIGHT_RED, MAIN_COLOR, MAIN_COLOR_2, MAIN_COLOR_GREEN, TEXT_BLACK, WHITE } from '../../utils/colors'
 import { ButtonComp } from '../common/ButtonComp'
 import Loading from '../common/Loading'
 import { TextInputComp } from '../common/TextInputComp'
 import { LanguageData } from '../firstInfoViews/Screen2'
+import { readBlobAsBase64 } from '../speechToText/readBlobAsBase64'
 import StoryCard from './StoryCard'
 import StoryCardButtons from './StoryCardButtons'
 
@@ -38,6 +41,7 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
     const {t} = useI18n("AllScreen");
 
     const { spokenLanguageCode } = useUserStore()
+    const [flagIcon, setFlagIcon] = useState("")
 
     const [sentences,setSentences] = useState<string[]>([])
     const [currentSentence,setCurrentSentence] = useState<string[]>([])
@@ -61,6 +65,15 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
     const [voices, setVoices] = useState<any[]>([]);
     const [filteredVoices, setFilteredVoices] = useState<any[]>([]);
     const [selectedVoice, setSelectedVoice] = useState<any>(null);
+
+    const [isRecording, setIsRecording] = useState(false);
+    const [recording, setRecording] = useState<Audio.Recording | null>(null);
+    const [recordedAudioUri, setRecordedAudioUri] = useState<any | null>(null);
+    const [sound, setSound] = useState<Audio.Sound | null>(null);
+    const [text, setText] = useState<string>("");
+
+    const [startStopButton, setStartStopButton] = useState<number>(1);
+
     const wordDelay = 300;
 
     const genAI = new GoogleGenerativeAI(`${process.env.GEMINI_API_KEY}`);
@@ -77,17 +90,34 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
 
       useEffect(()=>{
         const allSentences = story ? story.split("*").map(sentence => sentence.trim()).filter(sentence => sentence) : []
-        console.log("all",allSentences)
         setSentences(allSentences)
       },[story])
 
       useEffect(()=>{
         const nextSentence = sentences.length>0 ? sentences[currentSentenceIndex].split(" ") : []
-        console.log("one",nextSentence)
         setCurrentSentence(nextSentence)
       },[sentences,currentSentenceIndex])
 
       const words = story.match(/(\p{L}+|\p{N}+|\p{P}+|\p{Z}+)/gu) || [];
+
+      React.useEffect(() => {
+        return sound
+          ? () => {
+              sound.unloadAsync();
+            }
+          : undefined;
+      }, [sound]);
+          
+  useQuery(['getFlagByLanguageId'],
+    () => getLanguage(),
+    {
+        enabled:!!languageId,
+        onSuccess(data) {
+            const language = data.data.find((lang:ILanguage) => lang.id === languageId)
+            setFlagIcon(language.iconUrl)
+        },
+    }
+  )
 
   useQuery(['getSavedWords'],
     () =>  getSavedWordsByLanguageId({languageId}),
@@ -194,9 +224,6 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
   In the "${spokenLanguageCode.toUpperCase()}" language, give a one-sentence definition of the word "${text.toLowerCase()}" as it would be understood in that language. Provide only the definition of the word between two hyphens without additional information. For example, if the word is "curious" in English, respond with: - Showing a strong desire to know or learn something -.
 `;
 
-  
-    console.log("prompt", prompt);
-    
     const result = await model.generateContent([prompt]);
     const wordMeaningResponse = await transleMeaning({text:result.response.text(),targetLang:spokenLanguageCode});
     setMeaning(wordMeaningResponse);
@@ -268,6 +295,184 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
             }
       };
 
+      const onStartRecord = async () => {
+        Speech.stop();
+        setIsRecording(true);
+        try {
+          console.log("Kayıt başlatılıyor...");
+          const { granted } = await Audio.requestPermissionsAsync();
+          if (!granted) {
+            Alert.alert("Mikrofon izni verilmedi.");
+            return;
+          }
+    
+          await Audio.setAudioModeAsync({
+            allowsRecordingIOS: true,
+            playsInSilentModeIOS: true,
+          });
+    
+          const recording = new Audio.Recording();
+          await recording.prepareToRecordAsync({
+            android: {
+              extension: ".amr",
+              outputFormat: Audio.AndroidOutputFormat.AMR_WB,
+              audioEncoder: Audio.AndroidAudioEncoder.AMR_WB,
+              sampleRate: 16000,
+              numberOfChannels: 1,
+              bitRate: 128000,
+            },
+            ios: {
+              extension: ".wav",
+              audioQuality: Audio.IOSAudioQuality.HIGH,
+              sampleRate: 44100,
+              numberOfChannels: 1,
+              bitRate: 128000,
+              linearPCMBitDepth: 16,
+              linearPCMIsBigEndian: false,
+              linearPCMIsFloat: false,
+            },
+            web: {} // Web desteği için boş bir obje ekliyoruz
+          });
+    
+          await recording.startAsync();
+          setRecording(recording);
+          console.log("Kayıt başladı...");
+        } catch (error) {
+          console.error("Kayıt başlatılamadı:", error);
+          Alert.alert("Kayıt başlatılamadı.");
+        }
+      };
+    
+      const onStopRecord = async () => {
+        setIsRecording(false);
+        try {
+          console.log("Kayıt durduruluyor...");
+          await recording?.stopAndUnloadAsync();
+          const uri = recording?.getURI();
+          setRecordedAudioUri(uri);
+          setRecording(null);
+          console.log("Kayıt durduruldu ve URI alındı:", uri);
+          Alert.alert("Kayıt tamamlandı", "Kayıt başarıyla alındı.");
+        } catch (error) {
+          console.error("Kayıt durdurulamadı:", error);
+          Alert.alert("Kayıt durdurulamadı.");
+        }
+      };
+    
+      const playRecording = async () => {
+        if (!recordedAudioUri) {
+          Alert.alert("Kayıt yapılmış bir ses bulunamadı.");
+          return;
+        }
+    
+        try {
+          console.log("Ses oynatılıyor...");
+          const { sound } = await Audio.Sound.createAsync({ uri: recordedAudioUri });
+          setSound(sound);
+          await sound.playAsync();
+          console.log("Ses oynatıldı.");
+        } catch (error) {
+          console.error("Ses oynatılamadı:", error);
+          Alert.alert("Ses oynatılamadı.");
+        }
+      };
+
+      const convertSpeechToText = async () => {
+        if (!recordedAudioUri) {
+          Alert.alert("No recorded audio found.");
+          return;
+        }
+      
+        await Audio.setAudioModeAsync({
+          allowsRecordingIOS: false,
+          playsInSilentModeIOS: false,
+        });
+      
+        try {
+          let base64Uri = "";
+      
+          // Convert audio file to base64 format
+          if (Platform.OS === "web") {
+            const blob = await fetch(recordedAudioUri).then((res) => res.blob());
+            const foundBase64 = (await readBlobAsBase64(blob)) as string;
+            base64Uri = foundBase64.split("base64,")[1];
+          } else {
+            base64Uri = await FileSystem.readAsStringAsync(recordedAudioUri, {
+              encoding: FileSystem.EncodingType.Base64,
+            });
+          }
+      
+          const audioConfig = {
+            encoding:
+              Platform.OS === "android"
+                ? "AMR_WB"
+                : Platform.OS === "web"
+                ? "WEBM_OPUS"
+                : "LINEAR16",
+            sampleRateHertz:
+              Platform.OS === "android"
+                ? 16000
+                : Platform.OS === "web"
+                ? 48000
+                : 44100,
+            languageCode: "en-US",
+          };
+      
+          const response = await fetch("http://3.79.207.37/api/v1/user/speech-to-text", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ audioUrl: base64Uri, audioConfig: audioConfig }),
+          });
+      
+          if (!response.ok) {
+            const errorText = await response.text();
+            console.error("Error:", errorText);
+            Alert.alert("Error", "Unexpected response from server.");
+            return;
+          }
+      
+          const data = await response.json();
+      
+          if (data.results && data.results.length > 0 && data.results[0].alternatives && data.results[0].alternatives.length > 0) {
+            setText(data.results[0].alternatives[0].transcript || "Text not found.");
+          } else {
+            console.error("Unexpected data format:", data);
+            Alert.alert("Error", "Unexpected data format from server.");
+            setText("Text not found.");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          Alert.alert("Error", "An error occurred, please try again.");
+        }
+      };
+
+      function startStory() {
+        const language = 'tr'; // Adjust this if you have multiple languages
+        setIsSpeaking(true);
+        setStartStopButton(0); // Reset button on completion
+        
+        Speech.speak(sentences[currentSentenceIndex], {
+          voice: selectedVoice?.identifier,
+          language: language,
+          onDone: () => {
+            setCurrentWordIndex(0);
+            setIsSpeaking(false);
+          },
+          onError: (error) => {
+            console.error("Error in speech:", error);
+            setIsSpeaking(false);
+            setStartStopButton(1); // Reset button on error
+          },
+        });
+      }
+      
+      function stopStory() {
+        Speech.stop();
+        setIsSpeaking(false);
+        setStartStopButton(1); // Reset button on stop
+      }
 
     return (
         <ScrollView
@@ -285,6 +490,8 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
               alignItems: "center",
               padding: 4,
               borderRadius: 8,
+              width:SCREEN_WIDTH*0.22,
+              maxWidth:SCREEN_WIDTH*0.22,
               backgroundColor: 'white', // Add background color for better shadow visibility
               // iOS shadow properties
               shadowColor: "#000",
@@ -320,6 +527,8 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
               alignItems: "center",
               padding: 4,
               borderRadius: 8,
+              width:SCREEN_WIDTH*0.22,
+              maxWidth:SCREEN_WIDTH*0.22,
               backgroundColor: 'white', 
               shadowColor: "#000",
               shadowOffset: {
@@ -337,8 +546,113 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
 
         </View>
         <StoryCard flagIcon={iconUrl} savedWords={savedWords} currentSentence={currentSentence} currentWordIndex={currentWordIndex} handleWordPress={handleWordPress} voiceOnOpen={voiceOnOpen} titleOnOpen={titleOnOpen} isSavedStory={isSavedStory}/>
+        <View style={{ marginVertical: 16, flexDirection: "row", alignItems: "center", justifyContent: "space-around", width: SCREEN_WIDTH }}>
+          <Pressable
+            onPress={startStory}
+            style={{
+              paddingVertical: 12,
+              paddingHorizontal: 16,
+              borderRadius: 8,
+              backgroundColor: startStopButton === 0 ? MAIN_COLOR : LIGHT_GRAY_2,
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 1 },
+              shadowOpacity: 0.2,
+              shadowRadius: 4,
+            }}
+          >
+            <Text style={{
+              fontWeight: "600",
+              color: startStopButton === 0 ? "#FFFFFF" : "#333", // Dynamic text color
+              textAlign: "center",
+            }}>
+              Metni Başlat
+            </Text>
+          </Pressable>
+
+          <Pressable
+            onPress={stopStory} // Added onPress for stopping story
+            style={{
+              paddingVertical: 12,
+              paddingHorizontal: 16,
+              borderRadius: 8,
+              backgroundColor: startStopButton === 1 ? MAIN_COLOR : LIGHT_GRAY_2,
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 1 },
+              shadowOpacity: 0.2,
+              shadowRadius: 4,
+            }}
+          >
+            <Text style={{
+              fontWeight: "600",
+              color: startStopButton === 1 ? "#FFFFFF" : "#333", // Dynamic text color
+              textAlign: "center",
+            }}>
+              Metni Durdur
+            </Text>
+          </Pressable>
+        </View>
+
         <StoryCardButtons currentSentenceIndex={currentSentenceIndex} sentences={sentences} handleNextSentence={handleNextSentence} handlePreviousSentence={handlePreviousSentence} />
-  
+        
+        <View style={{
+            width: SCREEN_WIDTH,
+            paddingVertical:8,
+            alignSelf:"center",
+            alignItems: "center",
+            backgroundColor: "#f9f9f9", // Hafif bir arka plan rengi
+            shadowColor: "#000",
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.1,
+            shadowRadius: 4,
+            elevation: 3, // Android için gölge
+          }}>
+            <Text style={{
+              textAlign: "center",
+              fontSize: 20,
+              fontWeight: "300",
+            }}>
+              {text}
+            </Text>
+          </View>
+
+        
+        <View style={{flexDirection:"row", marginTop: 32, borderWidth: 1, width: SCREEN_WIDTH,alignItems: 'center', justifyContent: 'center' }}>
+          {isRecording ? (
+            <View style={{alignItems:"center", justifyContent:"center"}}>
+            <TouchableOpacity onPress={onStopRecord} style={{borderRadius:180, backgroundColor:LIGHT_RED, padding:12, alignItems:"center", justifyContent:"center"}}>
+            <View style={{height:15, width:15, backgroundColor:WHITE, borderRadius:4}}/>
+              </TouchableOpacity>
+              <Text style={{fontWeight:"600", marginTop:4}}>
+                Stop
+              </Text>
+            </View>
+            
+          ) : (
+            <View style={{alignItems:"center", justifyContent:"center"}}>
+
+            <TouchableOpacity onPress={onStartRecord} style={{borderRadius:180, backgroundColor:LIGHT_RED, padding:4, alignItems:"center", justifyContent:"center"}}>
+              <MaterialIcons name="keyboard-voice" size={32} color={WHITE} />
+            </TouchableOpacity>
+            <Text style={{fontWeight:"600", marginTop:4}}>
+                Record
+              </Text>
+            </View>
+
+          )}
+            <View style={{alignItems:"center", justifyContent:"center", marginLeft:36, }}>
+
+          <TouchableOpacity onPress={playRecording} style={{backgroundColor:LIGHT_RED, padding:6,borderRadius:180,alignItems:"center", justifyContent:"center"}}>
+            <MaterialCommunityIcons name="account-voice" size={28} color={WHITE} />          
+          </TouchableOpacity>
+          <Text style={{fontWeight:"600", marginTop:4}}>
+                Listen
+              </Text>
+          </View>
+        </View>
+        <TouchableOpacity onPress={convertSpeechToText} style={{padding:16, backgroundColor:"red"}}>
+            <Text>Texte çevir</Text>
+          </TouchableOpacity>
+
         {/* WORD MEANING MODAL */}
         <Actionsheet isOpen={wordIsOpen} onClose={wordOnClose} disableOverlay>
             <Actionsheet.Content>
@@ -508,7 +822,8 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
         fontSize:36,
         fontWeight:'bold',
         textAlign:'center',
-      }
+      },
+      
     
   });
   
