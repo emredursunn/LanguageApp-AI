@@ -38,7 +38,6 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
     const {t} = useI18n("AllScreen");
 
     const { spokenLanguageCode } = useUserStore()
-    const [flagIcon, setFlagIcon] = useState("")
 
     const [sentences,setSentences] = useState<string[]>([])
     const [currentSentence,setCurrentSentence] = useState<string[]>([])
@@ -89,18 +88,6 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
       },[sentences,currentSentenceIndex])
 
       const words = story.match(/(\p{L}+|\p{N}+|\p{P}+|\p{Z}+)/gu) || [];
-
-          
-  useQuery(['getFlagByLanguageId'],
-    () => getLanguage(),
-    {
-        enabled:!!languageId,
-        onSuccess(data) {
-            const language = data.data.find((lang:ILanguage) => lang.id === languageId)
-            setFlagIcon(language.iconUrl)
-        },
-    }
-  )
 
   useQuery(['getSavedWords'],
     () =>  getSavedWordsByLanguageId({languageId}),

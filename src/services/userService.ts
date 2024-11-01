@@ -128,3 +128,8 @@ export const deleteSavedStory = async ({storyId} : {storyId:number}) => {
   const response = await api.delete(`/user/story`, {data: {storyId}});
   return response.data;
 };
+
+export const getStaticStoriesByLanguageId = async ({languageId} : {languageId:number}) => {
+  const response = await api.get(`/user/static-story/${languageId}`);
+  return response.data;
+};
