@@ -13,6 +13,7 @@ import { updateProfile } from "../../services/userService";
 import { useAuthStore } from "../../store/useAuthStore";
 import { TabStackParamList } from "../../types/stackNavigations";
 import {
+  GRAY,
   LIGHT_GRAY,
   LIGHT_RED,
   MAIN_COLOR_GREEN,
@@ -147,10 +148,10 @@ const ProfileSettings = () => {
       <View
         style={{ flexDirection: "row", alignItems: "center", marginBottom: 24 }}
       >
-        <TouchableOpacity onPress={onOpen} activeOpacity={.7} style={{width:75,height:75,borderRadius:38, backgroundColor:'red'}}>
+        <TouchableOpacity onPress={onOpen} activeOpacity={.7} style={{width:63,height:63, alignItems:"center", justifyContent:"center", borderRadius:180, backgroundColor:GRAY}}>
         <Image
           source={profileImage}
-          style={{width: 75,height: 75,borderRadius: 38}}
+          style={{width: 60,height: 60,borderRadius: 38}}
           resizeMode="cover"
           />
           </TouchableOpacity>
