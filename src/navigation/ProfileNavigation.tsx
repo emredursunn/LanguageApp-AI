@@ -5,7 +5,6 @@ import {
 import LoginScreen from "../screens/auth/LoginScreen";
 import RegisterScreen from "../screens/auth/RegisterScreen";
 import PersonalInformation from "../screens/profile/PersonalInformation";
-import ProfileScreen from "../screens/profile/ProfileScreen";
 import ProfileSettings from "../screens/profile/ProfileSettings";
 import SavedWordsList from "../screens/profile/SavedWordsListScreen";
 import SavedWordsMenu from "../screens/profile/SavedWordsMenuScreen";
@@ -56,11 +55,6 @@ export default function ProfileNavigation() {
         <Stack.Screen
             component={ProfileSettings}
             name="Settings"
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            component={ProfileScreen}
-            name="Profile"
             options={{ headerShown: false }}
           />
           <Stack.Screen

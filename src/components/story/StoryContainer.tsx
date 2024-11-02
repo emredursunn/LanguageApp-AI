@@ -626,7 +626,7 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
             <View style={{height:15, width:15, backgroundColor:WHITE, borderRadius:4}}/>
               </TouchableOpacity>
               <Text style={{fontWeight:"600", marginTop:4}}>
-                Stop
+                {t("stop")}
               </Text>
             </View>
             
@@ -637,7 +637,7 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
               <MaterialIcons name="keyboard-voice" size={32} color={WHITE} />
             </TouchableOpacity>
             <Text style={{fontWeight:"600", marginTop:4}}>
-                Record
+              {t("record")}
               </Text>
             </View>
 
@@ -648,7 +648,7 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
             <MaterialCommunityIcons name="account-voice" size={28} color={WHITE} />          
           </TouchableOpacity>
           <Text style={{fontWeight:"600", marginTop:4}}>
-                Listen
+            {t("listen")}
               </Text>
           </View>
         </View>
@@ -702,16 +702,16 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
                         minHeight: SCREEN_HEIGHT * 0.5,
                     }}>
                     <View style={styles.modalContent}>
-                      <Text style={styles.modalTitle}>Ses Seç</Text>
+                      <Text style={styles.modalTitle}>{t("selectVoice")}</Text>
                       {filteredVoices.map((voice, index) => (
                           <View key={voice.identifier} style={styles.voiceOptionContainer}>
                             <Text style={styles.voiceText}>
-                              Konuşmacı {index + 1}
+                            {t("speaker")} {index + 1}
                             </Text>
                             <View style={styles.voiceButtons}>
                               {/* <Button title="Test" onPress={() => testVoice(voice)} /> */}
                               <TouchableOpacity onPress={() => testVoice(voice)} style={{paddingVertical:8, paddingHorizontal:16, borderRadius:8, backgroundColor:MAIN_COLOR_GREEN}}>
-                                <Text style={{fontSize:14, fontWeight:"700", color:WHITE}}>Test</Text>
+                                <Text style={{fontSize:14, fontWeight:"700", color:WHITE}}>{t("test")}</Text>
                               </TouchableOpacity>
                               <TouchableOpacity onPress={() => {
                                   setSelectedVoice(voice); // Set the selected voice

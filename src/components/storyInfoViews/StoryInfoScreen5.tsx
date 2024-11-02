@@ -55,7 +55,7 @@ export const StoryInfoScreen5: React.FC<StoryScreenType> = ({ handleDoneInfo, re
 
     return (
         <>
-            <Text style={styles.title}>Select the Language Difficulty</Text>
+            <Text style={styles.title}>{t("selectDifficulty")}</Text>
             {difficulties.map((item) => (
                 <TouchableOpacity
                     key={item.value}

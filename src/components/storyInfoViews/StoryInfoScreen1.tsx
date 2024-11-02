@@ -29,7 +29,6 @@ export type StoryScreenType = {
     requestData: StoryRequestData,
     setRequestData: React.Dispatch<React.SetStateAction<StoryRequestData>>;
     navigation: NativeStackNavigationProp<RootStackParamList, "StoryInfo">; // Adjust "StoryInfo" to your specific screen name
-
 };
 
 export const StoryInfoScreen1: React.FC<StoryScreenType> = ({ handleNext, languageData, requestData, setRequestData, navigation }) => {
@@ -82,9 +81,9 @@ export const StoryInfoScreen1: React.FC<StoryScreenType> = ({ handleNext, langua
           <Modal transparent={true} animationType="fade">
             <View style={styles.modalBackground}>
               <View style={styles.modalContainer}>
-                <Text style={styles.loginPromptText}>Please log in to create a story!</Text>
+                <Text style={styles.loginPromptText}>{t("loginRequired")}</Text>
                 <TouchableOpacity style={styles.loginButton} onPress={() => navigation.navigate("Tab")}>
-                  <Text style={styles.buttonText}>Log In</Text>
+                  <Text style={styles.buttonText}>{t("loginBtn")}</Text>
                 </TouchableOpacity>
               </View>
             </View>

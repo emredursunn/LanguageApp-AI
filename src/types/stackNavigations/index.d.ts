@@ -28,7 +28,6 @@ type RootStackParamList = {
 
 export type TabStackParamList = {
     Home: undefined,
-    Profile: undefined,
     Settings:undefined,
     PersonalInformation:undefined,
     SavedWordsMenu:undefined,
