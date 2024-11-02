@@ -97,12 +97,7 @@ export default function StoryInfoScreen() {
       default:
         return null;
     }
-  };
-
-  
-  
-  
-  
+  };  
 
   return (
     <AnimatedFormContainer

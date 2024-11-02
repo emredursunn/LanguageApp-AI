@@ -11,6 +11,7 @@ import { useMutation, useQuery } from 'react-query'
 import useI18n from '../../hooks/useI18n'
 import { getLanguage, translateText, transleMeaning } from '../../services/apiService'
 import { deleteSavedStory, getLearnedWords, getSavedWordsByLanguageId, saveStory, saveWord } from '../../services/userService'
+import { useAuthStore } from '../../store/useAuthStore'
 import { useUserStore } from '../../store/useUserStore'
 import { BLACK_COLOR, LIGHT_GRAY_2, LIGHT_RED, MAIN_COLOR, MAIN_COLOR_2, MAIN_COLOR_GREEN, TEXT_BLACK, WHITE } from '../../utils/colors'
 import { ButtonComp } from '../common/ButtonComp'
@@ -38,9 +39,9 @@ const {width:SCREEN_WIDTH, height : SCREEN_HEIGHT} = Dimensions.get("screen");
 
 export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
     const {t} = useI18n("AllScreen");
+    const { auth } = useAuthStore();
 
     const { spokenLanguageCode } = useUserStore();
-    console.log("spoken", spokenLanguageCode);
     const [flagIcon, setFlagIcon] = useState("");
     const [code1, setCode1] = useState("");
     const [code2, setCode2] = useState("");
@@ -78,8 +79,6 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
 
     console.log("filteredVoices",filteredVoices);
     
-    console.log("code1", code1);
-
     const wordDelay = 300;
 
     const genAI = new GoogleGenerativeAI(`${process.env.GEMINI_API_KEY}`);
@@ -663,16 +662,21 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
                   :
                   <>
                     {/* Save Word Button */}
-                    <TouchableOpacity  
-                        disabled={savedWords.includes(currentWord) || saveWordMutation.isLoading} 
-                        onPress={handleSaveWord} // Call handleSaveWord on press
-                        style={{ alignSelf: "flex-end", padding: 10 }}>
-                        <FontAwesome 
-                            name={savedWords.includes(currentWord) ? "star" : "star-o"} 
-                            size={28} 
-                            color={MAIN_COLOR} 
-                            />
-                    </TouchableOpacity>
+                    {auth == null ? (
+                      null
+                    ): (
+                      <TouchableOpacity  
+                          disabled={savedWords.includes(currentWord) || saveWordMutation.isLoading} 
+                          onPress={handleSaveWord} // Call handleSaveWord on press
+                          style={{ alignSelf: "flex-end", padding: 10 }}>
+                          <FontAwesome 
+                              name={savedWords.includes(currentWord) ? "star" : "star-o"} 
+                              size={28} 
+                              color={MAIN_COLOR} 
+                              />
+                      </TouchableOpacity>
+                    )}
+                   
                     {/* Word Translation Display */}
                     <View style={{ marginTop: 24, alignItems: "center", borderBottomWidth: 1, borderBottomColor: '#E0E0E0', paddingBottom: 10 }}>
                       <View style={{flexDirection:"row", alignItems:"center"}}>

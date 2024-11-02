@@ -36,7 +36,6 @@ export const StoryInfoScreen1: React.FC<StoryScreenType> = ({ handleNext, langua
   const {t} = useI18n("AllScreen");
   const { auth } = useAuthStore();
 
-
     const [selectedLanguage, setSelectedLanguage] = useState<LanguageData | null>(() => {
         if (requestData.languageId) {
             return languageData.find(language => language.id === requestData.languageId) || null;
