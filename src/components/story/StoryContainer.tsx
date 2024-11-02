@@ -187,15 +187,17 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
   const speakSentence = () => {
     const language = code1; // Adjust this if you have multiple languages
     setIsSpeaking(true);
-    Speech.speak(sentences[currentSentenceIndex], {
-      voice: selectedVoice?.identifier,
-      language: language,
-      onDone: () => {
-        setCurrentWordIndex(0);
-        setIsSpeaking(false);
-      },
-    });
-
+    if(filteredVoices.length > 0){
+      Speech.speak(sentences[currentSentenceIndex], {
+        voice: selectedVoice?.identifier,
+        language: language,
+        onDone: () => {
+          setCurrentWordIndex(0);
+          setIsSpeaking(false);
+        },
+      });  
+    }
+   
     currentSentence.forEach((word, index) => {
       setTimeout(() => {
         setCurrentWordIndex(index);

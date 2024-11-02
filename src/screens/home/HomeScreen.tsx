@@ -27,7 +27,7 @@ export default function HomeScreen(){
     return(
         <View style={styles.container}>
            <View style={styles.header}>
-            <TouchableOpacity onPress={() => navigationStack.navigate("Story")}>
+            <TouchableOpacity onPress={() => navigationStack.push("Story")}>
                 <Text>
                 story
 
