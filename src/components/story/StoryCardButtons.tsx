@@ -7,9 +7,11 @@ type Props = {
     currentSentenceIndex:number,
     handlePreviousSentence: () => void,
     handleNextSentence: () => void,
-}
+  }
 
 const StoryCardButtons = ({sentences,currentSentenceIndex,handleNextSentence,handlePreviousSentence}:Props) => {
+  
+
   return (
     <View style={styles.buttonContainer}>
         {currentSentenceIndex > 0 && (

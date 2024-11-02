@@ -12,7 +12,6 @@ import useI18n from '../../hooks/useI18n'
 import { getLanguage, translateText, transleMeaning } from '../../services/apiService'
 import { deleteSavedStory, getLearnedWords, getSavedWordsByLanguageId, saveStory, saveWord } from '../../services/userService'
 import { useUserStore } from '../../store/useUserStore'
-import { ILanguage } from '../../types/Language'
 import { BLACK_COLOR, LIGHT_GRAY_2, LIGHT_RED, MAIN_COLOR, MAIN_COLOR_2, MAIN_COLOR_GREEN, TEXT_BLACK, WHITE } from '../../utils/colors'
 import { ButtonComp } from '../common/ButtonComp'
 import Loading from '../common/Loading'
@@ -40,8 +39,11 @@ const {width:SCREEN_WIDTH, height : SCREEN_HEIGHT} = Dimensions.get("screen");
 export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
     const {t} = useI18n("AllScreen");
 
-    const { spokenLanguageCode } = useUserStore()
-    const [flagIcon, setFlagIcon] = useState("")
+    const { spokenLanguageCode } = useUserStore();
+    console.log("spoken", spokenLanguageCode);
+    const [flagIcon, setFlagIcon] = useState("");
+    const [code1, setCode1] = useState("");
+    const [code2, setCode2] = useState("");
 
     const [sentences,setSentences] = useState<string[]>([])
     const [currentSentence,setCurrentSentence] = useState<string[]>([])
@@ -73,6 +75,8 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
     const [text, setText] = useState<string>("");
 
     const [startStopButton, setStartStopButton] = useState<number>(1);
+    
+    console.log("code1", code1);
 
     const wordDelay = 300;
 
@@ -113,8 +117,10 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
     {
         enabled:!!languageId,
         onSuccess(data) {
-            const language = data.data.find((lang:ILanguage) => lang.id === languageId)
-            setFlagIcon(language.iconUrl)
+            const language = data.data.find((lang:any) => lang.id === languageId);
+            setFlagIcon(language.iconUrl);
+            setCode1(language?.countryCode);
+            setCode2(language?.countryCode2);
         },
     }
   )
@@ -149,7 +155,7 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
 
   const getVoices = async () => {
     const availableVoices = await Speech.getAvailableVoicesAsync();
-    const languagePrefix = 'tr'; // Change this as needed
+    const languagePrefix = code1; // Change this as needed
   
     // Filter voices based on the prefix before the '-'
     const filteredVoices = availableVoices.filter(voice =>
@@ -180,7 +186,7 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
   };
 
   const speakSentence = () => {
-    const language = 'tr'; // Adjust this if you have multiple languages
+    const language = code1; // Adjust this if you have multiple languages
     setIsSpeaking(true);
     Speech.speak(sentences[currentSentenceIndex], {
       voice: selectedVoice?.identifier,
@@ -207,6 +213,7 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
   }, [currentSentenceIndex]);
 
   const handleNextSentence = () => {
+    setText("");
     setCurrentSentenceIndex((prev) => Math.min(prev + 1, sentences.length - 1));
   };
 
@@ -336,9 +343,7 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
     
           await recording.startAsync();
           setRecording(recording);
-          console.log("Kayıt başladı...");
         } catch (error) {
-          console.error("Kayıt başlatılamadı:", error);
           Alert.alert("Kayıt başlatılamadı.");
         }
       };
@@ -346,15 +351,12 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
       const onStopRecord = async () => {
         setIsRecording(false);
         try {
-          console.log("Kayıt durduruluyor...");
           await recording?.stopAndUnloadAsync();
           const uri = recording?.getURI();
           setRecordedAudioUri(uri);
           setRecording(null);
-          console.log("Kayıt durduruldu ve URI alındı:", uri);
-          Alert.alert("Kayıt tamamlandı", "Kayıt başarıyla alındı.");
+          await convertSpeechToText()
         } catch (error) {
-          console.error("Kayıt durdurulamadı:", error);
           Alert.alert("Kayıt durdurulamadı.");
         }
       };
@@ -415,7 +417,7 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
                 : Platform.OS === "web"
                 ? 48000
                 : 44100,
-            languageCode: "en-US",
+            languageCode: `${code1}-${code2}`,
           };
       
           const response = await fetch("http://3.79.207.37/api/v1/user/speech-to-text", {
@@ -449,7 +451,7 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
       };
 
       function startStory() {
-        const language = 'tr'; // Adjust this if you have multiple languages
+        const language = code1; // Adjust this if you have multiple languages
         setIsSpeaking(true);
         setStartStopButton(0); // Reset button on completion
         
@@ -592,9 +594,10 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
           </Pressable>
         </View>
 
-        <StoryCardButtons currentSentenceIndex={currentSentenceIndex} sentences={sentences} handleNextSentence={handleNextSentence} handlePreviousSentence={handlePreviousSentence} />
+        <StoryCardButtons currentSentenceIndex={currentSentenceIndex} sentences={sentences} handleNextSentence={handleNextSentence} handlePreviousSentence={handlePreviousSentence}/>
         
         <View style={{
+          display: text ? "flex" :"none",
             width: SCREEN_WIDTH,
             paddingVertical:8,
             alignSelf:"center",
@@ -616,7 +619,7 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
           </View>
 
         
-        <View style={{flexDirection:"row", marginTop: 32, borderWidth: 1, width: SCREEN_WIDTH,alignItems: 'center', justifyContent: 'center' }}>
+        <View style={{flexDirection:"row", marginTop: 32, width: SCREEN_WIDTH,alignItems: 'center', justifyContent: 'center' }}>
           {isRecording ? (
             <View style={{alignItems:"center", justifyContent:"center"}}>
             <TouchableOpacity onPress={onStopRecord} style={{borderRadius:180, backgroundColor:LIGHT_RED, padding:12, alignItems:"center", justifyContent:"center"}}>
@@ -649,9 +652,6 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
               </Text>
           </View>
         </View>
-        <TouchableOpacity onPress={convertSpeechToText} style={{padding:16, backgroundColor:"red"}}>
-            <Text>Texte çevir</Text>
-          </TouchableOpacity>
 
         {/* WORD MEANING MODAL */}
         <Actionsheet isOpen={wordIsOpen} onClose={wordOnClose} disableOverlay>

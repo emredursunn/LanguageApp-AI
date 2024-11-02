@@ -3,4 +3,5 @@ export interface ILanguage {
   language: string;
   iconUrl: string;
   countryCode: string;
+  countryCode2: string;
 }
