@@ -72,7 +72,6 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
     const [voices, setVoices] = useState<any[]>([]);
     const [filteredVoices, setFilteredVoices] = useState<any[]>([]);
     const [selectedVoice, setSelectedVoice] = useState<any>(null);
-
     const [isRecording, setIsRecording] = useState(false);
     const [recording, setRecording] = useState<Audio.Recording | null>(null);
     const [recordedAudioUri, setRecordedAudioUri] = useState<any | null>(null);
@@ -491,13 +490,14 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
         setIsSpeaking(true);
         setStartStopButton(0); // Reset button on completion
         
-        if(filteredVoices.length > 0){
+        if(filteredVoices.length > 0 && selectedVoice?.language == `${code1}-${code2}`){
           Speech.speak(sentences[currentSentenceIndex], {
             voice: selectedVoice?.identifier,
             language: code1,
             onDone: () => {
               setCurrentWordIndex(0);
               setIsSpeaking(false);
+              Speech.stop();
             },
             onError: (error) => {
               console.error("Error in speech:", error);

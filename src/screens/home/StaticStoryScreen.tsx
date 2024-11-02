@@ -1,12 +1,12 @@
-import React, { useState } from 'react'
 import { useRoute } from '@react-navigation/native'
-import { StoryContainer } from '../../components/story/StoryContainer'
+import React, { useState } from 'react'
 import { useQuery } from 'react-query'
+import Error from '../../components/common/Error'
+import Loading from '../../components/common/Loading'
+import { StoryContainer } from '../../components/story/StoryContainer'
+import useI18n from '../../hooks/useI18n'
 import { getStaticStoryDetail } from '../../services/userService'
 import { IStory } from '../../types/Story'
-import Loading from '../../components/common/Loading'
-import Error from '../../components/common/Error'
-import useI18n from '../../hooks/useI18n'
 
 const StaticStoryScreen = () => {
   const {languageId, storyId} = useRoute<any>().params
