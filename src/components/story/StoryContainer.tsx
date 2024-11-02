@@ -736,7 +736,9 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
                             </Text>
                             <View style={styles.voiceButtons}>
                               {/* <Button title="Test" onPress={() => testVoice(voice)} /> */}
-                              <TouchableOpacity onPress={() => testVoice(voice)} style={{paddingVertical:8, paddingHorizontal:16, borderRadius:8, backgroundColor:MAIN_COLOR_GREEN}}>
+                              <TouchableOpacity onPress={() => testVoice(voice)} style={{paddingVertical:8, paddingHorizontal:16, borderRadius:8, backgroundColor:MAIN_COLOR_GREEN,
+                                marginRight:12
+                              }}>
                                 <Text style={{fontSize:14, fontWeight:"700", color:WHITE}}>{t("test")}</Text>
                               </TouchableOpacity>
                               <TouchableOpacity onPress={() => {
