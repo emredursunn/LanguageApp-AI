@@ -19,6 +19,7 @@ import { BORDER_RADIUS_2 } from '../../utils/measurement'
 import { ButtonComp } from '../common/ButtonComp'
 import Loading from '../common/Loading'
 import { TextInputComp } from '../common/TextInputComp'
+import CustomModal from '../CustomModal'
 import { LanguageData } from '../firstInfoViews/Screen2'
 import { readBlobAsBase64 } from '../speechToText/readBlobAsBase64'
 import StoryCard from './StoryCard'
@@ -77,6 +78,9 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
     const [recordedAudioUri, setRecordedAudioUri] = useState<any | null>(null);
     const [sound, setSound] = useState<Audio.Sound | null>(null);
     const [text, setText] = useState<string>("");
+
+    const [similarityScore, setSimilarityScore] = useState<string>("");
+    const [visibleModal, setVisibleModal] = useState<boolean>(false);
 
     const [startStopButton, setStartStopButton] = useState<number>(1);
 
@@ -263,7 +267,11 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
       Sentence 2: "${sentence2}"
     `
     const result = await model.generateContent([prompt]);
-    console.log("result", result.response.text());
+
+    setSimilarityScore(result.response.text())
+    setVisibleModal(true);
+
+    console.log("result.response.text()",result.response.text());
   }
   
     const handleWordPress = async (index: number) => {
@@ -485,6 +493,8 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
         }
       };
 
+      console.log("voice", selectedVoice);
+
       function startStory() {
         setCurrentWordIndex(0);
         setIsSpeaking(true);
@@ -497,7 +507,6 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
             onDone: () => {
               setCurrentWordIndex(0);
               setIsSpeaking(false);
-              Speech.stop();
             },
             onError: (error) => {
               console.error("Error in speech:", error);
@@ -528,6 +537,15 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
         Speech.stop();
         navigation.goBack();
       }
+
+    const handleGenerate = () => {
+        setVisibleModal(true); // Show modal when button is pressed
+    };
+
+    const closeModal = () => {
+        setVisibleModal(false); // Close modal when called
+    };
+
     return (
         <ScrollView
           style={styles.container}
@@ -807,7 +825,11 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
             </Animated.View>
             </Actionsheet.Content>
         </Actionsheet> 
-
+            <CustomModal 
+                isVisible={visibleModal} 
+                numberString={similarityScore} 
+                onClose={closeModal} 
+            />
         </ScrollView>
     );
   }
