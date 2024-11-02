@@ -6,7 +6,7 @@ import * as FileSystem from "expo-file-system"
 import * as Speech from 'expo-speech'
 import { Actionsheet, useDisclose } from 'native-base'
 import React, { useEffect, useState } from 'react'
-import { Alert, Dimensions, Image, Platform, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, BackHandler, Dimensions, Image, Platform, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import Animated, { SlideInDown, SlideOutDown } from 'react-native-reanimated'
 import { useMutation, useQuery } from 'react-query'
 import useI18n from '../../hooks/useI18n'
@@ -85,13 +85,27 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
 
     const genAI = new GoogleGenerativeAI(`${process.env.GEMINI_API_KEY}`);
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+    useEffect(() => {
+      const backAction = () => {
+        Speech.stop();
+        
+        navigation.goBack();
+  
+        return true;
+      };
+  
+      const backHandler = BackHandler.addEventListener("hardwareBackPress", backAction);
+      return () => backHandler.remove();
+    }, [navigation]);
   
     useEffect(() => {
         if (countdown > 0) {
           const countdownTimer = setTimeout(() => setCountdown(countdown - 1), 1000);
           return () => clearTimeout(countdownTimer);
         } else {
-          speakSentence();
+          // speakSentence();
+          startStory();
         }
       }, [countdown]);
 
@@ -188,34 +202,34 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
     setFilteredVoices(filtered);
   };
 
-  const speakSentence = () => {
-    const language = code1; // Adjust this if you have multiple languages
-    setIsSpeaking(true);
-    if(filteredVoices.length > 0){
-      Speech.speak(sentences[currentSentenceIndex], {
-        voice: selectedVoice?.identifier,
-        language: language,
-        onDone: () => {
-          setCurrentWordIndex(0);
-          setIsSpeaking(false);
-        },
-      });  
-    }
+  // const speakSentence = () => {
+  //   const language = code1; // Adjust this if you have multiple languages
+  //   setIsSpeaking(true);
+  //   if(filteredVoices.length > 0){
+  //     Speech.speak(sentences[currentSentenceIndex], {
+  //       voice: selectedVoice?.identifier,
+  //       language: language,
+  //       onDone: () => {
+  //         setCurrentWordIndex(0);
+  //         setIsSpeaking(false);
+  //       },
+  //     });  
+  //   }
    
-    currentSentence.forEach((word, index) => {
-      setTimeout(() => {
-        setCurrentWordIndex(index);
-      }, index * wordDelay);
-    });
+  //   currentSentence.forEach((word, index) => {
+  //     setTimeout(() => {
+  //       setCurrentWordIndex(index);
+  //     }, index * wordDelay);
+  //   });
 
-    filterVoicesByLanguage(language); // Filter voices based on the language
-  };
+  //   filterVoicesByLanguage(language); // Filter voices based on the language
+  // };
 
-  useEffect(() => {
-    if (!isSpeaking) {
-      speakSentence();
-    }
-  }, [currentSentenceIndex]);
+  // useEffect(() => {
+  //   if (!isSpeaking) {
+  //     speakSentence();
+  //   }
+  // }, [currentSentenceIndex]);
 
   const handleNextSentence = () => {
     setText("");
@@ -477,24 +491,29 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
         setIsSpeaking(true);
         setStartStopButton(0); // Reset button on completion
         
-        Speech.speak(sentences[currentSentenceIndex], {
-          voice: selectedVoice?.identifier,
-          language: code1,
-          onDone: () => {
-            setCurrentWordIndex(0);
-            setIsSpeaking(false);
-          },
-          onError: (error) => {
-            console.error("Error in speech:", error);
-            setIsSpeaking(false);
-            setStartStopButton(1); // Reset button on error
-          },
-        });
+        if(filteredVoices.length > 0){
+          Speech.speak(sentences[currentSentenceIndex], {
+            voice: selectedVoice?.identifier,
+            language: code1,
+            onDone: () => {
+              setCurrentWordIndex(0);
+              setIsSpeaking(false);
+            },
+            onError: (error) => {
+              console.error("Error in speech:", error);
+              setIsSpeaking(false);
+              setStartStopButton(1); // Reset button on error
+            },
+          });
+        }
+
         currentSentence.forEach((word, index) => {
           setTimeout(() => {
             setCurrentWordIndex(index);
           }, index * wordDelay);
         });
+        filterVoicesByLanguage(code1); // Filter voices based on the language
+
       }
       
       function stopStory() {
@@ -503,6 +522,11 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
         setStartStopButton(1); // Reset button on stop
         setCurrentWordIndex(0);
         
+      }
+
+      const navigationGoBack = () => {
+        Speech.stop();
+        navigation.goBack();
       }
     return (
         <ScrollView
@@ -514,7 +538,7 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
         >
           <View style={{paddingVertical: 12, paddingLeft:16, width:SCREEN_WIDTH }}>
               <TouchableOpacity
-                onPress={() => navigation.goBack()}
+                onPress={() => navigationGoBack()}
                 style={styles.backButton}
               >
                 <FontAwesome5 name="chevron-left" size={24} color={WHITE} />
