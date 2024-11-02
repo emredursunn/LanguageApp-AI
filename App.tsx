@@ -21,6 +21,7 @@ import StoryScreen from "./src/screens/StoryScreen";
 import { RootStackParamList } from "./src/types/stackNavigations";
 import HomeScreen from "./src/screens/home/HomeScreen";
 import DefaultStoriesListScreen from "./src/components/home/DefaultStoriesList";
+import StaticStoryScreen from "./src/screens/home/StaticStoryScreen";
 
 const App = () => {
   const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -55,6 +56,7 @@ const App = () => {
                   <Stack.Screen component={StoryScreen} name="Story" />
                   <Stack.Screen component={HomeScreen} name="Home" />
                   <Stack.Screen component={DefaultStoriesListScreen} name="DefaultStoriesList" />
+                  <Stack.Screen component={StaticStoryScreen} name="StaticStoryScreen" />
                 </Stack.Navigator>
               </NavigationContainer>
             </SafeAreaView>

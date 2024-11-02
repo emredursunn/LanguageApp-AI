@@ -7,7 +7,7 @@ import { BLACK_COLOR, GRAY, WHITE } from '../../utils/colors';
 import useI18n from '../../hooks/useI18n';
 
 export interface MenuLanguageCard {
-    languageId: number,
+    id: number,
     language: string,
     iconUrl: string,
     countryCode: string,
@@ -26,11 +26,12 @@ const HomeLanguageCard = ({ languageCard }: Props) => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList, "Home">>();
 
   const handleNavigate = () => { 
-    navigation.navigate("DefaultStoriesList", { languageId: languageCard.languageId });
+    console.log("card",languageCard)
+    navigation.navigate("DefaultStoriesList", { id: languageCard.id });
   }
 
   return (
-    <TouchableOpacity key={languageCard.languageId} onPress={handleNavigate} activeOpacity={0.7} style={styles.card}>
+    <TouchableOpacity key={languageCard.id} onPress={handleNavigate} activeOpacity={0.7} style={styles.card}>
         <View style={styles.flagContainer}>
             <Image source={{ uri: languageCard.iconUrl }} style={styles.flagImg} resizeMode='cover' />
         </View>

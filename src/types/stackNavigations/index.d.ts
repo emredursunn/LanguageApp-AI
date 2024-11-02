@@ -22,8 +22,12 @@ type RootStackParamList = {
         storyId?:number
     },
     DefaultStoriesList: {
-        languageId:number
-    }
+        id:number
+    },
+    StaticStoryScreen: {
+        storyId:number,
+        languageId:number,
+    },
 };
 
 export type TabStackParamList = {

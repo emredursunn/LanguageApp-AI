@@ -10,6 +10,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../../types/stackNavigations'
 import Entypo from '@expo/vector-icons/Entypo';
 import { getStaticStoriesByLanguageId } from '../../services/userService'
+import useI18n from '../../hooks/useI18n'
 
 const RenderItem = ({item,index, navigateStory} : {item:IStory,index:number, navigateStory: (storyId:number) => void}) => (
   <Animated.View
@@ -28,16 +29,20 @@ const RenderItem = ({item,index, navigateStory} : {item:IStory,index:number, nav
 )
 
 const DefaultStoriesListScreen = () => {
-  const {languageId} = useRoute<any>().params
+  const {t} = useI18n("AllScreen");
+
+  const {id} = useRoute<any>().params
   const {navigate} =
     useNavigation<NativeStackNavigationProp<RootStackParamList, "Story">>();
   const [stories,setStories] = useState<IStory[]>([])
   
   const {isFetching,isError} = useQuery(['getStaticStoriesByLanguageId'],
-    () => getStaticStoriesByLanguageId({languageId}),
-    {enabled:!!languageId,
+    () => getStaticStoriesByLanguageId({languageId:id}),
+    {enabled:!!id,
       onSuccess(data) {
-        setStories(data.data)
+        setStories(data.results)
+      },onError(err) {
+        console.log("error",err)
       },
     }
   )
@@ -53,10 +58,10 @@ const DefaultStoriesListScreen = () => {
 
   return (
     <ScrollView style={{flex:1, backgroundColor:'white', paddingTop:24}} contentContainerStyle={{justifyContent:'center',alignItems:'center'}}>
-      {stories.map((story,index) => (
-        <RenderItem key={story.id} item={story} index={index} navigateStory={() => navigate("Story", 
+      {stories && stories.map((story,index) => (
+        <RenderItem key={story.id} item={{id:story.id,story:story.story,storyTitle:`${t('example')} ${index+1}`}} index={index} navigateStory={() => navigate("StaticStoryScreen", 
           {
-          languageId:languageId,
+          languageId:id,
           storyId:story.id,
       }
     )} />

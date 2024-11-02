@@ -32,9 +32,6 @@ export default function HomeScreen(){
     return(
         <View style={styles.container}>
            <View style={styles.header}>
-            <TouchableOpacity onPress={() => navigationStack.navigate("Story")}>
-                <Text>story</Text>
-            </TouchableOpacity>
                 <View style={{height:65, width:65, alignItems:"center", justifyContent:"center", backgroundColor:GRAY, borderRadius:180}}>
                     <Image source={require("../../../assets/profile-images/1.jpeg")} style={styles.profileImage} resizeMode="cover" />
                 </View>

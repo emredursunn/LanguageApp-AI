@@ -16,6 +16,8 @@ type Props = {
 
 const LanguageMenu = ({ languages, type }: Props) => {
 
+  console.log("menu",languages)
+
   const {t} = useI18n("AllScreen");
   const navigation = useNavigation<ProfileScreenNavigationProp>();
 

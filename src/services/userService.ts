@@ -133,3 +133,8 @@ export const getStaticStoriesByLanguageId = async ({languageId} : {languageId:nu
   const response = await api.get(`/user/static-story/${languageId}`);
   return response.data;
 };
+
+export const getStaticStoryDetail= async ({storyId} : {storyId:number}) => {
+  const response = await api.get(`/user/static-story-detail/${storyId}`);
+  return response.data;
+};
