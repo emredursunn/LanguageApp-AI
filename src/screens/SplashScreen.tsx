@@ -54,8 +54,8 @@ export default function SplashScreen() {
     // );
 
     return(
-        <View style={{flex:1, alignItems:"center", justifyContent:"center", backgroundColor:"#eef9fa"}}>
-            <Image source={require("../../assets/splash.png")} width={width} height={height} resizeMode="center"/>
+        <View style={{flex:1, alignItems:"center", justifyContent:"center", backgroundColor:"#dfe1dc"}}>
+            <Image source={require("../../assets/splash.jpeg")} width={width} height={height} resizeMode="center" style={{borderRadius:24}}/>
         </View>
     )
 }
