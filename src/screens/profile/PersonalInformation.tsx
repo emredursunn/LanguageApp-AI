@@ -191,7 +191,7 @@ const PersonalInformation = () => {
                     fontSize: 18,
                   }}
                 >
-                  {item.language}
+                  {t(`${item.language}`)}
                 </Text>
               </TouchableOpacity>
             )}
@@ -227,8 +227,8 @@ const PersonalInformation = () => {
                     fontSize: 18,
                   }}
                 >
-                  {item.language}
-                </Text>
+                  {t(`${item.language}`)}
+                  </Text>
               </TouchableOpacity>
             )}
           />
@@ -253,8 +253,8 @@ const PersonalInformation = () => {
         value={surname}
         onchangeValue={setSurname}
       />
-      <View style={{ gap: 3 }}>
-        <Text style={styles.itemLabel}>Country</Text>
+      {/* <View style={{ gap: 3 }}>
+        <Text style={styles.itemLabel}>{t('selectCountry')}</Text>
         <TouchableOpacity
           onPress={() => {
             setMode(1);
@@ -267,10 +267,10 @@ const PersonalInformation = () => {
             style={{ width: 24, height: 16, marginRight: 8 }}
           />
           <Text style={{ fontSize: 18, color: BLACK_COLOR }}>
-            {selectedCountry?.countryName || t("selectCountry")}
+          {selectedCountry?.countryName || t("selectCountry")}
           </Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
       <View style={{ gap: 3 }}>
         <Text style={styles.itemLabel}>{t("spokenLanguage")}</Text>
         <TouchableOpacity
@@ -285,7 +285,7 @@ const PersonalInformation = () => {
             style={{ width: 24, height: 16, marginRight: 8 }}
           />
           <Text style={{ fontSize: 18, color: BLACK_COLOR }}>
-            {selectedSpokenLanguage?.language || t("selectSpokenLanguage")}
+            {t(`${selectedSpokenLanguage?.language}`) || t("selectSpokenLanguage")}
           </Text>
         </TouchableOpacity>
       </View>
@@ -303,7 +303,7 @@ const PersonalInformation = () => {
             style={{ width: 24, height: 16, marginRight: 8 }}
           />
           <Text style={{ fontSize: 18, color: BLACK_COLOR }}>
-            {selectedLanguage?.language || t("selectTargetLanguage")}
+            {t(`${selectedLanguage?.language}`) || t("selectTargetLanguage")}
           </Text>
         </TouchableOpacity>
       </View>
