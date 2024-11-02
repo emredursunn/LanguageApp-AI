@@ -1,12 +1,40 @@
+import { FontAwesome5 } from '@expo/vector-icons';
 import { NavigationProp } from '@react-navigation/native';
-import { Dimensions, View } from 'react-native';
+import React from 'react';
+import { Dimensions, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { MAIN_COLOR_GREEN, WHITE } from '../utils/colors';
+import { BORDER_RADIUS_2 } from '../utils/measurement';
 
-export const Header = async (navigation: NavigationProp<any>) => {
+interface HeaderProps {
+  navigation: NavigationProp<any>; // Veya daha özel bir tür kullanabilirsiniz
+}
 
-    const {width} = Dimensions.get("screen");
+export const Header: React.FC<HeaderProps> = ({ navigation }) => {
+  const { width } = Dimensions.get("screen");
 
-    <View style={{borderWidth:1, width:width, paddingVertical:12}}>
-        
+  return (
+    <View style={[styles.container, { width }]}>
+      <TouchableOpacity
+        onPress={() => navigation.goBack()}
+        style={styles.backButton}
+      >
+        <FontAwesome5 name="chevron-left" size={24} color={WHITE} />
+      </TouchableOpacity>
     </View>
-
+  );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    borderWidth: 1,
+    paddingVertical: 12,
+  },
+  backButton: {
+    borderRadius: BORDER_RADIUS_2,
+    width: 35,
+    height: 35,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: MAIN_COLOR_GREEN,
+  },
+});

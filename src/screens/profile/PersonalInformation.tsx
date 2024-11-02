@@ -1,3 +1,5 @@
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Actionsheet, useDisclose } from "native-base";
 import React, { useEffect, useState } from "react";
 import {
@@ -15,6 +17,7 @@ import { ButtonComp } from "../../components/common/ButtonComp";
 import { TextInputComp } from "../../components/common/TextInputComp";
 import { CountryData, RequestData } from "../../components/firstInfoViews/Screen1";
 import { LanguageData } from "../../components/firstInfoViews/Screen2";
+import { Header } from "../../components/Header";
 import useI18n from "../../hooks/useI18n";
 import { getCountry, getLanguage } from "../../services/apiService";
 import { updateFirstInfo, updateProfile } from "../../services/userService";
@@ -23,10 +26,13 @@ import { useUserStore } from "../../store/useUserStore";
 import { BLACK_COLOR, LIGHT_GRAY, MAIN_COLOR, TEXT_BLACK, WHITE } from "../../utils/colors";
 import { showToast } from "../../utils/helpers";
 
+type PersonalInformationScreenNavigationProp = NativeStackNavigationProp<any, "PersonalInformation">;
+
+
 const { height, width } = Dimensions.get("screen");
 
 const PersonalInformation = () => {
-  
+  const navigation = useNavigation<PersonalInformationScreenNavigationProp>();
   const {t} = useI18n("AllScreen");
 
   const { auth } = useAuthStore();
@@ -241,6 +247,7 @@ const PersonalInformation = () => {
 
   return (
     <Animated.ScrollView entering={SlideInRight} contentContainerStyle={{ flexGrow: 1 }} style={{ flex: 1, backgroundColor: WHITE, padding: 24, width:width }}>
+      <Header navigation={navigation}/>
       <TextInputComp
         label={t("name")}
         placeholder={t("namePlacehHolder")}

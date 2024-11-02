@@ -1,5 +1,6 @@
-import { FontAwesome, Fontisto, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons'
+import { FontAwesome, FontAwesome5, Fontisto, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons'
 import { GoogleGenerativeAI } from '@google/generative-ai'
+import { useNavigation } from '@react-navigation/native'
 import { Audio } from "expo-av"
 import * as FileSystem from "expo-file-system"
 import * as Speech from 'expo-speech'
@@ -14,6 +15,7 @@ import { deleteSavedStory, getLearnedWords, getSavedWordsByLanguageId, saveStory
 import { useAuthStore } from '../../store/useAuthStore'
 import { useUserStore } from '../../store/useUserStore'
 import { BLACK_COLOR, LIGHT_GRAY_2, LIGHT_RED, MAIN_COLOR, MAIN_COLOR_2, MAIN_COLOR_GREEN, TEXT_BLACK, WHITE } from '../../utils/colors'
+import { BORDER_RADIUS_2 } from '../../utils/measurement'
 import { ButtonComp } from '../common/ButtonComp'
 import Loading from '../common/Loading'
 import { TextInputComp } from '../common/TextInputComp'
@@ -40,6 +42,8 @@ const {width:SCREEN_WIDTH, height : SCREEN_HEIGHT} = Dimensions.get("screen");
 export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
     const {t} = useI18n("AllScreen");
     const { auth } = useAuthStore();
+
+    const navigation = useNavigation();
 
     const { spokenLanguageCode } = useUserStore();
     const [flagIcon, setFlagIcon] = useState("");
@@ -508,6 +512,14 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
             alignItems: "center"
           }}
         >
+          <View style={{paddingVertical: 12, paddingLeft:16, width:SCREEN_WIDTH }}>
+              <TouchableOpacity
+                onPress={() => navigation.goBack()}
+                style={styles.backButton}
+              >
+                <FontAwesome5 name="chevron-left" size={24} color={WHITE} />
+              </TouchableOpacity>
+            </View>
         <Text style={styles.storyTitle}>{storyTitle}</Text>
         <View style={{ marginBottom:24, width:"90%", flexDirection:"row", alignItems:"center", justifyContent:"space-between", paddingHorizontal:4}}>
           <TouchableOpacity
@@ -782,6 +794,14 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
       backgroundColor:WHITE,
       paddingTop:10,
       paddingBottom:300,
+    },
+    backButton: {
+      borderRadius: BORDER_RADIUS_2,
+      width: 35,
+      height: 35,
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: MAIN_COLOR_GREEN,
     },
     centeredContent: {
       justifyContent: "center",

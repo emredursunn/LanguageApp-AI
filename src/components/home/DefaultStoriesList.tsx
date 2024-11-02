@@ -1,16 +1,17 @@
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import Entypo from '@expo/vector-icons/Entypo'
 import { useNavigation, useRoute } from '@react-navigation/native'
-import { useQuery } from 'react-query'
-import { IStory } from '../../types/Story'
-import Loading from '../common/Loading'
-import Error from '../common/Error'
-import Animated, { SlideInRight, SlideOutLeft } from 'react-native-reanimated'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { RootStackParamList } from '../../types/stackNavigations'
-import Entypo from '@expo/vector-icons/Entypo';
-import { getStaticStoriesByLanguageId } from '../../services/userService'
+import React, { useState } from 'react'
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import Animated, { SlideInRight, SlideOutLeft } from 'react-native-reanimated'
+import { useQuery } from 'react-query'
 import useI18n from '../../hooks/useI18n'
+import { getStaticStoriesByLanguageId } from '../../services/userService'
+import { RootStackParamList } from '../../types/stackNavigations'
+import { IStory } from '../../types/Story'
+import Error from '../common/Error'
+import Loading from '../common/Loading'
+import { Header } from '../Header'
 
 const RenderItem = ({item,index, navigateStory} : {item:IStory,index:number, navigateStory: (storyId:number) => void}) => (
   <Animated.View
@@ -30,7 +31,8 @@ const RenderItem = ({item,index, navigateStory} : {item:IStory,index:number, nav
 
 const DefaultStoriesListScreen = () => {
   const {t} = useI18n("AllScreen");
-
+  const navigation = useNavigation<any>();
+  
   const {id} = useRoute<any>().params
   const {navigate} =
     useNavigation<NativeStackNavigationProp<RootStackParamList, "Story">>();
@@ -57,7 +59,10 @@ const DefaultStoriesListScreen = () => {
 
 
   return (
-    <ScrollView style={{flex:1, backgroundColor:'white', paddingTop:24}} contentContainerStyle={{justifyContent:'center',alignItems:'center'}}>
+    <ScrollView style={{flex:1, backgroundColor:'white', paddingTop:24,}} contentContainerStyle={{justifyContent:'center',alignItems:'center'}}>
+      <View style={{paddingLeft:32}}>
+        <Header navigation={navigation}/>
+      </View>
       {stories && stories.map((story,index) => (
         <RenderItem key={story.id} item={{id:story.id,story:story.story,storyTitle:`${t('example')} ${index+1}`}} index={index} navigateStory={() => navigate("StaticStoryScreen", 
           {

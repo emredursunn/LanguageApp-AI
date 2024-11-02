@@ -5,6 +5,7 @@ import { StyleSheet, Text } from "react-native";
 import Animated, { SlideInRight } from "react-native-reanimated";
 import useI18n from "../../hooks/useI18n";
 import { WHITE } from "../../utils/colors";
+import { Header } from "../Header";
 import LanguageCard, { ILanguageCard } from "./LanguageCard";
 
 type ProfileScreenNavigationProp = NativeStackNavigationProp<any, "Profile">;
@@ -15,8 +16,6 @@ type Props = {
 };
 
 const LanguageMenu = ({ languages, type }: Props) => {
-
-  console.log("menu",languages)
 
   const {t} = useI18n("AllScreen");
   const navigation = useNavigation<ProfileScreenNavigationProp>();
@@ -34,6 +33,7 @@ const LanguageMenu = ({ languages, type }: Props) => {
 
   return (
     <Animated.ScrollView entering={SlideInRight} contentContainerStyle={styles.container}>
+      <Header navigation={navigation}/>
       {languages && languages.length > 0 ? (
         languages.map((languageCard: ILanguageCard) => (
           <LanguageCard
