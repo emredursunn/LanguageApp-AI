@@ -1,8 +1,11 @@
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useState } from "react";
-import { Dimensions, FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Dimensions, FlatList, Image, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import useI18n from "../../hooks/useI18n";
 import { StoryRequestData } from "../../screens/StoryInfoScreen";
-import { MAIN_COLOR, TEXT_BLACK, WHITE } from "../../utils/colors";
+import { useAuthStore } from "../../store/useAuthStore";
+import { RootStackParamList } from "../../types/stackNavigations";
+import { MAIN_COLOR, MAIN_COLOR_GREEN, TEXT_BLACK, WHITE } from "../../utils/colors";
 import { ButtonComp } from "../common/ButtonComp";
 
 const { height } = Dimensions.get("screen");
@@ -25,11 +28,14 @@ export type StoryScreenType = {
     languageData: LanguageData[];
     requestData: StoryRequestData,
     setRequestData: React.Dispatch<React.SetStateAction<StoryRequestData>>;
+    navigation: NativeStackNavigationProp<RootStackParamList, "StoryInfo">; // Adjust "StoryInfo" to your specific screen name
 
 };
 
-export const StoryInfoScreen1: React.FC<StoryScreenType> = ({ handleNext, languageData, requestData, setRequestData }) => {
+export const StoryInfoScreen1: React.FC<StoryScreenType> = ({ handleNext, languageData, requestData, setRequestData, navigation }) => {
   const {t} = useI18n("AllScreen");
+  const { auth } = useAuthStore();
+
 
     const [selectedLanguage, setSelectedLanguage] = useState<LanguageData | null>(() => {
         if (requestData.languageId) {
@@ -71,6 +77,21 @@ export const StoryInfoScreen1: React.FC<StoryScreenType> = ({ handleNext, langua
         }
         handleNext();
     };
+
+    if (!auth) {
+        return (
+          <Modal transparent={true} animationType="fade">
+            <View style={styles.modalBackground}>
+              <View style={styles.modalContainer}>
+                <Text style={styles.loginPromptText}>Please log in to create a story!</Text>
+                <TouchableOpacity style={styles.loginButton} onPress={() => navigation.navigate("Tab")}>
+                  <Text style={styles.buttonText}>Log In</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
+        );
+      }
 
     return (
         <View style={{ paddingHorizontal: 8 }}>
@@ -157,4 +178,36 @@ const styles = StyleSheet.create({
     buttonContainer: {
         marginTop: 32,
     },
+    modalBackground: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.3)', // Semi-transparent background
+      },
+      modalContainer: {
+        width: '80%',
+        height: '30%',
+        backgroundColor: 'white',
+        borderRadius: 20,
+        padding: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+      },
+      loginPromptText: {
+        fontSize: 20,
+        textAlign: 'center',
+        marginBottom: 20,
+        fontWeight:"500"
+      },
+      loginButton: {
+        backgroundColor: MAIN_COLOR_GREEN,
+        paddingVertical: 10,
+        paddingHorizontal: 32,
+        borderRadius: 10,
+      },
+      buttonText: {
+        color: WHITE,
+        fontSize: 16,
+        fontWeight:"700"
+      },
 });

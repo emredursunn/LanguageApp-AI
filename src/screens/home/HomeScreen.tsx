@@ -1,11 +1,10 @@
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useQuery } from "react-query";
 import HomeStoryLanguages from "../../components/home/HomeStoryLanguages";
 import { getLanguage } from "../../services/apiService";
-import { useAuthStore } from "../../store/useAuthStore";
 import { RootStackParamList, TabStackParamList } from "../../types/stackNavigations";
 import { BLACK_COLOR, GRAY, LIGHT_GRAY, LIGHT_PINK_2, MAIN_COLOR_GREEN, TEXT_BLACK } from '../../utils/colors';
 
@@ -15,8 +14,6 @@ export default function HomeScreen(){
     const navigationStack = useNavigation<NativeStackNavigationProp<RootStackParamList, "Home">>();
     const navigationTab = useNavigation<NativeStackNavigationProp<TabStackParamList, "Home">>();
 
-    const {auth} = useAuthStore()
-
     const {
         data: languageData,
         error: languageError,
@@ -24,19 +21,7 @@ export default function HomeScreen(){
       } = useQuery("language", getLanguage);
 
       const handleGenerate = () => {
-        if(auth){
-            navigationStack.navigate("StoryInfo")
-        }else{
-            Alert.alert("Heyy, login and come back", "You have to login for generate story", [{
-                text:"Login",
-                onPress: () => navigationTab.navigate("Login")
-            },
-            {
-                text:"Cancel",
-                style:"cancel"
-            }
-            ])
-        }
+            navigationStack.navigate("StoryInfo");
       }
 
     return(
