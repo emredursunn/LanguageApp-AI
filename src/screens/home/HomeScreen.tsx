@@ -112,7 +112,9 @@ title:{
     fontSize:22, 
     fontWeight:'700', 
     marginBottom:8,
-    color:TEXT_BLACK
+    color:TEXT_BLACK,
+    width:"80%",
+    alignSelf:"center"
 }
 
 })
