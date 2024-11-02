@@ -451,13 +451,13 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
       };
 
       function startStory() {
-        const language = code1; // Adjust this if you have multiple languages
+        setCurrentWordIndex(0);
         setIsSpeaking(true);
         setStartStopButton(0); // Reset button on completion
         
         Speech.speak(sentences[currentSentenceIndex], {
           voice: selectedVoice?.identifier,
-          language: language,
+          language: code1,
           onDone: () => {
             setCurrentWordIndex(0);
             setIsSpeaking(false);
@@ -474,8 +474,9 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
         Speech.stop();
         setIsSpeaking(false);
         setStartStopButton(1); // Reset button on stop
+        setCurrentWordIndex(0);
+        
       }
-
     return (
         <ScrollView
           style={styles.container}
@@ -596,7 +597,9 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
 
         <StoryCardButtons currentSentenceIndex={currentSentenceIndex} sentences={sentences} handleNextSentence={handleNextSentence} handlePreviousSentence={handlePreviousSentence}/>
         
-        <View style={{
+        <Pressable 
+        onPress={() => setText("")}
+        style={{
           display: text ? "flex" :"none",
             width: SCREEN_WIDTH,
             paddingVertical:8,
@@ -616,7 +619,7 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
             }}>
               {text}
             </Text>
-          </View>
+          </Pressable>
 
         
         <View style={{flexDirection:"row", marginTop: 32, width: SCREEN_WIDTH,alignItems: 'center', justifyContent: 'center' }}>
