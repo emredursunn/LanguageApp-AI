@@ -93,6 +93,9 @@
         "hard": "Difícil",
         "select": "Seleccionar",
         "enterStoryTitle": "Ingrese el título de la historia",
-        "save": "Guardar"
+        "save": "Guardar",
+        "generateNowText":"¡Crea tu propia historia ahora y comienza a aprender!",
+        "generateStory":"¡Generar historia!",
+        "readStory":"¡Lee historias en tu idioma preferido!"
     }
 }

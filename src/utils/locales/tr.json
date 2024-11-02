@@ -93,7 +93,9 @@
         "hard":"Zor",
         "select":"Seç",
         "enterStoryTitle":"Hikaye Başlığı Giriniz",
-        "save":"Kaydet"     
+        "save":"Kaydet",
+        "generateNowText":"Hemen kendi hikayeni oluştur ve Öğrenmeye Başla!",
+        "generateStory":"Hikaye oluştur!"
 
     }
 }

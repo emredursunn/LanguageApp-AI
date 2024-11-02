@@ -7,12 +7,17 @@ import HomeStoryLanguages from "../../components/home/HomeStoryLanguages";
 import { getLanguage } from "../../services/apiService";
 import { RootStackParamList, TabStackParamList } from "../../types/stackNavigations";
 import { BLACK_COLOR, GRAY, LIGHT_GRAY, LIGHT_PINK_2, MAIN_COLOR_GREEN, TEXT_BLACK } from '../../utils/colors';
-
+import useI18n from '../../hooks/useI18n';
+import { useAuthStore } from '../../store/useAuthStore';
 
 export default function HomeScreen(){
 
     const navigationStack = useNavigation<NativeStackNavigationProp<RootStackParamList, "Home">>();
     const navigationTab = useNavigation<NativeStackNavigationProp<TabStackParamList, "Home">>();
+
+    const {t} = useI18n("AllScreen");
+
+    const {auth} = useAuthStore()
 
     const {
         data: languageData,
@@ -27,32 +32,26 @@ export default function HomeScreen(){
     return(
         <View style={styles.container}>
            <View style={styles.header}>
-            <TouchableOpacity onPress={() => navigationStack.push("Story")}>
-                <Text>
-                story
-
-                </Text>
-            </TouchableOpacity>
                 <View style={{height:65, width:65, alignItems:"center", justifyContent:"center", backgroundColor:GRAY, borderRadius:180}}>
                     <Image source={require("../../../assets/profile-images/1.jpeg")} style={styles.profileImage} resizeMode="cover" />
                 </View>
 
-                <Text style={{fontSize:24,fontWeight:'600',color:BLACK_COLOR, marginRight:10, marginLeft:12}}>Merhaba,</Text>
-                <Text style={{fontSize:24,fontWeight:'800',color:LIGHT_PINK_2, paddingTop:3}}>Emre</Text>
+                <Text style={{fontSize:24,fontWeight:'600',color:BLACK_COLOR, marginRight:10, marginLeft:12}}>{t('hello')}</Text>
+                <Text style={{fontSize:24,fontWeight:'800',color:LIGHT_PINK_2, paddingTop:3}}>{auth?.name}</Text>
             </View>
 
             <View style={{}}>
                 <Text style={styles.title}>
-                    Hemen kendi hikayeni oluştur ve Öğrenmeye Başla!
+                    {t("generateNowText")}
                     </Text>
             <TouchableOpacity style={styles.button} onPress={handleGenerate}>
             <FontAwesome6 name="wand-magic-sparkles" size={24} color="white" />
-                <Text style={styles.buttonText}>Generate Story</Text>
+                <Text style={styles.buttonText}>{t("generateStory")}</Text>
             </TouchableOpacity>
             </View>
 
             <View style={{}}>
-                <Text style={styles.title}>İstediğin dilde hikayeler oku!</Text>
+                <Text style={styles.title}>{t("readStory")}</Text>
               {languageData && <HomeStoryLanguages languages={languageData.data}/> }
             </View>
         </View>

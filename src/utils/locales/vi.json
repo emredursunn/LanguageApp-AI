@@ -93,6 +93,9 @@
         "hard": "Khó",
         "select": "Chọn",
         "enterStoryTitle": "Nhập tiêu đề câu chuyện",
-        "save": "Lưu"
+        "save": "Lưu",
+        "generateNowText":"Tạo câu chuyện của riêng bạn ngay bây giờ và Bắt đầu Học!",
+        "generateStory":"Tạo câu chuyện!",
+        "readStory":"Đọc những câu chuyện bằng ngôn ngữ bạn thích!"
     }
 }

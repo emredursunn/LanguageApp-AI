@@ -8,7 +8,6 @@ import translationEs from "./locales/es.json";
 import translationFr from "./locales/fr.json";
 import translationHi from "./locales/hi.json";
 import translationIt from "./locales/it.json";
-import translationJa from "./locales/ja.json";
 import translationPt from "./locales/pt.json";
 import translationRu from "./locales/ru.json";
 import translationTh from "./locales/th.json";
@@ -41,9 +40,6 @@ i18n
         },
         it: {
             translation: translationIt
-        },
-        ja: {
-            translation: translationJa
         },
         pt: {
             translation: translationPt
