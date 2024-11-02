@@ -75,6 +75,8 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
     const [text, setText] = useState<string>("");
 
     const [startStopButton, setStartStopButton] = useState<number>(1);
+
+    console.log("filteredVoices",filteredVoices);
     
     console.log("code1", code1);
 
@@ -177,7 +179,7 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
 
   useEffect(() => {
     getVoices();
-  }, []);
+  }, [code1, languageId]);
 
   const filterVoicesByLanguage = (language: string) => {
     const langPrefix = language.split('-')[0]; // Get the prefix (e.g., 'tr' from 'tr-TR')

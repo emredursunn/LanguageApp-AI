@@ -7,6 +7,7 @@ import HomeStoryLanguages from "../../components/home/HomeStoryLanguages";
 import { getLanguage } from "../../services/apiService";
 import { useAuthStore } from "../../store/useAuthStore";
 import { RootStackParamList, TabStackParamList } from "../../types/stackNavigations";
+import { BLACK_COLOR, GRAY, LIGHT_GRAY, LIGHT_PINK_2, MAIN_COLOR_GREEN, TEXT_BLACK } from '../../utils/colors';
 
 
 export default function HomeScreen(){
@@ -47,16 +48,21 @@ export default function HomeScreen(){
 
                 </Text>
             </TouchableOpacity>
-                <Image source={require("../../../assets/profile-images/1.jpeg")} style={styles.profileImage} resizeMode="cover" />
-                <Text style={{fontSize:28,fontWeight:'800',color:'purple', marginRight:10, fontStyle:'italic'}}>Merhaba</Text>
-                <Text style={{fontSize:24,fontWeight:'bold',color:'black', paddingTop:3, fontStyle:'italic'}}>Emre</Text>
+                <View style={{height:65, width:65, alignItems:"center", justifyContent:"center", backgroundColor:GRAY, borderRadius:180}}>
+                    <Image source={require("../../../assets/profile-images/1.jpeg")} style={styles.profileImage} resizeMode="cover" />
+                </View>
+
+                <Text style={{fontSize:24,fontWeight:'600',color:BLACK_COLOR, marginRight:10, marginLeft:12}}>Merhaba,</Text>
+                <Text style={{fontSize:24,fontWeight:'800',color:LIGHT_PINK_2, paddingTop:3}}>Emre</Text>
             </View>
 
             <View style={{}}>
-                <Text style={styles.title}>Hemen kendi hikayeni oluştur!</Text>
+                <Text style={styles.title}>
+                    Hemen kendi hikayeni oluştur ve Öğrenmeye Başla!
+                    </Text>
             <TouchableOpacity style={styles.button} onPress={handleGenerate}>
             <FontAwesome6 name="wand-magic-sparkles" size={24} color="white" />
-                <Text style={styles.buttonText}>Generate</Text>
+                <Text style={styles.buttonText}>Generate Story</Text>
             </TouchableOpacity>
             </View>
 
@@ -79,13 +85,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginBottom: 34,
         margin:6,
-        paddingLeft:16
+        paddingLeft:16,
+        paddingBottom:12,
+        borderBottomWidth:1,
+        borderColor:LIGHT_GRAY
     },
     profileImage: {
-        width: 75,
-        height: 75,
+        width: 60,
+        height: 60,
         borderRadius: 36,
-        marginRight: 16,
     },
     welcomeText: {
         fontSize: 28,
@@ -98,9 +106,8 @@ button: {
     justifyContent:'center',
     alignItems:'center',
     alignSelf:'center',
-    marginTop:8,
-    marginBottom:24,
-    backgroundColor: 'darkblue', // Yeşil arka plan
+    marginVertical:24,
+    backgroundColor: MAIN_COLOR_GREEN, // Yeşil arka plan
     borderRadius: 10, // Kenar yuvarlama
     paddingVertical: 15, // Dikey iç boşluk
     elevation: 5, // Gölgelendirme
@@ -112,11 +119,16 @@ button: {
 buttonText: {
     color: '#FFFFFF', // Metin rengi
     fontSize: 24, // Metin boyutu
-    fontWeight: 'bold', // Metin kalınlığı
+    fontWeight: '600', // Metin kalınlığı
     marginLeft:12,
     textAlign: 'center', // Metin hizalaması
 },
 title:{
-    textAlign:'center', fontSize:22, fontWeight:'600', marginBottom:8
+    textAlign:'center', 
+    fontSize:22, 
+    fontWeight:'700', 
+    marginBottom:8,
+    color:TEXT_BLACK
 }
+
 })
