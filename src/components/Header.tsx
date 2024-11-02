@@ -26,7 +26,6 @@ export const Header: React.FC<HeaderProps> = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    borderWidth: 1,
     paddingVertical: 12,
   },
   backButton: {
