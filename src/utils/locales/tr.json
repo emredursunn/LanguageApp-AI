@@ -108,6 +108,19 @@
     "test": "Test",
     "selectVoice":"Ses Seç",
     "loginRequired":"Hikaye oluşturmak için lütfen giriş yapın!",
-    "selectDifficulty":"Dil Zorluk Seviyesini Seç"
+    "selectDifficulty":"Dil Zorluk Seviyesini Seç",
+    "English": "İngilizce",
+    "Spanish": "İspanyolca",
+    "French": "Fransızca",
+    "German": "Almanca",
+    "Turkish": "Türkçe",
+    "Russian": "Rusça",
+    "Italian": "İtalyanca",
+    "Portuguese": "Portekizce",
+    "Hindi": "Hintçe",
+    "Vietnamese": "Vietnamca",
+    "Thai": "Tayca",
+    "Danish": "Danca",
+    "Finnish": "Fince"
   }
 }

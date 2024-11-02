@@ -108,6 +108,19 @@
     "test": "Kiểm tra",
     "selectVoice":"Chọn Giọng nói",
     "loginRequired":"Vui lòng đăng nhập để tạo câu chuyện!",
-    "selectDifficulty":"Chọn độ Khó của Ngôn ngữ"
+    "selectDifficulty":"Chọn độ Khó của Ngôn ngữ",
+    "English": "Tiếng Anh",
+    "Spanish": "Tiếng Tây Ban Nha",
+    "French": "Tiếng Pháp",
+    "German": "Tiếng Đức",
+    "Turkish": "Tiếng Thổ Nhĩ Kỳ",
+    "Russian": "Tiếng Nga",
+    "Italian": "Tiếng Ý",
+    "Portuguese": "Tiếng Bồ Đào Nha",
+    "Hindi": "Tiếng Hindi",
+    "Vietnamese": "Tiếng Việt",
+    "Thai": "Tiếng Thái",
+    "Danish": "Tiếng Đan Mạch",
+    "Finnish": "Tiếng Phần Lan"
   }
 }

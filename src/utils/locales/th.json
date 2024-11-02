@@ -108,6 +108,19 @@
     "test": "ทดสอบ",
     "selectVoice":"เลือกเสียง",
     "loginRequired":"กรุณาเข้าสู่ระบบเพื่อสร้างเรื่องราว!",
-    "selectDifficulty":"เลือกความยากของภาษา"
+    "selectDifficulty":"เลือกความยากของภาษา",
+    "English": "อังกฤษ",
+    "Spanish": "สเปน",
+    "French": "ฝรั่งเศส",
+    "German": "เยอรมัน",
+    "Turkish": "ตุรกี",
+    "Russian": "รัสเซีย",
+    "Italian": "อิตาลี",
+    "Portuguese": "โปรตุเกส",
+    "Hindi": "ภาษาฮินดี",
+    "Vietnamese": "เวียดนาม",
+    "Thai": "ไทย",
+    "Danish": "เดนมาร์ก",
+    "Finnish": "ฟินแลนด์"
   }
 }

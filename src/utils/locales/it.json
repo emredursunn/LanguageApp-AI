@@ -108,6 +108,19 @@
     "test": "Test",
     "selectVoice":"Seleziona Voce",
     "loginRequired":"Per favore, accedi per creare una storia!",
-    "selectDifficulty":"Seleziona la Difficoltà della Lingua"
+    "selectDifficulty":"Seleziona la Difficoltà della Lingua",
+    "English": "Inglese",
+    "Spanish": "Spagnolo",
+    "French": "Francese",
+    "German": "Tedesco",
+    "Turkish": "Turco",
+    "Russian": "Russo",
+    "Italian": "Italiano",
+    "Portuguese": "Portoghese",
+    "Hindi": "Hindi",
+    "Vietnamese": "Vietnamita",
+    "Thai": "Thailandese",
+    "Danish": "Danese",
+    "Finnish": "Finlandese"
   }
 }

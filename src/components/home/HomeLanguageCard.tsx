@@ -4,6 +4,7 @@ import React from 'react';
 import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { RootStackParamList } from '../../types/stackNavigations';
 import { BLACK_COLOR, GRAY, WHITE } from '../../utils/colors';
+import useI18n from '../../hooks/useI18n';
 
 export interface MenuLanguageCard {
     languageId: number,
@@ -20,6 +21,8 @@ const { width: SCREEN_WIDTH } = Dimensions.get('screen');
 
 const HomeLanguageCard = ({ languageCard }: Props) => {
 
+    const {t} = useI18n("AllScreen");
+
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList, "Home">>();
 
   const handleNavigate = () => { 
@@ -31,7 +34,7 @@ const HomeLanguageCard = ({ languageCard }: Props) => {
         <View style={styles.flagContainer}>
             <Image source={{ uri: languageCard.iconUrl }} style={styles.flagImg} resizeMode='cover' />
         </View>
-        <Text style={styles.label}>{languageCard.language}</Text>
+        <Text style={styles.label}>{t(`${languageCard.language}`)}</Text>
     </TouchableOpacity>
   );
 };

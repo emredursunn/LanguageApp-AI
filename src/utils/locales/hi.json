@@ -108,6 +108,19 @@
     "test": "परीक्षण",
     "selectVoice":"आवाज़ चुनें",
     "loginRequired":"कहानी बनाने के लिए कृपया लॉग इन करें!",
-    "selectDifficulty":"भाषा की कठिनाई का चयन करें"
+    "selectDifficulty":"भाषा की कठिनाई का चयन करें",
+    "English": "अंग्रेज़ी",
+    "Spanish": "स्पेनिश",
+    "French": "फ़्रेंच",
+    "German": "जर्मन",
+    "Turkish": "तुर्की",
+    "Russian": "रूसी",
+    "Italian": "इतालवी",
+    "Portuguese": "पुर्तगाली",
+    "Hindi": "हिन्दी",
+    "Vietnamese": "वियतनामी",
+    "Thai": "थाई",
+    "Danish": "डेनिश",
+    "Finnish": "फिनिश"
   }
 }

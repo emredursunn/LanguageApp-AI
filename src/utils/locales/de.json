@@ -108,6 +108,19 @@
     "test": "Test",
     "selectVoice":"Stimme Auswählen",
     "loginRequired":"Bitte melden Sie sich an, um eine Geschichte zu erstellen!",
-    "selectDifficulty":"Wählen Sie die Sprachschwierigkeit"
+    "selectDifficulty":"Wählen Sie die Sprachschwierigkeit",
+    "English": "Englisch",
+    "Spanish": "Spanisch",
+    "French": "Französisch",
+    "German": "Deutsch",
+    "Turkish": "Türkisch",
+    "Russian": "Russisch",
+    "Italian": "Italienisch",
+    "Portuguese": "Portugiesisch",
+    "Hindi": "Hindi",
+    "Vietnamese": "Vietnamesisch",
+    "Thai": "Thailändisch",
+    "Danish": "Dänisch",
+    "Finnish": "Finnisch"
   }
 }
