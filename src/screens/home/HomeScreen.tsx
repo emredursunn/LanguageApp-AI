@@ -4,11 +4,11 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useQuery } from "react-query";
 import HomeStoryLanguages from "../../components/home/HomeStoryLanguages";
+import useI18n from '../../hooks/useI18n';
 import { getLanguage } from "../../services/apiService";
+import { useAuthStore } from '../../store/useAuthStore';
 import { RootStackParamList, TabStackParamList } from "../../types/stackNavigations";
 import { BLACK_COLOR, GRAY, LIGHT_GRAY, LIGHT_PINK_2, MAIN_COLOR_GREEN, TEXT_BLACK } from '../../utils/colors';
-import useI18n from '../../hooks/useI18n';
-import { useAuthStore } from '../../store/useAuthStore';
 
 export default function HomeScreen(){
 
@@ -32,6 +32,9 @@ export default function HomeScreen(){
     return(
         <View style={styles.container}>
            <View style={styles.header}>
+            <TouchableOpacity onPress={() => navigationStack.navigate("Story")}>
+                <Text>story</Text>
+            </TouchableOpacity>
                 <View style={{height:65, width:65, alignItems:"center", justifyContent:"center", backgroundColor:GRAY, borderRadius:180}}>
                     <Image source={require("../../../assets/profile-images/1.jpeg")} style={styles.profileImage} resizeMode="cover" />
                 </View>

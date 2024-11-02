@@ -237,6 +237,17 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
     setMeaning(wordMeaningResponse);
     
   }
+
+  const compareSentences = async({sentence1, sentence2}:{sentence1:string, sentence2:string}) => {
+    const prompt = `
+      I want you to compare these two sentences and tell me how similar they are between 1 and 10, including the number 1 and 10. Just give a similarity score. Don't give any other information. Put it in quotation marks.
+      For example: "9" or "6".
+      Sentence 1: "${sentence1}"
+      Sentence 2: "${sentence2}"
+    `
+    const result = await model.generateContent([prompt]);
+    console.log("result", result.response.text());
+  }
   
     const handleWordPress = async (index: number) => {
       wordOnOpen();
@@ -303,6 +314,7 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
       };
 
       const onStartRecord = async () => {
+        setText("");
         Speech.stop();
         setIsRecording(true);
         try {
@@ -360,6 +372,8 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
           Alert.alert("Kayıt durdurulamadı.");
         }
       };
+
+      // console.log("currentsentece", sentences[currentSentenceIndex]);
     
       const playRecording = async () => {
         if (!recordedAudioUri) {
@@ -438,7 +452,11 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
           const data = await response.json();
       
           if (data.results && data.results.length > 0 && data.results[0].alternatives && data.results[0].alternatives.length > 0) {
-            setText(data.results[0].alternatives[0].transcript || "Text not found.");
+            setText(data.results[0].alternatives[0].transcript || "Text can not be converted!");
+              await compareSentences({
+                sentence1: sentences[currentSentenceIndex],
+                sentence2: data.results[0].alternatives[0].transcript
+            });
           } else {
             console.error("Unexpected data format:", data);
             Alert.alert("Error", "Unexpected data format from server.");
@@ -467,6 +485,11 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
             setIsSpeaking(false);
             setStartStopButton(1); // Reset button on error
           },
+        });
+        currentSentence.forEach((word, index) => {
+          setTimeout(() => {
+            setCurrentWordIndex(index);
+          }, index * wordDelay);
         });
       }
       
