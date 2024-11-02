@@ -5,7 +5,7 @@ import * as FileSystem from "expo-file-system"
 import * as Speech from 'expo-speech'
 import { Actionsheet, useDisclose } from 'native-base'
 import React, { useEffect, useState } from 'react'
-import { Alert, Button, Dimensions, Image, Platform, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, Dimensions, Image, Platform, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import Animated, { SlideInDown, SlideOutDown } from 'react-native-reanimated'
 import { useMutation, useQuery } from 'react-query'
 import useI18n from '../../hooks/useI18n'
@@ -77,8 +77,6 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
 
     const [startStopButton, setStartStopButton] = useState<number>(1);
 
-    console.log("filteredVoices",filteredVoices);
-    
     const wordDelay = 300;
 
     const genAI = new GoogleGenerativeAI(`${process.env.GEMINI_API_KEY}`);
@@ -297,7 +295,6 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
             if (newStoryTitle.trim() === '') {
                 return;
             }
-            console.log("2")
             saveStoryMutation.mutate({ languageId, storyTitle: newStoryTitle, story });
             titleOnClose(); // Hide modal after saving
             }
@@ -704,21 +701,26 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
                     }}>
                     <View style={styles.modalContent}>
                       <Text style={styles.modalTitle}>Ses Seç</Text>
-                      {filteredVoices.map((voice) => (
-                        <View key={voice.identifier} style={styles.voiceOptionContainer}>
-                          <Text style={styles.voiceText}>{voice.name} ({voice.language})</Text>
-                          <View style={styles.voiceButtons}>
-                            <Button title="Test" onPress={() => testVoice(voice)} />
-                            <Button
-                              title={t("select")}
-                              onPress={() => {
-                                setSelectedVoice(voice); // Set the selected voice
-                                voiceOnClose() // Close the modal
-                              }}
-                            />
+                      {filteredVoices.map((voice, index) => (
+                          <View key={voice.identifier} style={styles.voiceOptionContainer}>
+                            <Text style={styles.voiceText}>
+                              Konuşmacı {index + 1}
+                            </Text>
+                            <View style={styles.voiceButtons}>
+                              {/* <Button title="Test" onPress={() => testVoice(voice)} /> */}
+                              <TouchableOpacity onPress={() => testVoice(voice)} style={{paddingVertical:8, paddingHorizontal:16, borderRadius:8, backgroundColor:MAIN_COLOR_GREEN}}>
+                                <Text style={{fontSize:14, fontWeight:"700", color:WHITE}}>Test</Text>
+                              </TouchableOpacity>
+                              <TouchableOpacity onPress={() => {
+                                  setSelectedVoice(voice); // Set the selected voice
+                                  voiceOnClose(); // Close the modal
+                                }} style={{paddingVertical:8, paddingHorizontal:16, borderRadius:8, backgroundColor:MAIN_COLOR}}>
+                                <Text style={{fontSize:14, fontWeight:"700", color:TEXT_BLACK}}>{t("select")}</Text>
+                              </TouchableOpacity>
+                              
+                            </View>
                           </View>
-                        </View>
-                      ))}
+                        ))}
                     </View>
                   </ScrollView>
                 </Actionsheet.Content>
@@ -821,7 +823,8 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
         borderRadius:8,
       },
       voiceText: {
-        fontSize: 16,
+        fontSize: 20,
+        fontWeight:"700",
         color: TEXT_BLACK,
       },
       storyTitle:{
