@@ -36,8 +36,8 @@ export default function LoginScreen() {
 
   const { setToken } = useAuthStore();
 
-  const [email, setEmail] = useState("uygareren1030@gmail.com");
-  const [password, setPassword] = useState("uygareren12345");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const loginMutation = useMutation({
     mutationFn: login,

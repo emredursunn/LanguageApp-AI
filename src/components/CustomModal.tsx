@@ -1,6 +1,7 @@
 import { AntDesign, FontAwesome5 } from '@expo/vector-icons';
 import React, { useEffect } from 'react';
 import { BackHandler, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import useI18n from '../hooks/useI18n';
 import { BLUE, LIGHT_RED, MAIN_COLOR_GREEN, ORANGE, TEXT_BLACK } from '../utils/colors';
 
 interface CustomModalProps {
@@ -10,36 +11,36 @@ interface CustomModalProps {
 }
 
 const CustomModal: React.FC<CustomModalProps> = ({ isVisible, onClose, numberString }) => {
-  const number = parseInt(numberString.replace(/"/g, '')); // Tırnaklardan arındırılmış sayıyı al
+  const {t} = useI18n("AllScreen")
+
+  const number = parseInt(numberString.replace(/"/g, '')); 
   let message = '';
   let subMessage = '';
   let color = '';
   let icon = '';
 
-  // Duruma göre mesaj, renk ve ikon ayarları
   if (number <= 5) {
-    message = 'Yetersiz';
-    subMessage = 'Gelişime açık alanlar var.';
+    message = t('messages.insufficient');
+    subMessage = t('messages.open_to_improvement');
     color = LIGHT_RED;
     icon = 'times-circle';
   } else if (number >= 6 && number <= 7) {
-    message = 'Orta';
-    subMessage = 'İyi bir başlangıç, daha iyi olabilir.';
+    message = t('messages.moderate');
+    subMessage = t('messages.good_start');
     color = ORANGE;
     icon = 'exclamation-circle';
   } else if (number === 8) {
-    message = 'İyi';
-    subMessage = 'Başarılı bir performans sergilediniz.';
+    message = t('messages.good');
+    subMessage = t('messages.successful_performance');
     color = BLUE;
     icon = 'thumbs-up';
   } else {
-    message = 'Çok İyi';
-    subMessage = 'Mükemmel! Harika bir iş çıkardınız.';
+    message = t('messages.very_good');
+    subMessage = t('messages.excellent_job');
     color = MAIN_COLOR_GREEN;
     icon = 'star';
   }
 
-  // Geri tuşu ile modalı kapatma desteği
   useEffect(() => {
     const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
       if (isVisible) {

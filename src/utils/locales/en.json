@@ -122,6 +122,14 @@
     "Thai": "Thai",
     "Danish": "Danish",
     "Finnish": "Finnish",
-    "example": "Example"
+    "example": "Example",
+    "insufficient": "Insufficient",
+    "open_to_improvement": "There are areas open for improvement.",
+    "moderate": "Moderate",
+    "good_start": "A good start, can be better.",
+    "good": "Good",
+    "successful_performance": "You have shown a successful performance.",
+    "very_good": "Very Good",
+    "excellent_job": "Excellent! You've done a fantastic job."
   }
 }

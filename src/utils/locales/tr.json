@@ -122,6 +122,14 @@
     "Thai": "Tayca",
     "Danish": "Danca",
     "Finnish": "Fince",
-    "example": "Örnek"
+    "example": "Örnek",
+    "insufficient": "Yetersiz",
+    "open_to_improvement": "Gelişime açık alanlar var.",
+    "moderate": "Orta",
+    "good_start": "İyi bir başlangıç, daha iyi olabilir.",
+    "good": "İyi",
+    "successful_performance": "Başarılı bir performans sergilediniz.",
+    "very_good": "Çok İyi",
+    "excellent_job": "Mükemmel! Harika bir iş çıkardınız."
   }
 }
