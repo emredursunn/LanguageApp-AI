@@ -185,7 +185,6 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
     setVoices(filteredVoices);
     setFilteredVoices(filteredVoices); // Ensure to set the filtered voices
   
-    // Set a default voice based on the prefix
     const defaultVoice = filteredVoices.find(voice => voice.language.split('-')[0] === languagePrefix);
     if (defaultVoice) {
       setSelectedVoice(defaultVoice);
@@ -205,7 +204,6 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
     setFilteredVoices(filtered);
   };
 
-  // const speakSentence = () => {
   //   const language = code1; // Adjust this if you have multiple languages
   //   setIsSpeaking(true);
   //   if(filteredVoices.length > 0){
@@ -244,7 +242,7 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
   };
 
   const testVoice = (voice: any) => {
-    Speech.speak(t("hello"), { voice: voice.identifier });
+    Speech.speak(("hello"), { voice: voice.identifier });
   };
 
   const getMeaningFromTranslatedText = async({text, spokenLanguageCode}: {text:string, spokenLanguageCode:string}) => {
@@ -271,7 +269,6 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
     setSimilarityScore(result.response.text())
     setVisibleModal(true);
 
-    console.log("result.response.text()",result.response.text());
   }
   
     const handleWordPress = async (index: number) => {
@@ -304,11 +301,11 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
     const handleSaveWord = () => {
         if (currentWord && !savedWords.includes(currentWord.toLowerCase())) {
             saveWordMutation.mutate({languageId,word:currentWord.toLowerCase()})
-            // if (savedWords.includes(currentWord)) {
-            //     setSavedWords(savedWords.filter(word => word !== currentWord));
-            // } else {
-            //     setSavedWords([...savedWords, currentWord]);
-            // }
+            if (savedWords.includes(currentWord)) {
+                setSavedWords(savedWords.filter(word => word !== currentWord));
+            } else {
+                setSavedWords([...savedWords, currentWord]);
+            }
         }
     };
 
@@ -420,7 +417,6 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
 
       const convertSpeechToText = async () => {
         if (!recordedAudioUri) {
-          Alert.alert("No recorded audio found.");
           return;
         }
       
@@ -498,9 +494,9 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
       function startStory() {
         setCurrentWordIndex(0);
         setIsSpeaking(true);
-        setStartStopButton(0); // Reset button on completion
+        setStartStopButton(0); 
         
-        if(filteredVoices.length > 0 && selectedVoice?.language == `${code1}-${code2}`){
+        if(filteredVoices.length > 0 ){
           Speech.speak(sentences[currentSentenceIndex], {
             voice: selectedVoice?.identifier,
             language: code1,
@@ -546,6 +542,11 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
         setVisibleModal(false); // Close modal when called
     };
 
+    const handleFinish = async() => {
+      //@ts-ignore
+      navigation.navigate("Tab");
+    }
+
     return (
         <ScrollView
           style={styles.container}
@@ -562,8 +563,7 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
                 <FontAwesome5 name="chevron-left" size={24} color={WHITE} />
               </TouchableOpacity>
             </View>
-        <Text style={styles.storyTitle}>{storyTitle}</Text>
-        <View style={{ marginBottom:24, width:"90%", flexDirection:"row", alignItems:"center", justifyContent:"space-between", paddingHorizontal:4}}>
+        <View style={{marginTop:24, marginBottom:24, width:"90%", flexDirection:"row", alignItems:"center", justifyContent:"space-between", paddingHorizontal:4}}>
           <TouchableOpacity
             onPress={voiceOnOpen}
             style={{
@@ -589,17 +589,19 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
             <Text style={{ fontSize: 12, fontWeight: "600", color: MAIN_COLOR_GREEN }}>Konuşmacı</Text>
           </TouchableOpacity>
           <View>
+            <View style={{overflow:'hidden', borderRadius:8, width:50, height:40}}>
+
           <Image
               source={{ uri: iconUrl }}
               resizeMode="cover"
               style={{
-                width: 50,
-                height: 40,
-                borderRadius:8,
-                alignSelf:"center"
+                width: "100%",
+                height: "100%",
               }}
               
             />
+            </View>
+
           </View>
           <TouchableOpacity
             onPress={titleOnOpen}
@@ -645,7 +647,7 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
               color: startStopButton === 0 ? "#FFFFFF" : "#333", // Dynamic text color
               textAlign: "center",
             }}>
-              Metni Başlat
+              {t("startText")}
             </Text>
           </Pressable>
 
@@ -664,15 +666,15 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
           >
             <Text style={{
               fontWeight: "600",
-              color: startStopButton === 1 ? "#FFFFFF" : "#333", // Dynamic text color
+              color: startStopButton === 1 ? "#FFFFFF" : "#333", 
               textAlign: "center",
             }}>
-              Metni Durdur
+              {t("stopText")}
             </Text>
           </Pressable>
         </View>
 
-        <StoryCardButtons currentSentenceIndex={currentSentenceIndex} sentences={sentences} handleNextSentence={handleNextSentence} handlePreviousSentence={handlePreviousSentence}/>
+        <StoryCardButtons currentSentenceIndex={currentSentenceIndex} sentences={sentences} handleNextSentence={handleNextSentence} handlePreviousSentence={handlePreviousSentence} handleFinish={handleFinish}/>
         
         <Pressable 
         onPress={() => setText("")}

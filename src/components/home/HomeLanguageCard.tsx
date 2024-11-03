@@ -2,9 +2,9 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
 import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import useI18n from '../../hooks/useI18n';
 import { RootStackParamList } from '../../types/stackNavigations';
 import { BLACK_COLOR, GRAY, WHITE } from '../../utils/colors';
-import useI18n from '../../hooks/useI18n';
 
 export interface MenuLanguageCard {
     id: number,
@@ -26,7 +26,6 @@ const HomeLanguageCard = ({ languageCard }: Props) => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList, "Home">>();
 
   const handleNavigate = () => { 
-    console.log("card",languageCard)
     navigation.navigate("DefaultStoriesList", { id: languageCard.id });
   }
 

@@ -37,12 +37,12 @@ export default function RegisterScreen() {
 
   const { width, height } = Dimensions.get("screen");
 
-  const [name, setName] = useState("uygar");
-  const [surname, setSurname] = useState("erenn");
-  const [email, setEmail] = useState("uygareren1031@gmail.com");
-  const [phone, setPhone] = useState("123456789");
-  const [password, setPassword] = useState("uygareren123");
-  const [password2, setPassword2] = useState("uygareren123");
+  const [name, setName] = useState("");
+  const [surname, setSurname] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
+  const [password2, setPassword2] = useState("");
   const [checkBox, setCheckBox] = useState(false);
 
   const phoneInput = useRef<PhoneInput>(null);
@@ -102,7 +102,7 @@ export default function RegisterScreen() {
           value={surname}
           onchangeValue={setSurname}
           label={t("surname")}
-          placeholder={"surnamePlacehHolder"}
+          placeholder={t("surnamePlacehHolder")}
         />
         <TextInputComp
           value={email}

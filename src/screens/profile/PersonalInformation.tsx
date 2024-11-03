@@ -25,6 +25,7 @@ import { useAuthStore } from "../../store/useAuthStore";
 import { useUserStore } from "../../store/useUserStore";
 import { BLACK_COLOR, LIGHT_GRAY, MAIN_COLOR, TEXT_BLACK, WHITE } from "../../utils/colors";
 import { showToast } from "../../utils/helpers";
+import i18n from "../../utils/i18n";
 
 type PersonalInformationScreenNavigationProp = NativeStackNavigationProp<any, "PersonalInformation">;
 
@@ -126,7 +127,7 @@ const PersonalInformation = () => {
       setCountryId(countryId)
       setLanguageId(languageId)
       setSpokenLanguageId(spokenLanguageId)
-      // i18n.changeLanguage(selectedSpokenLanguage.countryCode);
+      i18n.changeLanguage(selectedSpokenLanguage.countryCode);
     }
   }
 
@@ -246,13 +247,14 @@ const PersonalInformation = () => {
   };
 
   return (
-    <Animated.ScrollView entering={SlideInRight} contentContainerStyle={{ flexGrow: 1 }} style={{ flex: 1, backgroundColor: WHITE, padding: 24, width:width }}>
+    <Animated.ScrollView entering={SlideInRight} contentContainerStyle={{ flexGrow: 1 }} style={{ flex: 1, paddingHorizontal:24, backgroundColor: WHITE, padding: 24, width:width }}>
       <Header navigation={navigation}/>
       <TextInputComp
         label={t("name")}
         placeholder={t("namePlacehHolder")}
         value={name}
         onchangeValue={setName}
+        styleContainer={{marginHorizontal:16}}
       />
       <TextInputComp
         label={t("surname")}

@@ -1,28 +1,43 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import React from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { WHITE } from '../../utils/colors';
 
 type Props = {
     sentences:string[]
     currentSentenceIndex:number,
     handlePreviousSentence: () => void,
     handleNextSentence: () => void,
+    handleFinish: () => void,
   }
 
-const StoryCardButtons = ({sentences,currentSentenceIndex,handleNextSentence,handlePreviousSentence}:Props) => {
-  
+  const {width} = Dimensions.get("screen");
+
+const StoryCardButtons = ({sentences,currentSentenceIndex,handleNextSentence,handlePreviousSentence, handleFinish}:Props) => {
+  console.log("curren",currentSentenceIndex);
+  console.log("sentences",sentences.length);
 
   return (
     <View style={styles.buttonContainer}>
         {currentSentenceIndex > 0 && (
-          <TouchableOpacity onPress={handlePreviousSentence} style={styles.button}>
+          <View style={{flexDirection:"row"}}>
+            <TouchableOpacity onPress={handlePreviousSentence} style={styles.button}>
               <Ionicons name="chevron-back-outline" size={24} color="white" />
           </TouchableOpacity>
+          {currentSentenceIndex == sentences.length-1 ? (
+            <TouchableOpacity onPress={handleFinish} style={styles.button}>
+            <Text style={{fontSize:16, fontWeight:"600", color:WHITE}}>Finish!</Text>
+          </TouchableOpacity>
+          ):null}
+             
+          </View>
+          
         )}
         {currentSentenceIndex < sentences.length - 1 && (
           <TouchableOpacity onPress={handleNextSentence} style={styles.button}>
             <Ionicons name="chevron-forward" size={24} color="white" />
           </TouchableOpacity>
+
         )}
       </View>
 
@@ -46,5 +61,6 @@ const styles = StyleSheet.create({
         paddingHorizontal:16,
         borderRadius: 5,
         marginHorizontal: 5,
+        width:width*0.25
       },
 })

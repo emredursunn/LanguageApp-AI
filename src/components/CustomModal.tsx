@@ -20,23 +20,23 @@ const CustomModal: React.FC<CustomModalProps> = ({ isVisible, onClose, numberStr
   let icon = '';
 
   if (number <= 5) {
-    message = t('messages.insufficient');
-    subMessage = t('messages.open_to_improvement');
+    message = t('insufficient');
+    subMessage = t('open_to_improvement');
     color = LIGHT_RED;
     icon = 'times-circle';
   } else if (number >= 6 && number <= 7) {
-    message = t('messages.moderate');
-    subMessage = t('messages.good_start');
+    message = t('moderate');
+    subMessage = t('good_start');
     color = ORANGE;
     icon = 'exclamation-circle';
   } else if (number === 8) {
-    message = t('messages.good');
-    subMessage = t('messages.successful_performance');
+    message = t('good');
+    subMessage = t('successful_performance');
     color = BLUE;
     icon = 'thumbs-up';
   } else {
-    message = t('messages.very_good');
-    subMessage = t('messages.excellent_job');
+    message = t('very_good');
+    subMessage = t('excellent_job');
     color = MAIN_COLOR_GREEN;
     icon = 'star';
   }

@@ -1,18 +1,11 @@
-import { Dimensions, StyleSheet, Text, View, ScrollView } from "react-native";
-import React from "react";
 import { Actionsheet } from "native-base";
-import {
-  WHITE,
-  BLACK_COLOR,
-  GRAY,
-  LIGHT_GRAY,
-  GREEN,
-  LIGHT_GRAY_2,
-} from "../../utils/colors";
-import { IWord } from "../../types/Word";
-import Feather from "@expo/vector-icons/Feather";
-import Loading from "../common/Loading";
+import React, { useEffect, useState } from "react";
+import { Dimensions, ScrollView, StyleSheet, Text, View } from "react-native";
 import Animated, { SlideInRight } from "react-native-reanimated";
+import { translateText } from "../../services/apiService";
+import { IWord } from "../../types/Word";
+import { BLACK_COLOR, GREEN, WHITE } from "../../utils/colors";
+import Loading from "../common/Loading";
 
 type Props = {
   word: IWord;
@@ -20,6 +13,7 @@ type Props = {
   isOpen: boolean;
   onClose: () => void;
   isLoading: boolean;
+  spokenLanguageCode: string;
 };
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("screen");
@@ -33,9 +27,12 @@ const DisplayLine = ({
   original: string;
   meaning: string;
   type: "TITLE" | "EXAMPLE";
-  index?:number
+  index?: number;
 }) => (
-  <Animated.View entering={SlideInRight.duration(index ? 200 * (index + 1) : 200)} style={styles.line}>
+  <Animated.View
+    entering={SlideInRight.duration(index ? 200 * (index + 1) : 200)}
+    style={styles.line}
+  >
     <View style={styles.textContainer}>
       <Text style={type === "TITLE" ? styles.word : styles.sentence}>
         {original}
@@ -44,7 +41,6 @@ const DisplayLine = ({
         {meaning}
       </Text>
     </View>
-    <Feather name="headphones" size={36} color="yellow" style={styles.icon} />
   </Animated.View>
 );
 
@@ -54,22 +50,39 @@ const WordBottomSheet = ({
   isOpen,
   onClose,
   isLoading,
+  spokenLanguageCode,
 }: Props) => {
+  const [translatedExamples, setTranslatedExamples] = useState<
+    { sentence: string; translation: string }[]
+  >(examples);
+
+  useEffect(() => {
+    const fetchTranslations = async () => {
+      const translated = await Promise.all(
+        examples.map(async (example) => ({
+          ...example,
+          translation: await translateText({text:example.translation, targetLang:spokenLanguageCode}),
+        }))
+      );
+      setTranslatedExamples(translated);
+    };
+
+    if (isOpen) {
+      fetchTranslations();
+    }
+  }, [examples, isOpen, spokenLanguageCode]);
+
   return (
     <Actionsheet isOpen={isOpen} onClose={onClose}>
       <Actionsheet.Content style={styles.content}>
         <ScrollView contentContainerStyle={styles.scrollContent}>
-          <DisplayLine
-            type="TITLE"
-            original={word.word}
-            meaning={word.meaning}
-          />
+          <DisplayLine type="TITLE" original={word.word} meaning={word.meaning} />
 
           <View style={styles.examplesContainer}>
             {isLoading ? (
               <Loading />
             ) : (
-              examples.map((example, index) => (
+              translatedExamples.map((example, index) => (
                 <DisplayLine
                   key={index}
                   type="EXAMPLE"
@@ -110,7 +123,7 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     flex: 1,
-    marginRight: 10, // Space between text and icon
+    marginRight: 10,
   },
   word: {
     fontSize: 26,
@@ -137,6 +150,6 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   icon: {
-    flexShrink: 0, // Prevent the icon from shrinking
+    flexShrink: 0,
   },
 });

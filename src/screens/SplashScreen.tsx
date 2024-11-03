@@ -21,41 +21,9 @@ export default function SplashScreen() {
         return () => clearTimeout(timer);
     }, [navigation]);
 
-    // return (
-    //     <View style={{ flex: 1, alignItems: "center", justifyContent: "center", backgroundColor:WHITE }}>
-    //         <View style={{flexDirection:"row", alignItems:"center"}}>
-    //             <Text style={{fontSize:48, fontWeight:"800", color:MAIN_COLOR_GREEN}}>
-    //                 G
-    //             </Text>
-    //             <Text style={{fontSize:48, fontWeight:"600", color:MAIN_COLOR_GREEN}}>
-    //                 e
-    //             </Text>
-    //             <Text style={{fontSize:48, fontWeight:"400", color:MAIN_COLOR_GREEN}}>
-    //                 m
-    //             </Text>
-    //             <Text style={{fontSize:48, fontWeight:"800", color:MAIN_COLOR}}>
-    //                 S
-    //             </Text>
-    //             <Text style={{fontSize:48, fontWeight:"700", color:MAIN_COLOR}}>
-    //                 p
-    //             </Text>
-    //             <Text style={{fontSize:48, fontWeight:"600", color:MAIN_COLOR}}>
-    //                 e
-    //             </Text>
-    //             <Text style={{fontSize:48, fontWeight:"500", color:MAIN_COLOR}}>
-    //                 a
-    //             </Text>
-    //             <Text style={{fontSize:48, fontWeight:"400", color:MAIN_COLOR}}>
-    //                 k
-    //             </Text>
-    //         </View>
-            
-    //     </View>
-    // );
-
     return(
-        <View style={{flex:1, alignItems:"center", justifyContent:"center", backgroundColor:"#dfe1dc"}}>
-            <Image source={require("../../assets/splash.jpeg")} width={width} height={height} resizeMode="center" style={{borderRadius:24}}/>
+        <View style={{flex:1, alignItems:"center", justifyContent:"center", backgroundColor:"#ddded8"}}>
+            <Image source={require("../../assets/splash.jpeg")} resizeMode="center" style={{borderRadius:180, width:"80%"}}/>
         </View>
     )
 }

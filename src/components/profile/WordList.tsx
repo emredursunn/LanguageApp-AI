@@ -121,6 +121,7 @@ const WordList = ({ language, words, setWords, type }: Props) => {
           isOpen={isOpen}
           onClose={handleOnClose}
           isLoading={geminiLoading}
+          spokenLanguageCode={spokenLanguageCode}
         />
       )}
     </>

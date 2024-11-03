@@ -150,7 +150,7 @@ const ProfileSettings = () => {
       >
         <TouchableOpacity onPress={onOpen} activeOpacity={.7} style={{width:63,height:63, alignItems:"center", justifyContent:"center", borderRadius:180, backgroundColor:GRAY}}>
         <Image
-          source={profileImage}
+          source={require("../../../assets/profile-images/3.jpeg")}
           style={{width: 60,height: 60,borderRadius: 38}}
           resizeMode="cover"
           />

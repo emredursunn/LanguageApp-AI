@@ -109,7 +109,7 @@ export const StoryInfoScreen1: React.FC<StoryScreenType> = ({ handleNext, langua
             <FlatList
                 data={filteredLanguages}
                 keyExtractor={(item) => item.id.toString()}
-                style={{ maxHeight: height * 0.55 }}
+                style={{ maxHeight: height * 0.5 }}
                 renderItem={({ item }) => (
                     <TouchableOpacity
                         onPress={() => handleLanguageSelection(item)}

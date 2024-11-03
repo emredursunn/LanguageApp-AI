@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React from "react";
-import { StyleSheet, Text } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import Animated, { SlideInRight } from "react-native-reanimated";
 import useI18n from "../../hooks/useI18n";
 import { WHITE } from "../../utils/colors";
@@ -43,7 +43,9 @@ const LanguageMenu = ({ languages, type }: Props) => {
           />
         ))
       ) : (
-        <Text>{t("noSavedWords")}</Text>
+        <View style={{flex:1, alignItems:"center", justifyContent:"center", height:"100%"}}>
+          <Text style={{fontSize:24, fontWeight:"600"}}>{t("noSavedWords")}</Text>
+        </View>
       )}
     </Animated.ScrollView>
   );

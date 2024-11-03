@@ -1,9 +1,9 @@
 import { useRoute } from '@react-navigation/native';
 import React, { useState } from 'react';
-import { Text } from 'react-native';
 import { useQuery } from 'react-query';
 import Loading from '../../components/common/Loading';
 import WordList from '../../components/profile/WordList';
+import { translateText } from '../../services/apiService';
 import { getSavedWordsByLanguageId } from '../../services/userService';
 import { useUserStore } from '../../store/useUserStore';
 import { IWord } from '../../types/Word';

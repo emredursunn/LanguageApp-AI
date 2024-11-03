@@ -1,6 +1,7 @@
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useState } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useQuery } from "react-query";
 import HomeStoryLanguages from "../../components/home/HomeStoryLanguages";
@@ -9,6 +10,7 @@ import { getLanguage } from "../../services/apiService";
 import { useAuthStore } from '../../store/useAuthStore';
 import { RootStackParamList, TabStackParamList } from "../../types/stackNavigations";
 import { BLACK_COLOR, GRAY, LIGHT_GRAY, LIGHT_PINK_2, MAIN_COLOR_GREEN, TEXT_BLACK } from '../../utils/colors';
+import { getImageSource } from '../../utils/helpers';
 
 export default function HomeScreen(){
 
@@ -18,6 +20,9 @@ export default function HomeScreen(){
     const {t} = useI18n("AllScreen");
 
     const {auth} = useAuthStore()
+    const [imageUrl,setImageUrl] = useState(auth?.imageUrl || "1")
+    const imageSource = getImageSource(imageUrl);
+    const [profileImage,setProfileImage] = useState<any>(imageSource);
 
     const {
         data: languageData,
@@ -29,18 +34,25 @@ export default function HomeScreen(){
             navigationStack.navigate("StoryInfo");
       }
 
+      
+
     return(
         <View style={styles.container}>
-           <View style={styles.header}>
+            {auth != null ? (
+                <View style={styles.header}>
                 <View style={{height:65, width:65, alignItems:"center", justifyContent:"center", backgroundColor:GRAY, borderRadius:180}}>
-                    <Image source={require("../../../assets/profile-images/1.jpeg")} style={styles.profileImage} resizeMode="cover" />
+                    <Image source={require("../../../assets/profile-images/3.jpeg")} style={styles.profileImage} resizeMode="cover" />
                 </View>
 
                 <Text style={{fontSize:24,fontWeight:'600',color:BLACK_COLOR, marginRight:10, marginLeft:12}}>{t('hello')}</Text>
                 <Text style={{fontSize:24,fontWeight:'800',color:LIGHT_PINK_2, paddingTop:3}}>{auth?.name}</Text>
             </View>
+            ): (
+                null
+            )}
+           
 
-            <View style={{}}>
+            <View style={{marginTop:24}}>
                 <Text style={styles.title}>
                     {t("generateNowText")}
                     </Text>

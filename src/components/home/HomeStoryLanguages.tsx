@@ -9,7 +9,7 @@ type Props = {
 const HomeStoryLanguages = ({languages}:Props) => {
 
   return (
-    <FlatList showsVerticalScrollIndicator={false} contentContainerStyle={{paddingTop:50, paddingBottom:300, justifyContent:'center', alignItems:'center'}} data={languages} numColumns={2} renderItem={({item,index}) => <HomeLanguageCard languageCard={item}/>}/>      
+    <FlatList showsVerticalScrollIndicator={false} contentContainerStyle={{paddingTop:50, paddingBottom:400, justifyContent:'center', alignItems:'center'}} data={languages} numColumns={2} renderItem={({item,index}) => <HomeLanguageCard languageCard={item}/>}/>      
   )
 }
 

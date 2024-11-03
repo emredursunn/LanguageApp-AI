@@ -80,7 +80,7 @@ export const StoryInfoScreen5: React.FC<StoryScreenType> = ({ handleDoneInfo, re
                 <ButtonComp
                     loading={false}
                     isActive={!!selectedDifficulty}
-                    title={t("done")}
+                    title={t("doneBtn")}
                     onPress={handleDone}
                 />
             </View>

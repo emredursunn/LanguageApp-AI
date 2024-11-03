@@ -1,10 +1,9 @@
-import { ImageBackground, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import { ImageBackground, StyleSheet } from 'react-native'
 
 const Error = () => {
   return (
     <ImageBackground source={require('../../../assets/error.png')} style={styles.img} resizeMode='cover'>
-      <Text style={styles.error}>Error</Text>
     </ImageBackground>
   )
 }
