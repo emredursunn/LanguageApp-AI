@@ -1,3 +1,7 @@
+Backend Codes: https://github.com/uygareren/Lingua-Backend
+Mobile Codes: https://github.com/emredursunn/LanguageApp-AI
+
+
 # GemSpeak
 **GemSpeak** is a language app that allows users to create their own stories and have them voiced. It evaluates the quality of your speech and provides feedback. Additionally, the app lets you save words and practice with them. **GemSpeak** utilizes the Gemini AI API for story generation and DeepL for word translation, supporting 12 languages.
 
