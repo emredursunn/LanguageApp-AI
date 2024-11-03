@@ -33,7 +33,7 @@ const LanguageMenu = ({ languages, type }: Props) => {
 
   return (
     <Animated.ScrollView entering={SlideInRight} contentContainerStyle={styles.container}>
-      <Header navigation={navigation}/>
+      <Header navigation={navigation} title="Diller"/>
       {languages && languages.length > 0 ? (
         languages.map((languageCard: ILanguageCard) => (
           <LanguageCard
@@ -60,7 +60,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
-    padding: 16,
     paddingTop: 20,
   },
 });

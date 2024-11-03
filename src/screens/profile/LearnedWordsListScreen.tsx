@@ -1,15 +1,17 @@
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import React, { useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useQuery } from 'react-query';
 import Error from '../../components/common/Error';
 import Loading from '../../components/common/Loading';
+import { Header } from '../../components/Header';
 import { IWordCard } from '../../components/profile/WordCard';
 import WordList from '../../components/profile/WordList';
+import { translateText } from '../../services/apiService';
 import { getLearnedWords } from '../../services/userService';
 import { useUserStore } from '../../store/useUserStore';
 import { IWord } from '../../types/Word';
-import { translateText } from '../../services/apiService';
+import { WHITE } from '../../utils/colors';
 
 export interface WordWithoutMeaning {
   id:number,
@@ -17,7 +19,7 @@ export interface WordWithoutMeaning {
 }
 
 const LearnedWordsList = () => {
-
+  const navigation = useNavigation<any>();
   const {languageId, language} = useRoute<any>().params
   const [wordsWithMeanings, setWordsWithMeanings] = useState<IWordCard[]>([]);
   const {spokenLanguageCode} = useUserStore()
@@ -57,7 +59,10 @@ const LearnedWordsList = () => {
   }
 
   return (
-    <WordList language={language} words={wordsWithMeanings} type='LEARNED'/>
+    <View style={{flex:1, backgroundColor:WHITE}}>
+      <Header navigation={navigation} title='Öğrendiğim Kelimeler'/>
+      <WordList language={language} words={wordsWithMeanings} type='LEARNED'/>
+    </View>
   );
 };
 

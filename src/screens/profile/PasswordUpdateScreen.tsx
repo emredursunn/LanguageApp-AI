@@ -35,7 +35,7 @@ const PasswordUpdateScreen = () => {
   return (
     <Animated.View
       entering={SlideInRight}
-      style={{ flex: 1, backgroundColor: WHITE, padding: 22, paddingTop: 100 }}
+      style={{ flex: 1, backgroundColor: WHITE, padding: 16, paddingTop: 50 }}
     >
       <Header navigation={navigation}/>
       <Text style={{ fontWeight: "800", color: BLACK_COLOR, fontSize: 24, marginTop:24 }}>

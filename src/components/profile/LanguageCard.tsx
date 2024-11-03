@@ -1,7 +1,7 @@
-import { Dimensions, Image, StyleSheet, Text, TouchableOpacity } from 'react-native'
-import React from 'react'
-import { BLACK_COLOR, GRAY, WHITE } from '../../utils/colors'; // Ensure WHITE_COLOR is defined in your colors
+import React from 'react';
+import { Dimensions, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import useI18n from '../../hooks/useI18n';
+import { BLACK_COLOR, GRAY, WHITE } from '../../utils/colors'; // Ensure WHITE_COLOR is defined in your colors
 
 export interface ILanguageCard {
     languageId: number,
@@ -48,6 +48,7 @@ const styles = StyleSheet.create({
         elevation: 8,
         margin: 6,
         padding: 16,
+        marginHorizontal:8
     },
     flagImg: {
         height: 100,

@@ -6,6 +6,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler"; // Import
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import { QueryClient, QueryClientProvider } from "react-query";
+import DefaultStoriesListScreen from "./src/components/home/DefaultStoriesList";
 import { TabNavigation } from "./src/navigation/Tab";
 import I18nProvider from "./src/provider/I18nProvider";
 import ProtectProvider from "./src/provider/ProtectProvider";
@@ -13,15 +14,12 @@ import CodeConfirmationScreen from "./src/screens/auth/CodeConfirmScreen";
 import EmailConfirmScreen from "./src/screens/auth/EmailConfirmScreen";
 import NewPasswordScreen from "./src/screens/auth/NewPasswordScreen";
 import FirstInfoScreen from "./src/screens/FirstInfoScreen";
-import SpeechToTextScreen from "./src/screens/SpeechToTextScreen";
-import SpeechToTextScreen2 from "./src/screens/SpeechToTextScreen2";
+import HomeScreen from "./src/screens/home/HomeScreen";
+import StaticStoryScreen from "./src/screens/home/StaticStoryScreen";
 import SplashScren from "./src/screens/SplashScreen";
 import StoryInfoScreen from "./src/screens/StoryInfoScreen";
 import StoryScreen from "./src/screens/StoryScreen";
 import { RootStackParamList } from "./src/types/stackNavigations";
-import HomeScreen from "./src/screens/home/HomeScreen";
-import DefaultStoriesListScreen from "./src/components/home/DefaultStoriesList";
-import StaticStoryScreen from "./src/screens/home/StaticStoryScreen";
 
 const App = () => {
   const Stack = createNativeStackNavigator<RootStackParamList>();
