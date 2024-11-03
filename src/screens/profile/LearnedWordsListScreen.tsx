@@ -9,6 +9,7 @@ import WordList from '../../components/profile/WordList';
 import { getLearnedWords } from '../../services/userService';
 import { useUserStore } from '../../store/useUserStore';
 import { IWord } from '../../types/Word';
+import { translateText } from '../../services/apiService';
 
 export interface WordWithoutMeaning {
   id:number,
@@ -27,12 +28,12 @@ const LearnedWordsList = () => {
       onSuccess: async (data) => {
         const wordsData = data.data; // Gelen data'nın içinden kelimeleri alıyoruz
         const wordsWithMeaningsPromises = wordsData.map(async (wordObj:WordWithoutMeaning) => {
-          // const meaningResponse = await translateText({text:wordObj.word,targetLang:spokenLanguageCode});
+          const meaningResponse = await translateText({text:wordObj.word,targetLang:spokenLanguageCode});
           return {
             id: wordObj.id,
             languageId,
             word: wordObj.word,
-            meaning: "meaningResponse", // Anlamı response içinden çekiyoruz
+            meaning: meaningResponse, // Anlamı response içinden çekiyoruz
           } as IWord;
         });
 
