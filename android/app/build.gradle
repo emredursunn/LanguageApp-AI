@@ -109,7 +109,7 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.uygarerenn.LanguageAppAI"
+    namespace 'com.uygarerenn.LanguageAppAI'
     defaultConfig {
         applicationId 'com.uygarerenn.LanguageAppAI'
         minSdkVersion rootProject.ext.minSdkVersion

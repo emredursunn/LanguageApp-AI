@@ -140,6 +140,7 @@ export const StoryContainer = ({story,storyId,storyTitle,languageId}:Props) => {
             const language = data.data.find((lang:any) => lang.id === languageId);
             setFlagIcon(language.iconUrl);
             setCode1(language?.countryCode);
+            console.log("logggggggg",language?.countryCode)
             setCode2(language?.countryCode2);
         },
     }

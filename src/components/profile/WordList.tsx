@@ -42,18 +42,21 @@ const WordList = ({ language, words, setWords, type }: Props) => {
       const fetchGeminiData = async () => {
         try {
           const prompt = `
-            Create 3 example sentences for the word "${selectedWord.word}" in the "${language}" language.
-            Translate each sentence to the language with the code "${spokenLanguageCode}".
-            Provide the response in the following JSON format without any punctuation marks:
-            [
-              {"sentence": "example sentence 1", "translation": "translated sentence 1"},
-              {"sentence": "example sentence 2", "translation": "translated sentence 2"},
-              {"sentence": "example sentence 3", "translation": "translated sentence 3"}
-            ]
-          `;
+          Create 3 example sentences for the word "${selectedWord.word}" in the "${language}" language.
+          Translate each sentence to the language with the code "${spokenLanguageCode}".
+          Provide the response in the following JSON format without any code block formatting:
+          [
+            {"sentence": "example sentence 1", "translation": "translated sentence 1"},
+            {"sentence": "example sentence 2", "translation": "translated sentence 2"},
+            {"sentence": "example sentence 3", "translation": "translated sentence 3"}
+          ]
+        `;
 
           const result = await model.generateContent([prompt]);
           const responseText = await result.response.text();
+          console.log(responseText)
+          const trimmedResponseText = responseText.trim();
+          console.log(trimmedResponseText)
           const parsedExamples = JSON.parse(responseText);
           setExamples(parsedExamples);
         } catch (error) {

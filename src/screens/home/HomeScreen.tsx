@@ -34,8 +34,6 @@ export default function HomeScreen(){
             navigationStack.navigate("StoryInfo");
       }
 
-      
-
     return(
         <View style={styles.container}>
             {auth != null ? (

@@ -63,14 +63,15 @@ const ProfileSettings = () => {
 
   const {t} = useI18n("AllScreen");
 
-  const imageUrls = ["1", "2", "3", "4", "5", "6", "7", "8"];
-  const [imageUrl,setImageUrl] = useState(auth?.imageUrl || "1")
+  const imageUrls = ["22", "23", "24", "25", "26", "27", "28", "29"];
+  const [imageUrl,setImageUrl] = useState(auth?.imageUrl || "22")
   const imageSource = getImageSource(imageUrl);
   const [profileImage,setProfileImage] = useState<any>(imageSource)
 
   const handleImagePress = (_imageUrl:string) => {
     setImageUrl(_imageUrl)
     const selectedImage = getImageSource(_imageUrl);
+    console.log(selectedImage)
     setProfileImage(selectedImage);
   };
 
@@ -150,7 +151,7 @@ const ProfileSettings = () => {
       >
         <TouchableOpacity onPress={onOpen} activeOpacity={.7} style={{width:63,height:63, alignItems:"center", justifyContent:"center", borderRadius:180, backgroundColor:GRAY}}>
         <Image
-          source={require("../../../assets/profile-images/3.jpeg")}
+        source={profileImage}
           style={{width: 60,height: 60,borderRadius: 38}}
           resizeMode="cover"
           />

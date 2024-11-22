@@ -23,14 +23,14 @@ export const validateEmail = (email: string) => {
 };
 
 const imageMap: { [key: string]: any } = {
-  "1": require("../../assets/profile-images/1.jpeg"),
-  "2": require("../../assets/profile-images/2.jpeg"),
-  "3": require("../../assets/profile-images/3.jpeg"),
-  "4": require("../../assets/profile-images/4.jpeg"),
-  "5": require("../../assets/profile-images/5.jpeg"),
-  "6": require("../../assets/profile-images/6.jpeg"),
-  "7": require("../../assets/profile-images/7.jpeg"),
-  "8": require("../../assets/profile-images/8.jpeg"),
+  "22": require("../../assets/profile-images/1.jpeg"),
+  "23": require("../../assets/profile-images/2.jpeg"),
+  "24": require("../../assets/profile-images/3.jpeg"),
+  "25": require("../../assets/profile-images/4.jpeg"),
+  "26": require("../../assets/profile-images/5.jpeg"),
+  "27": require("../../assets/profile-images/6.jpeg"),
+  "28": require("../../assets/profile-images/7.jpeg"),
+  "29": require("../../assets/profile-images/8.jpeg"),
 };
 
 export const getImageSource = (imageUrl: string) => {

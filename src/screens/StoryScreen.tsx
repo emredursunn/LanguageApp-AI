@@ -64,7 +64,7 @@ export default function StoryScreen({route}:any) {
           alignItems: "center"
         }}
       >
-        <StoryContainer languageId={1} story={story}/>
+        <StoryContainer languageId={languageId} story={story}/>
       </ScrollView>
   );
 }
